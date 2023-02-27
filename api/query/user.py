@@ -16,6 +16,11 @@ async def get(entity_id: PyObjectId) -> UserRead:
     return UserRead(**entity)
 
 
+async def get_by_username(username: str) -> UserRead:
+    entity = await user_collection.find_one({"username": username})
+    return UserRead(**entity)
+
+
 async def update(entity_id: PyObjectId, payload) -> UserRead:
     await user_collection.update_one({"_id": entity_id}, {"$set": payload})
     updated_entity = await user_collection.find_one({"_id": entity_id})

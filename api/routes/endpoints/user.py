@@ -26,6 +26,13 @@ async def update(entity_id: PyObjectId, payload=Body(...)):
     return updated
 
 
+@router.get("/username/{username}",
+            response_model=UserRead,
+            response_model_by_alias=False)
+async def get_by_username(username: str):
+    return await user_query.get_by_username(username)
+
+
 @router.get("/{entity_id}",
             response_model=UserRead,
             response_model_by_alias=False)
