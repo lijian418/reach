@@ -20,7 +20,7 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const App = () => {
-  const user = useUser()
+  const {user} = useUser()
 
   const show = () => {
     if (user) {

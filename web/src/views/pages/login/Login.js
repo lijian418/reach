@@ -24,21 +24,25 @@ import {
 } from "reactstrap";
 import {Field, Form, Formik} from "formik";
 import * as yup from "yup"
+import {useUser} from "../../../hooks/useUser";
 
 const Login = () => {
   const navigate = useNavigate();
+  const {user, fetchUser} = useUser()
 
   const login = async (values) => {
     const {data} = await api.user.getByUsername(values.username)
     if (data) {
       localStorage.setItem('username', values.username)
+      await fetchUser()
+      navigate('/')
     }
   }
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
-      <Container>
-        <Card>
+      <Container className={'d-flex justify-content-center'}>
+        <Card style={{minWidth: '300px'}}>
           <CardBody>
             <CardTitle tag="h5">
               Login
@@ -54,12 +58,13 @@ const Login = () => {
                   .required('Required'),
               })}
               onSubmit={async (values) => {
+                console.log(values)
                 await login(values)
               }}>
               {({ errors, touched }) => (
                 <Form>
                   <FormGroup row>
-                    <Col md="2">
+                    <Col md="2"style={{minWidth: '250px'}}>
                       <Label for="username">Username</Label>
                       <Input
                         type="text"
@@ -70,7 +75,8 @@ const Login = () => {
                       <FormFeedback>{errors.username}</FormFeedback>
                     </Col>
                   </FormGroup>
-                  <Button color="primary" type={"submit"}>Submit</Button>
+                  <Button color="primary" className="me-2">Register</Button>
+                  <Button color="primary" type={"submit"}>Login</Button>
                 </Form>
               )}
             </Formik>
