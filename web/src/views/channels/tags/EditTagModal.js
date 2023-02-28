@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   Modal,
@@ -6,46 +6,47 @@ import {
   ModalBody,
   ModalFooter,
 } from 'reactstrap';
-import {ChannelForm} from "./ChannelForm";
-import {Field, Form, Formik} from "formik";
+import {Formik} from "formik";
 import * as yup from "yup";
-import {api} from "../../api";
+import {api} from "../../../api";
+import {TagForm} from "./TagForm";
 
-function EditChannelModal(props) {
+function EditTagModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const editChannel = async (values) => {
-    const {data} = await api.channel.update(props.channel.id, values)
+  const editTag = async (values) => {
+    const {data} = await api.tag.update(props.tag.id, {
+      slug: values.slug,
+      channel_id: props.channel.id
+    })
     props.refetch()
   }
 
   return (
     <div>
       {
-        props.channel && (
+        props.channel && props.tag && (
           <div>
             <Button color="primary" onClick={toggle}>
               Edit
             </Button>
             <Formik
               initialValues={{
-                slug: props.channel.slug,
-                label: props.channel.label
+                slug: props.tag.slug,
               }}
               validationSchema={yup.object().shape({
                 slug: yup.string().required('Required'),
-                label: yup.string().required('Required'),
               })}
               onSubmit={async (values) => {
-                await editChannel(values)
+                await editTag(values)
               }}>
               {(formik) => (
                 <Modal isOpen={modal} toggle={toggle}>
-                  <ModalHeader toggle={toggle}>Edit {props.channel.label} Channel</ModalHeader>
+                  <ModalHeader toggle={toggle}>Edit {props.tag.slug} Tag</ModalHeader>
                   <ModalBody>
-                    <ChannelForm formik={formik}/>
+                    <TagForm formik={formik}/>
                   </ModalBody>
                   <ModalFooter>
                     <Button color="secondary" onClick={toggle}>
@@ -68,4 +69,4 @@ function EditChannelModal(props) {
   );
 }
 
-export default EditChannelModal;
+export default EditTagModal;

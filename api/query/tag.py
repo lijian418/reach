@@ -28,7 +28,7 @@ async def delete(entity_id: PyObjectId) -> bool:
 
 
 async def find(search: TagSearch) -> TagPaginatedRead:
-    query = {}
+    query = {"channel_id": search.channel_id}
     pipeline = [{"$match": query},
                 {"$sort": {"created_at": pymongo.DESCENDING}},
                 {"$skip": search.skip},

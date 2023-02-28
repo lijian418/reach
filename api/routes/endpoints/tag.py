@@ -3,6 +3,7 @@ import time
 from fastapi import APIRouter, Depends, Body
 
 import query.tag as tag_query
+import query.channel as channel_query
 from models.business.tag import TagRead, TagCreate, TagPaginatedRead, TagSearch
 from models.fastapi.mongodb import PyObjectId
 
@@ -14,6 +15,7 @@ router = APIRouter()
              response_model_by_alias=False)
 async def create(payload: TagCreate = Body(...)):
     created = await tag_query.create(payload)
+    await channel_query.add_tag_to_channel(created.channel_id, created.id)
     return created
 
 

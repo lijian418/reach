@@ -4,6 +4,9 @@ import {useState} from "react";
 import {api} from "../../api";
 import {Badge} from "reactstrap";
 import EditChannelModal from "./EditChannelModal";
+import EditTagModal from "./tags/EditTagModal";
+import CreateTagModal from "./tags/CreateTagModal";
+import {TagList} from "./tags/TagList";
 
 const ChannelDetail = () => {
   let { channelId } = useParams();
@@ -14,7 +17,7 @@ const ChannelDetail = () => {
   }, [channelId])
 
   const fetchChannel = async () => {
-    const {data} = await api.channels.get(channelId)
+    const {data} = await api.channel.get(channelId)
     setChannel(data)
   }
 
@@ -22,16 +25,28 @@ const ChannelDetail = () => {
     <>
       <div className={'d-flex justify-content-between'}>
         <div>
-          <h3>{channel?.label}</h3>
+          <h2>{channel?.label}</h2>
           <div className={'d-flex gap-1'}>
-            <p className={'mb-0'}>Slug for API identification is</p>
+            <p className={'mb-0'}>Slug for Channel Message identification is</p>
             <div>
               <Badge>{channel?.slug}</Badge>
             </div>
           </div>
         </div>
-
         <EditChannelModal channel={channel} refetch={fetchChannel}/>
+      </div>
+
+      <div className={'mt-4'}>
+
+        <div className={'d-flex justify-content-between mb-4'}>
+          <h3>Tags</h3>
+          {
+            channel && (
+              <CreateTagModal channel={channel} refetch={fetchChannel}/>
+            )
+          }
+        </div>
+        <TagList channel={channel} refetch={fetchChannel}/>
       </div>
     </>
   )

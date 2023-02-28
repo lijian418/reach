@@ -7,7 +7,7 @@ const Channels = () => {
   return (
     <>
       <div className={'d-flex justify-content-between'}>
-        <h3>Channels</h3>
+        <h2>Channels</h2>
         <CreateChannelModal/>
       </div>
       <ChannelList/>

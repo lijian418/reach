@@ -11,7 +11,6 @@ from models.fastapi.mongodb import PyObjectId
 class TagBase(PyBaseModel):
     channel_id: PyObjectId = Field(...)
     slug: str = Field(...)
-    label: str = Field(...)
     alert_route_ids: List[PyObjectId] = Field([])
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
@@ -36,4 +35,4 @@ class TagPaginatedRead(PyBaseModel):
 
 
 class TagSearch(PyPaginatedBaseModel):
-    pass
+    channel_id: PyObjectId

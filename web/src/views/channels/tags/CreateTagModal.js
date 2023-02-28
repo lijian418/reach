@@ -6,42 +6,43 @@ import {
   ModalBody,
   ModalFooter,
 } from 'reactstrap';
-import {ChannelForm} from "./ChannelForm";
 import {Field, Form, Formik} from "formik";
 import * as yup from "yup";
-import {api} from "../../api";
+import {TagForm} from "./TagForm";
+import {api} from "../../../api";
 
-function CreateChannelModal(args) {
+function CreateTagModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const createChannel = async (values) => {
-    const {data} = await api.channel.create(values)
+  const createTag = async (values) => {
+    const {data} = await api.tag.create(values)
+    props.refetch()
   }
 
   return (
     <div>
       <Button color="primary" onClick={toggle}>
-        Add a new channel
+        Add a tag
       </Button>
       <Formik
         initialValues={{
           slug: "",
-          label: "",
+          channel_id: props.channel.id,
         }}
         validationSchema={yup.object().shape({
           slug: yup.string().required('Required'),
-          label: yup.string().required('Required'),
+          channel_id: yup.string().required('Required'),
         })}
         onSubmit={async (values) => {
-          await createChannel(values)
+          await createTag(values)
         }}>
         {(formik) => (
-          <Modal isOpen={modal} toggle={toggle} {...args}>
-            <ModalHeader toggle={toggle}>Create Channel</ModalHeader>
+          <Modal isOpen={modal} toggle={toggle}>
+            <ModalHeader toggle={toggle}>Create Tag</ModalHeader>
             <ModalBody>
-              <ChannelForm formik={formik}/>
+              <TagForm formik={formik}/>
             </ModalBody>
             <ModalFooter>
               <Button color="secondary" onClick={toggle}>
@@ -61,4 +62,4 @@ function CreateChannelModal(args) {
   );
 }
 
-export default CreateChannelModal;
+export default CreateTagModal;

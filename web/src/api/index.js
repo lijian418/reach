@@ -1,7 +1,9 @@
 import {user} from "./user";
-import {channels} from "./channels";
+import {channel} from "./channel";
+import {tag} from "./tag";
 
 export const api = {
   user,
-  channels
+  channel,
+  tag
 }

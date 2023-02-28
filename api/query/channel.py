@@ -12,8 +12,15 @@ async def create(payload: ChannelCreate) -> ChannelRead:
 
 
 async def get(entity_id: PyObjectId) -> ChannelRead:
-    entity = await channel_collection.find_one({"_id": entity_id})
-    return ChannelRead(**entity)
+    pipeline = [{"$match": {"_id": entity_id}},
+                {"$lookup": {
+                    "from": "tag_collection",
+                    "localField": "tag_ids",
+                    "foreignField": "_id",
+                    "as": "tags"
+                }}]
+    entity = await channel_collection.aggregate(pipeline).to_list(length=None)
+    return ChannelRead(**entity[0])
 
 
 async def update(entity_id: PyObjectId, payload) -> ChannelRead:
@@ -30,6 +37,12 @@ async def delete(entity_id: PyObjectId) -> bool:
 async def find(search: ChannelSearch) -> ChannelPaginatedRead:
     query = {}
     pipeline = [{"$match": query},
+                {"$lookup": {
+                    "from": "tag_collection",
+                    "localField": "tag_ids",
+                    "foreignField": "_id",
+                    "as": "tags"
+                }},
                 {"$sort": {"created_at": pymongo.DESCENDING}},
                 {"$skip": search.skip},
                 {"$limit": search.limit}]
@@ -39,3 +52,9 @@ async def find(search: ChannelSearch) -> ChannelPaginatedRead:
 
     return ChannelPaginatedRead(items=[ChannelRead(**item) for item in items],
                                 total=total)
+
+
+async def add_tag_to_channel(channel_id: PyObjectId, tag_id: PyObjectId):
+    await channel_collection.update_one({"_id": channel_id}, {"$push": {"tag_ids": tag_id}})
+    updated_entity = await channel_collection.find_one({"_id": channel_id})
+    return ChannelRead(**updated_entity)

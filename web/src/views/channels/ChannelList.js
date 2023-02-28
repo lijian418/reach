@@ -30,7 +30,7 @@ export const ChannelList = () => {
   }, [])
 
   const getChannels = async (searchData) => {
-    const {data} = await api.channels.find(searchData)
+    const {data} = await api.channel.find(searchData)
     setChannels(data.items)
     setTotal(data.total)
   }
@@ -84,8 +84,8 @@ export const ChannelList = () => {
                         <div>
                           {
                             channel.tags.map((tag) => (
-                              <Badge className={'me-2'}>
-                                {tag.label}
+                              <Badge className={'me-2'} key={tag.id}>
+                                {tag.slug}
                               </Badge>
                             ))
                           }
