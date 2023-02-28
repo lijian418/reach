@@ -27,7 +27,7 @@ import * as yup from "yup"
 import {useUser} from "../../../hooks/useUser";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const {user, fetchUser} = useUser()
 
   const login = async (values) => {
@@ -35,7 +35,7 @@ const Login = () => {
     if (data) {
       localStorage.setItem('username', values.username)
       await fetchUser()
-      navigate('/')
+      window.location.reload()
     }
   }
 
@@ -52,13 +52,9 @@ const Login = () => {
                 username: '',
               }}
               validationSchema={yup.object().shape({
-                username: yup.string()
-                  .min(2, 'Too Short!')
-                  .max(5, 'Too Long!')
-                  .required('Required'),
+                username: yup.string().required('Required'),
               })}
               onSubmit={async (values) => {
-                console.log(values)
                 await login(values)
               }}>
               {({ errors, touched }) => (
@@ -75,7 +71,11 @@ const Login = () => {
                       <FormFeedback>{errors.username}</FormFeedback>
                     </Col>
                   </FormGroup>
-                  <Button color="primary" className="me-2">Register</Button>
+                  <Button color="primary"
+                          onClick={() => {
+                            navigate('/register')
+                          }}
+                          className="me-2">New user ? Register</Button>
                   <Button color="primary" type={"submit"}>Login</Button>
                 </Form>
               )}

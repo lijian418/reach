@@ -17,5 +17,11 @@ export function useUser() {
     }
   }
 
-  return {user, fetchUser};
+  const logout = () => {
+    localStorage.removeItem('username')
+    setUser(null)
+    window.location.href = "/"
+  }
+
+  return {user, fetchUser, logout};
 }
