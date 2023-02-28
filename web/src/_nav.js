@@ -1,6 +1,7 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
+  cilAudioSpectrum,
   cilBell,
   cilCalculator,
   cilChartPie,
@@ -9,7 +10,7 @@ import {
   cilDrop,
   cilNotes,
   cilPencil,
-  cilPuzzle,
+  cilPuzzle, cilRouter,
   cilSpeedometer,
   cilStar,
 } from '@coreui/icons'
@@ -20,39 +21,14 @@ const _nav = [
     component: CNavItem,
     name: 'Dashboard',
     to: '/dashboard',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
+    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />
   },
   {
-    component: CNavGroup,
-    name: 'Pages',
-    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Login',
-        to: '/login',
-      },
-      {
-        component: CNavItem,
-        name: 'Register',
-        to: '/register',
-      },
-      {
-        component: CNavItem,
-        name: 'Error 404',
-        to: '/404',
-      },
-      {
-        component: CNavItem,
-        name: 'Error 500',
-        to: '/500',
-      },
-    ],
-  }
+    component: CNavItem,
+    name: 'Channels',
+    to: '/channels',
+    icon: <CIcon icon={cilAudioSpectrum} customClassName="nav-icon" />
+  },
 ]
 
 export default _nav

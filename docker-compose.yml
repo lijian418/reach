@@ -36,7 +36,7 @@ services:
       REACT_APP_API_URL: http://localhost:8000
     volumes:
       - ./web:/usr/src/app/web
-      - /usr/src/app/web/node_modules
+      - ./web/node_modules:/usr/src/app/web/node_modules
 
 volumes:
   mongodb-reach:

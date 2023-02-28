@@ -20,7 +20,7 @@ class ChannelBase(PyBaseModel):
 
 class ChannelRead(ChannelBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    tags: List[TagRead] = Field(...)
+    tags: List[TagRead] = Field([])
     alert_routes: List[AlertRouteRead] = Field([])
 
 

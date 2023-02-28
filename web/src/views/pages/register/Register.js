@@ -42,7 +42,7 @@ const Register = () => {
               {({ errors, touched }) => (
                 <Form>
                   <FormGroup row>
-                    <Col md="2"style={{minWidth: '250px'}}>
+                    <Col>
                       <Label for="username">Username</Label>
                       <Input
                         type="text"
