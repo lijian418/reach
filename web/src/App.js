@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import {BrowserRouter, HashRouter, Route, Routes} from 'react-router-dom'
 import './scss/style.scss'
 import {useUser} from "./hooks/useUser";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,7 +25,7 @@ const App = () => {
   const show = () => {
     if (user) {
       return (
-        <HashRouter>
+        <BrowserRouter>
           <Suspense fallback={loading}>
             <Routes>
               <Route exact path="/login" name="Login Page" element={<Login />} />
@@ -35,11 +35,11 @@ const App = () => {
               <Route path="*" name="Home" element={<DefaultLayout />} />
             </Routes>
           </Suspense>
-        </HashRouter>
+        </BrowserRouter>
       )
     } else {
       return (
-        <HashRouter>
+        <BrowserRouter>
           <Suspense fallback={loading}>
             <Routes>
               <Route path="/login" name="Login Page" element={<Login />} />
@@ -49,7 +49,7 @@ const App = () => {
               <Route path="/" name="Login" element={<Login />} />
             </Routes>
           </Suspense>
-        </HashRouter>
+        </BrowserRouter>
       )
     }
   }

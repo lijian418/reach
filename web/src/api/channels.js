@@ -17,7 +17,24 @@ const find = async (search): Promise<AxiosResponse> => {
   })
 }
 
+const get = async (channelId): Promise<AxiosResponse> => {
+  return await request({
+    method: "GET",
+    url: `/channels/${channelId}`
+  })
+}
+
+const update = async (channelId, data): Promise<AxiosResponse> => {
+  return await request({
+    method: "PUT",
+    url: `/channels/${channelId}`,
+    data: data
+  })
+}
+
 export const channels = {
   create,
-  find
+  find,
+  get,
+  update
 }

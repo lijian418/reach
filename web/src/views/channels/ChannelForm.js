@@ -9,19 +9,6 @@ export const ChannelForm = (props) => {
     <Form>
       <FormGroup row>
         <Col>
-          <Label for="slug">Slug</Label>
-          <Input
-            type="text"
-            name="slug"
-            tag={Field}
-            invalid={errors.slug && touched.slug}
-          />
-          <FormText>Used to identify your channel with API</FormText>
-          <FormFeedback>{errors.slug}</FormFeedback>
-        </Col>
-      </FormGroup>
-      <FormGroup row>
-        <Col>
           <Label for="label">Label</Label>
           <Input
             type="text"
@@ -31,6 +18,19 @@ export const ChannelForm = (props) => {
           />
           <FormText>Only used for display</FormText>
           <FormFeedback>{errors.label}</FormFeedback>
+        </Col>
+      </FormGroup>
+      <FormGroup row>
+        <Col>
+          <Label for="slug">Slug</Label>
+          <Input
+            type="text"
+            name="slug"
+            tag={Field}
+            invalid={errors.slug && touched.slug}
+          />
+          <FormText>Used to identify your channel with API</FormText>
+          <FormFeedback>{errors.slug}</FormFeedback>
         </Col>
       </FormGroup>
     </Form>
