@@ -18,9 +18,6 @@ function AssignAlertRouteModal(props) {
 
   const toggle = () => setModal(!modal);
 
-  useEffect(() => {
-    console.log(props.alreadyAssigned)
-  }, [props])
   async function loadOptions(search, loadedOptions) {
     const {data} = await api.alertRoute.find({
       limit: 10,
@@ -53,7 +50,7 @@ function AssignAlertRouteModal(props) {
   return (
     <div>
       <Button color="primary" onClick={toggle}>
-        Assign alert route
+        Assign
       </Button>
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Assign Alert Route</ModalHeader>

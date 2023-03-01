@@ -13,10 +13,19 @@ async def create(payload: ChannelCreate) -> ChannelRead:
 
 async def get(entity_id: PyObjectId) -> ChannelRead:
     pipeline = [{"$match": {"_id": entity_id}},
+                # nested lookup tag and then alert_route
                 {"$lookup": {
                     "from": "tag_collection",
-                    "localField": "tag_ids",
-                    "foreignField": "_id",
+                    "let": {"tag_ids": "$tag_ids"},
+                    "pipeline": [
+                        {"$match": {"$expr": {"$in": ["$_id", "$$tag_ids"]}}},
+                        {"$lookup": {
+                            "from": "alert_route_collection",
+                            "localField": "alert_route_ids",
+                            "foreignField": "_id",
+                            "as": "alert_routes"
+                        }}
+                    ],
                     "as": "tags"
                 }},
                 {"$lookup": {

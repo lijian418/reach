@@ -6,7 +6,6 @@ import {Badge} from "reactstrap";
 import EditChannelModal from "./EditChannelModal";
 import CreateTagModal from "./tags/CreateTagModal";
 import {TagList} from "./tags/TagList";
-import CreateAlertRouteModal from "../alert-routes/CreateAlertRouteModal";
 import AssignAlertRouteModal from "../alert-routes/AssignAlertRouteModal";
 import {ChannelAlertRouteList} from "./alert-routes/ChannelAlertRouteList";
 
@@ -62,7 +61,7 @@ const ChannelDetail = () => {
             channel && (
               <AssignAlertRouteModal
                 alreadyAssigned={channel.alert_routes.map((x) => x.id)}
-                callbackAssign={(x) => assignAlertRouteToChannel(x.value)}/>
+                callbackAssign={(option) => assignAlertRouteToChannel(option.value)}/>
             )
           }
         </div>
