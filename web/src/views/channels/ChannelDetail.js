@@ -6,6 +6,8 @@ import {Badge} from "reactstrap";
 import EditChannelModal from "./EditChannelModal";
 import CreateTagModal from "./tags/CreateTagModal";
 import {TagList} from "./tags/TagList";
+import CreateAlertRouteModal from "../alert-routes/CreateAlertRouteModal";
+import AssignAlertRouteModal from "../alert-routes/AssignAlertRouteModal";
 
 const ChannelDetail = () => {
   let { channelId } = useParams();
@@ -36,7 +38,6 @@ const ChannelDetail = () => {
       </div>
 
       <div className={'mt-4'}>
-
         <div className={'d-flex justify-content-between mb-4'}>
           <h3>Tags</h3>
           {
@@ -46,6 +47,17 @@ const ChannelDetail = () => {
           }
         </div>
         <TagList channel={channel} refetch={fetchChannel}/>
+      </div>
+
+      <div className={'mt-4'}>
+        <div className={'d-flex justify-content-between mb-4'}>
+          <h3>Alert Routes</h3>
+          {
+            channel && (
+              <AssignAlertRouteModal/>
+            )
+          }
+        </div>
       </div>
     </>
   )
