@@ -4,7 +4,6 @@ import {useState} from "react";
 import {api} from "../../api";
 import {Badge} from "reactstrap";
 import EditChannelModal from "./EditChannelModal";
-import EditTagModal from "./tags/EditTagModal";
 import CreateTagModal from "./tags/CreateTagModal";
 import {TagList} from "./tags/TagList";
 

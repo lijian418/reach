@@ -39,3 +39,15 @@ async def find(search: TagSearch) -> TagPaginatedRead:
 
     return TagPaginatedRead(items=[TagRead(**item) for item in items],
                             total=total)
+
+
+async def add_alert_route_id_to_tag(tag_id: PyObjectId, alert_route_id: PyObjectId):
+    await tag_collection.update_one({"_id": tag_id}, {"$addToSet": {"alert_route_ids": alert_route_id}})
+    updated_entity = await tag_collection.find_one({"_id": tag_id})
+    return TagRead(**updated_entity)
+
+
+async def remove_alert_route_id_from_tag(tag_id: PyObjectId, alert_route_id: PyObjectId):
+    await tag_collection.update_one({"_id": tag_id}, {"$pull": {"alert_route_ids": alert_route_id}})
+    updated_entity = await tag_collection.find_one({"_id": tag_id})
+    return TagRead(**updated_entity)

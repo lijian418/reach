@@ -6,46 +6,48 @@ import {
   ModalBody,
   ModalFooter,
 } from 'reactstrap';
-import {ChannelForm} from "./ChannelForm";
 import {Formik} from "formik";
 import * as yup from "yup";
 import {api} from "../../api";
+import {AlertRouteForm} from "./AlertRouteForm";
 
-function EditChannelModal(props) {
+function EditAlertRouteModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const editChannel = async (values) => {
-    const {data} = await api.channel.update(props.channel.id, values)
+  const editAlertRoute = async (values) => {
+    const {data} = await api.alertRoute.update(props.alertRoute.id, values)
     props.refetch()
   }
 
   return (
     <div>
       {
-        props.channel && (
+        props.alertRoute && (
           <div>
             <Button color="primary" onClick={toggle}>
-              Edit Channel
+              Edit Alert Route
             </Button>
             <Formik
               initialValues={{
-                slug: props.channel.slug,
-                label: props.channel.label
+                email: props.alertRoute.email,
+                label: props.alertRoute.label,
+                webhook_url: props.alertRoute.webhook_url
               }}
               validationSchema={yup.object().shape({
-                slug: yup.string().required('Required'),
+                email: yup.string().optional(),
                 label: yup.string().required('Required'),
+                webhook_url: yup.string().optional(),
               })}
               onSubmit={async (values) => {
-                await editChannel(values)
+                await editAlertRoute(values)
               }}>
               {(formik) => (
                 <Modal isOpen={modal} toggle={toggle}>
-                  <ModalHeader toggle={toggle}>Edit {props.channel.label} Channel</ModalHeader>
+                  <ModalHeader toggle={toggle}>Edit Alert Route</ModalHeader>
                   <ModalBody>
-                    <ChannelForm formik={formik}/>
+                    <AlertRouteForm formik={formik}/>
                   </ModalBody>
                   <ModalFooter>
                     <Button color="secondary" onClick={toggle}>
@@ -68,4 +70,4 @@ function EditChannelModal(props) {
   );
 }
 
-export default EditChannelModal;
+export default EditAlertRouteModal;

@@ -8,11 +8,12 @@ from models.fastapi.mongodb import PyObjectId
 
 
 class AlertRouteBase(PyBaseModel):
-    channel_id: Optional[PyObjectId] = Field(None)
-    tag_id: Optional[PyObjectId] = Field(None)
-    user_id: Optional[PyObjectId] = Field(None)
-    webhook_urls: List[str] = Field([])
-    emails: List[str] = Field([])
+    label: str = Field(...)
+    channel_ids: List[PyObjectId] = Field([])
+    tag_ids: List[PyObjectId] = Field([])
+    user_ids: List[PyObjectId] = Field([])
+    webhook_url: Optional[str] = Field(None)
+    email: Optional[str] = Field(None)
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 

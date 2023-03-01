@@ -1,20 +1,11 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
+  cilAlarm,
   cilAudioSpectrum,
-  cilBell,
-  cilCalculator,
-  cilChartPie,
-  cilCursor,
-  cilDescription,
-  cilDrop,
-  cilNotes,
-  cilPencil,
-  cilPuzzle, cilRouter,
   cilSpeedometer,
-  cilStar,
 } from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import { CNavItem } from '@coreui/react'
 
 const _nav = [
   {
@@ -28,6 +19,12 @@ const _nav = [
     name: 'Channels',
     to: '/channels',
     icon: <CIcon icon={cilAudioSpectrum} customClassName="nav-icon" />
+  },
+  {
+    component: CNavItem,
+    name: 'Alert Routes',
+    to: '/alert-routes',
+    icon: <CIcon icon={cilAlarm} customClassName="nav-icon" />
   },
 ]
 

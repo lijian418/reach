@@ -55,6 +55,18 @@ async def find(search: ChannelSearch) -> ChannelPaginatedRead:
 
 
 async def add_tag_to_channel(channel_id: PyObjectId, tag_id: PyObjectId):
-    await channel_collection.update_one({"_id": channel_id}, {"$push": {"tag_ids": tag_id}})
+    await channel_collection.update_one({"_id": channel_id}, {"$addToSet": {"tag_ids": tag_id}})
+    updated_entity = await channel_collection.find_one({"_id": channel_id})
+    return ChannelRead(**updated_entity)
+
+
+async def add_alert_route_id_to_channel(channel_id: PyObjectId, alert_route_id: PyObjectId):
+    await channel_collection.update_one({"_id": channel_id}, {"$addToSet": {"alert_route_ids": alert_route_id}})
+    updated_entity = await channel_collection.find_one({"_id": channel_id})
+    return ChannelRead(**updated_entity)
+
+
+async def remove_alert_route_id_from_channel(channel_id: PyObjectId, alert_route_id: PyObjectId):
+    await channel_collection.update_one({"_id": channel_id}, {"$pull": {"alert_route_ids": alert_route_id}})
     updated_entity = await channel_collection.find_one({"_id": channel_id})
     return ChannelRead(**updated_entity)

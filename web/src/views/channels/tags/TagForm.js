@@ -16,7 +16,7 @@ export const TagForm = (props) => {
             tag={Field}
             invalid={errors.slug && touched.slug}
           />
-          <FormText>Used to identify your tag with API</FormText>
+          <FormText>Used to identify your tag</FormText>
           <FormFeedback>{errors.slug}</FormFeedback>
         </Col>
       </FormGroup>

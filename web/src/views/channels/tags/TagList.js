@@ -41,6 +41,11 @@ export const TagList = (props) => {
             )
           })
         }
+        {
+          props.channel && props.channel.tags.length === 0 && (
+            <p>No tags</p>
+          )
+        }
       </div>
     </>
   )

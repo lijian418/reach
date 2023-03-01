@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Button,
   Modal,
@@ -6,43 +6,45 @@ import {
   ModalBody,
   ModalFooter,
 } from 'reactstrap';
-import {ChannelForm} from "./ChannelForm";
-import {Field, Form, Formik} from "formik";
+import {Formik} from "formik";
 import * as yup from "yup";
 import {api} from "../../api";
+import {AlertRouteForm} from "./AlertRouteForm";
 
-function CreateChannelModal(props) {
+function CreateAlertRouteModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const createChannel = async (values) => {
-    const {data} = await api.channel.create(values)
+  const createAlertRoute = async (values) => {
+    const {data} = await api.alertRoute.create(values)
     props.refetch()
   }
 
   return (
     <div>
       <Button color="primary" onClick={toggle}>
-        Add a new channel
+        Add a new alert route
       </Button>
       <Formik
         initialValues={{
-          slug: "",
+          email: "",
           label: "",
+          webhook_url: "",
         }}
         validationSchema={yup.object().shape({
-          slug: yup.string().required('Required'),
-          label: yup.string().required('Required'),
+          email: yup.string().optional(),
+          label: yup.string().required("Required"),
+          webhook_url: yup.string().optional(),
         })}
         onSubmit={async (values) => {
-          await createChannel(values)
+          await createAlertRoute(values)
         }}>
         {(formik) => (
           <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Create Channel</ModalHeader>
+            <ModalHeader toggle={toggle}>Create Alert Route</ModalHeader>
             <ModalBody>
-              <ChannelForm formik={formik}/>
+              <AlertRouteForm formik={formik}/>
             </ModalBody>
             <ModalFooter>
               <Button color="secondary" onClick={toggle}>
@@ -62,4 +64,4 @@ function CreateChannelModal(props) {
   );
 }
 
-export default CreateChannelModal;
+export default CreateAlertRouteModal;

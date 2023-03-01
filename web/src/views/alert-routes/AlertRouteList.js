@@ -2,21 +2,21 @@ import {useEffect, useState} from "react";
 import {api} from "../../api";
 import useAsyncEffect from "use-async-effect";
 import {
-  Badge,
   Button,
   Card,
   CardBody,
-  CardSubtitle, CardText,
+  CardText,
   CardTitle,
 } from "reactstrap";
 import Pagination from "react-js-pagination";
 import {cilTrash} from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import {useNavigate} from "react-router-dom";
+import {pageNumber} from "../../utils/pageNumber";
 
-export const ChannelList = (props) => {
+export const AlertRouteList = (props) => {
   const [search, setSearch] = useState()
-  const [channels, setChannels] = useState()
+  const [alertRoutes, setAlertRoutes] = useState()
   const [total, setTotal] = useState()
   const navigate = useNavigate()
 
@@ -26,17 +26,13 @@ export const ChannelList = (props) => {
       skip: 0
     }
     setSearch(searchData)
-    await getChannels(searchData)
+    await getAlertRoutes(searchData)
   }, [props.refetchAt])
 
-  const getChannels = async (searchData) => {
-    const {data} = await api.channel.find(searchData)
-    setChannels(data.items)
+  const getAlertRoutes = async (searchData) => {
+    const {data} = await api.alertRoute.find(searchData)
+    setAlertRoutes(data.items)
     setTotal(data.total)
-  }
-
-  function pageNumber(total,limit,offset){
-    return offset >= total ? -1 : parseInt(offset / limit) + 1;
   }
 
   const changePage = async (page) => {
@@ -46,14 +42,14 @@ export const ChannelList = (props) => {
       skip: newOffset
     }
     setSearch(searchData)
-    await getChannels(searchData)
+    await getAlertRoutes(searchData)
   }
 
   return (
     <>
       <div className={'d-flex flex-row-reverse mt-4'}>
         <div className={'d-flex align-items-end'}>
-          <p className={'me-2'}>{search?.skip + channels?.length} out of {total}</p>
+          <p className={'me-2'}>{search?.skip + alertRoutes?.length} out of {total}</p>
           <Pagination
             activePage={pageNumber(total ? total : 0, 10, search?.skip)}
             totalItemsCount={total ? total : 0}
@@ -65,46 +61,21 @@ export const ChannelList = (props) => {
       </div>
       <div className={'d-flex gap-3 flex-wrap'}>
         {
-          channels && channels.map((channel) => {
+          alertRoutes && alertRoutes.map((alertRoute) => {
             return (
-              <Card style={{width: '25rem', minWidth: '300px'}} key={channel.id}>
+              <Card style={{width: '25rem', minWidth: '300px'}} key={alertRoute.id}>
                 <CardBody>
                   <CardTitle tag="h5">
-                    {channel.label}
+                    Route {alertRoute.label}
                   </CardTitle>
-                  <CardSubtitle
-                    className="mb-2 text-muted"
-                    tag="h6"
-                  >
-                    {channel.slug}
-                  </CardSubtitle>
-                  <div className={'my-2'}>
-                    {
-                      channel.tags.length > 0 ? (
-                        <div>
-                          {
-                            channel.tags.map((tag) => (
-                              <Badge className={'me-2'} key={tag.id}>
-                                {tag.slug}
-                              </Badge>
-                            ))
-                          }
-                        </div>
-                      ) : (
-                        <div>
-                          <Badge className={'me-2'}>
-                            No tags
-                          </Badge>
-                        </div>
-                      )
-                    }
-                  </div>
+                  <CardText>Email: {alertRoute.email ? alertRoute.email : "No Email Set"}</CardText>
+                  <CardText>Webhook URL: {alertRoute.webhook_url ? alertRoute.webhook_url : "No Webhook Set"}</CardText>
                   <div className={'d-flex flex-row-reverse'}>
                     <div className={'d-flex gap-2 flex-wrap'}>
                       <Button color={'danger'}>
                         <CIcon icon={cilTrash} size="sm"/> Delete
                       </Button>
-                      <Button color={'primary'} onClick={() => navigate(`/channels/${channel.id}`)}>
+                      <Button color={'primary'} onClick={() => navigate(`/alert-routes/${alertRoute.id}`)}>
                         View
                       </Button>
                     </div>
@@ -115,10 +86,9 @@ export const ChannelList = (props) => {
           })
         }
       </div>
-
       <div className={'d-flex flex-row-reverse mt-4'}>
         <div className={'d-flex align-items-end'}>
-          <p className={'me-2'}>{search?.skip + channels?.length} out of {total}</p>
+          <p className={'me-2'}>{search?.skip + alertRoutes?.length} out of {total}</p>
           <Pagination
             activePage={pageNumber(total ? total : 0, 10, search?.skip)}
             totalItemsCount={total ? total : 0}

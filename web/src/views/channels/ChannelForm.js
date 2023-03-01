@@ -29,7 +29,7 @@ export const ChannelForm = (props) => {
             tag={Field}
             invalid={errors.slug && touched.slug}
           />
-          <FormText>Used to identify your channel with API</FormText>
+          <FormText>Used to identify your channel</FormText>
           <FormFeedback>{errors.slug}</FormFeedback>
         </Col>
       </FormGroup>
