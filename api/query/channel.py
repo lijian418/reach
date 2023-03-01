@@ -18,6 +18,12 @@ async def get(entity_id: PyObjectId) -> ChannelRead:
                     "localField": "tag_ids",
                     "foreignField": "_id",
                     "as": "tags"
+                }},
+                {"$lookup": {
+                    "from": "alert_route_collection",
+                    "localField": "alert_route_ids",
+                    "foreignField": "_id",
+                    "as": "alert_routes"
                 }}]
     entity = await channel_collection.aggregate(pipeline).to_list(length=None)
     return ChannelRead(**entity[0])
@@ -42,6 +48,12 @@ async def find(search: ChannelSearch) -> ChannelPaginatedRead:
                     "localField": "tag_ids",
                     "foreignField": "_id",
                     "as": "tags"
+                }},
+                {"$lookup": {
+                    "from": "alert_route_collection",
+                    "localField": "alert_route_ids",
+                    "foreignField": "_id",
+                    "as": "alert_routes"
                 }},
                 {"$sort": {"created_at": pymongo.DESCENDING}},
                 {"$skip": search.skip},

@@ -11,9 +11,9 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/channels', name: 'Channels', element: Channels },
-  { path: '/channels/:channelId', name: 'ChannelDetail', element: ChannelDetail },
-  { path: '/alert-routes', name: 'AlertRoutes', element: AlertRoutes },
-  { path: '/alert-routes/:alertRouteId', name: 'AlertRouteDetail', element: AlertRouteDetail },
+  { path: '/channels/:channelId', name: 'Channel Detail', element: ChannelDetail },
+  { path: '/alert-routes', name: 'Alert Routes', element: AlertRoutes },
+  { path: '/alert-routes/:alertRouteId', name: 'Alert Route Detail', element: AlertRouteDetail },
 ]
 
 export default routes

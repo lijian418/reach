@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   Modal,
@@ -18,7 +18,9 @@ function AssignAlertRouteModal(props) {
 
   const toggle = () => setModal(!modal);
 
-
+  useEffect(() => {
+    console.log(props.alreadyAssigned)
+  }, [props])
   async function loadOptions(search, loadedOptions) {
     const {data} = await api.alertRoute.find({
       limit: 10,
@@ -27,12 +29,22 @@ function AssignAlertRouteModal(props) {
 
     return {
       options: data.items.map((item) => {
-        return (
-          {
-            value: item.id,
-            label: item.label
-          }
-        )
+        if (!props.alreadyAssigned.includes(item.id)) {
+          return (
+            {
+              value: item.id,
+              label: item.label,
+            }
+          )
+        } else {
+          return (
+            {
+              value: item.id,
+              label: item.label + " - Already Assigned",
+              isDisabled: true
+            }
+          )
+        }
       }),
       hasMore: loadedOptions.length < data.total
     };
@@ -43,40 +55,27 @@ function AssignAlertRouteModal(props) {
       <Button color="primary" onClick={toggle}>
         Assign alert route
       </Button>
-      <Formik
-        initialValues={{
-          alert_route_id: "",
-        }}
-        validationSchema={yup.object().shape({
-          alert_route_id: yup.string().required(),
-        })}
-        onSubmit={async (values) => {
-          await props.callbackAssign(values)
-        }}>
-        {(formik) => (
-          <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Assign Alert Route</ModalHeader>
-            <ModalBody>
-              <AsyncPaginate
-                value={alertRoute}
-                loadOptions={loadOptions}
-                onChange={setAlertRoute}
-              />
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={toggle}>
-                Cancel
-              </Button>{' '}
-              <Button color="primary" onClick={() => {
-                formik.handleSubmit()
-                toggle()
-              }}>
-                Assign
-              </Button>
-            </ModalFooter>
-          </Modal>
-        )}
-      </Formik>
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Assign Alert Route</ModalHeader>
+        <ModalBody>
+          <AsyncPaginate
+            value={alertRoute}
+            loadOptions={loadOptions}
+            onChange={setAlertRoute}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>{' '}
+          <Button color="primary" onClick={() => {
+            props.callbackAssign(alertRoute)
+            toggle()
+          }}>
+            Assign
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 }

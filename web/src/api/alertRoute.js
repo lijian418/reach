@@ -35,42 +35,42 @@ const update = async (entityId, data): Promise<AxiosResponse> => {
 const assignToTag = async (entityId, tagId): Promise<AxiosResponse> => {
   return await request({
     method: "PUT",
-    url: `/${entityId}/assign/tag/${tagId}`
+    url: `/alert-routes/${entityId}/assign/tag/${tagId}`
   })
 }
 
 const assignToChannel = async (entityId, channelId): Promise<AxiosResponse> => {
   return await request({
     method: "PUT",
-    url: `/${entityId}/assign/channel/${channelId}`
+    url: `/alert-routes/${entityId}/assign/channel/${channelId}`
   })
 }
 
 const assignToUser = async (entityId, userId): Promise<AxiosResponse> => {
   return await request({
     method: "PUT",
-    url: `/${entityId}/assign/user/${userId}`
+    url: `/alert-routes/${entityId}/assign/user/${userId}`
   })
 }
 
-const unassignToTag = async (entityId, tagId): Promise<AxiosResponse> => {
+const unassignFromTag = async (entityId, tagId): Promise<AxiosResponse> => {
   return await request({
     method: "PUT",
-    url: `/${entityId}/unassign/tag/${tagId}`
+    url: `/alert-routes/${entityId}/unassign/tag/${tagId}`
   })
 }
 
-const unassignToChannel = async (entityId, channelId): Promise<AxiosResponse> => {
+const unassignFromChannel = async (entityId, channelId): Promise<AxiosResponse> => {
   return await request({
     method: "PUT",
-    url: `/${entityId}/unassign/channel/${channelId}`
+    url: `/alert-routes/${entityId}/unassign/channel/${channelId}`
   })
 }
 
-const unassignToUser = async (entityId, userId): Promise<AxiosResponse> => {
+const unassignFromUser = async (entityId, userId): Promise<AxiosResponse> => {
   return await request({
     method: "PUT",
-    url: `/${entityId}/unassign/user/${userId}`
+    url: `/alert-routes/${entityId}/unassign/user/${userId}`
   })
 }
 
@@ -82,7 +82,7 @@ export const alertRoute = {
   assignToTag,
   assignToUser,
   assignToChannel,
-  unassignToUser,
-  unassignToChannel,
-  unassignToTag
+  unassignFromUser,
+  unassignFromChannel,
+  unassignFromTag
 }
