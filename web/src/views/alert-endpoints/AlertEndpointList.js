@@ -14,9 +14,9 @@ import CIcon from "@coreui/icons-react";
 import {useNavigate} from "react-router-dom";
 import {pageNumber} from "../../utils/pageNumber";
 
-export const AlertRouteList = (props) => {
+export const AlertEndpointList = (props) => {
   const [search, setSearch] = useState()
-  const [alertRoutes, setAlertRoutes] = useState()
+  const [alertEndpoints, setAlertEndpoints] = useState()
   const [total, setTotal] = useState()
   const navigate = useNavigate()
 
@@ -26,12 +26,12 @@ export const AlertRouteList = (props) => {
       skip: 0
     }
     setSearch(searchData)
-    await getAlertRoutes(searchData)
+    await getAlertEndpoints(searchData)
   }, [props.refetchAt])
 
-  const getAlertRoutes = async (searchData) => {
-    const {data} = await api.alertRoute.find(searchData)
-    setAlertRoutes(data.items)
+  const getAlertEndpoints = async (searchData) => {
+    const {data} = await api.alertEndpoint.find(searchData)
+    setAlertEndpoints(data.items)
     setTotal(data.total)
   }
 
@@ -42,14 +42,14 @@ export const AlertRouteList = (props) => {
       skip: newOffset
     }
     setSearch(searchData)
-    await getAlertRoutes(searchData)
+    await getAlertEndpoints(searchData)
   }
 
   return (
     <>
       <div className={'d-flex flex-row-reverse mt-4'}>
         <div className={'d-flex align-items-end'}>
-          <p className={'me-2'}>{search?.skip + alertRoutes?.length} out of {total}</p>
+          <p className={'me-2'}>{search?.skip + alertEndpoints?.length} out of {total}</p>
           <Pagination
             activePage={pageNumber(total ? total : 0, 10, search?.skip)}
             totalItemsCount={total ? total : 0}
@@ -61,21 +61,21 @@ export const AlertRouteList = (props) => {
       </div>
       <div className={'d-flex gap-3 flex-wrap'}>
         {
-          alertRoutes && alertRoutes.map((alertRoute) => {
+          alertEndpoints && alertEndpoints.map((alertEndpoint) => {
             return (
-              <Card style={{width: '25rem', minWidth: '300px'}} key={alertRoute.id}>
+              <Card style={{width: '25rem', minWidth: '300px'}} key={alertEndpoint.id}>
                 <CardBody>
                   <CardTitle tag="h5">
-                    Route {alertRoute.label}
+                    Endpoint {alertEndpoint.label}
                   </CardTitle>
-                  <CardText>Email: {alertRoute.email ? alertRoute.email : "No Email Set"}</CardText>
-                  <CardText>Webhook URL: {alertRoute.webhook_url ? alertRoute.webhook_url : "No Webhook Set"}</CardText>
+                  <CardText>Email: {alertEndpoint.email ? alertEndpoint.email : "No Email Set"}</CardText>
+                  <CardText>Webhook URL: {alertEndpoint.webhook_url ? alertEndpoint.webhook_url : "No Webhook Set"}</CardText>
                   <div className={'d-flex flex-row-reverse'}>
                     <div className={'d-flex gap-2 flex-wrap'}>
                       <Button color={'danger'}>
                         <CIcon icon={cilTrash} size="sm"/> Delete
                       </Button>
-                      <Button color={'primary'} onClick={() => navigate(`/alert-routes/${alertRoute.id}`)}>
+                      <Button color={'primary'} onClick={() => navigate(`/alert-endpoints/${alertEndpoint.id}`)}>
                         View
                       </Button>
                     </div>
@@ -88,7 +88,7 @@ export const AlertRouteList = (props) => {
       </div>
       <div className={'d-flex flex-row-reverse mt-4'}>
         <div className={'d-flex align-items-end'}>
-          <p className={'me-2'}>{search?.skip + alertRoutes?.length} out of {total}</p>
+          <p className={'me-2'}>{search?.skip + alertEndpoints?.length} out of {total}</p>
           <Pagination
             activePage={pageNumber(total ? total : 0, 10, search?.skip)}
             totalItemsCount={total ? total : 0}

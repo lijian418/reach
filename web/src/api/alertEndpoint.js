@@ -4,7 +4,7 @@ import {AxiosResponse} from "axios";
 const create = async (data): Promise<AxiosResponse> => {
   return await request({
     method: 'POST',
-    url: '/tags',
+    url: '/alert-endpoints',
     data: data
   })
 }
@@ -12,27 +12,28 @@ const create = async (data): Promise<AxiosResponse> => {
 const find = async (search): Promise<AxiosResponse> => {
   return await request({
     method: "GET",
-    url: "/tags",
+    url: "/alert-endpoints",
     params: search
   })
 }
 
-const get = async (tagId): Promise<AxiosResponse> => {
+const get = async (entityId): Promise<AxiosResponse> => {
   return await request({
     method: "GET",
-    url: `/tags/${tagId}`
+    url: `/alert-endpoints/${entityId}`
   })
 }
 
-const update = async (tagId, data): Promise<AxiosResponse> => {
+const update = async (entityId, data): Promise<AxiosResponse> => {
   return await request({
     method: "PUT",
-    url: `/tags/${tagId}`,
+    url: `/alert-endpoints/${entityId}`,
     data: data
   })
 }
 
-export const tag = {
+
+export const alertEndpoint = {
   create,
   find,
   get,

@@ -44,15 +44,3 @@ async def find(search: UserSearch) -> UserPaginatedRead:
 
     return UserPaginatedRead(items=[UserRead(**item) for item in items],
                              total=total)
-
-
-async def add_alert_route_id_to_user(user_id: PyObjectId, alert_route_id: PyObjectId):
-    await user_collection.update_one({"_id": user_id}, {"$addToSet": {"alert_route_ids": alert_route_id}})
-    updated_entity = await user_collection.find_one({"_id": user_id})
-    return UserRead(**updated_entity)
-
-
-async def remove_alert_route_id_from_user(user_id: PyObjectId, alert_route_id: PyObjectId):
-    await user_collection.update_one({"_id": user_id}, {"$pull": {"alert_route_ids": alert_route_id}})
-    updated_entity = await user_collection.find_one({"_id": user_id})
-    return UserRead(**updated_entity)

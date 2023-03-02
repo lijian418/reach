@@ -3,8 +3,8 @@ import React from 'react'
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Channels = React.lazy(() => import('./views/channels/Channels'))
 const ChannelDetail = React.lazy(() => import('./views/channels/ChannelDetail'))
-const AlertRoutes = React.lazy(() => import('./views/alert-routes/AlertRoutes'))
-const AlertRouteDetail = React.lazy(() => import('./views/alert-routes/AlertRouteDetail'))
+const AlertEndpoints = React.lazy(() => import('./views/alert-endpoints/AlertEndpoints'))
+const AlertEndpointDetail = React.lazy(() => import('./views/alert-endpoints/AlertEndpointDetail'))
 
 
 const routes = [
@@ -12,8 +12,8 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/channels', name: 'Channels', element: Channels },
   { path: '/channels/:channelId', name: 'Channel Detail', element: ChannelDetail },
-  { path: '/alert-routes', name: 'Alert Routes', element: AlertRoutes },
-  { path: '/alert-routes/:alertRouteId', name: 'Alert Route Detail', element: AlertRouteDetail },
+  { path: '/alert-endpoints', name: 'Alert Endpoints', element: AlertEndpoints },
+  { path: '/alert-endpoints/:alertEndpointId', name: 'Alert Endpoint Detail', element: AlertEndpointDetail },
 ]
 
 export default routes

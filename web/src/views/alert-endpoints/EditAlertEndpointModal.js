@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Button,
   Modal,
@@ -8,45 +8,46 @@ import {
 } from 'reactstrap';
 import {Formik} from "formik";
 import * as yup from "yup";
-import {api} from "../../../api";
-import {TagForm} from "./TagForm";
+import {api} from "../../api";
+import {AlertEndpointForm} from "./AlertEndpointForm";
 
-function EditTagModal(props) {
+function EditAlertEndpointModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const editTag = async (values) => {
-    const {data} = await api.tag.update(props.tag.id, {
-      slug: values.slug,
-      channel_id: props.channel.id
-    })
+  const editAlertEndpoint = async (values) => {
+    const {data} = await api.alertEndpoint.update(props.alertEndpoint.id, values)
     props.refetch()
   }
 
   return (
     <div>
       {
-        props.channel && props.tag && (
+        props.alertEndpoint && (
           <div>
             <Button color="primary" onClick={toggle}>
-              Edit
+              Edit Alert Endpoint
             </Button>
             <Formik
               initialValues={{
-                slug: props.tag.slug,
+                email: props.alertEndpoint.email,
+                label: props.alertEndpoint.label,
+                webhook_url: props.alertEndpoint.webhook_url
               }}
               validationSchema={yup.object().shape({
-                slug: yup.string().required('Required'),
+                email: yup.string().optional(),
+                label: yup.string().required('Required'),
+                webhook_url: yup.string().optional(),
               })}
               onSubmit={async (values) => {
-                await editTag(values)
+                await editAlertEndpoint(values)
               }}>
               {(formik) => (
                 <Modal isOpen={modal} toggle={toggle}>
-                  <ModalHeader toggle={toggle}>Edit {props.tag.slug} Tag</ModalHeader>
+                  <ModalHeader toggle={toggle}>Edit Alert Endpoint</ModalHeader>
                   <ModalBody>
-                    <TagForm formik={formik}/>
+                    <AlertEndpointForm formik={formik}/>
                   </ModalBody>
                   <ModalFooter>
                     <Button color="secondary" onClick={toggle}>
@@ -69,4 +70,4 @@ function EditTagModal(props) {
   );
 }
 
-export default EditTagModal;
+export default EditAlertEndpointModal;

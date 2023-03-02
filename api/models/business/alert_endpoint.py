@@ -7,33 +7,30 @@ from models.fastapi.base_models import PyBaseModel, PyPaginatedBaseModel
 from models.fastapi.mongodb import PyObjectId
 
 
-class AlertRouteBase(PyBaseModel):
+class AlertEndpointBase(PyBaseModel):
     label: str = Field(...)
-    channel_ids: List[PyObjectId] = Field([])
-    tag_ids: List[PyObjectId] = Field([])
-    user_ids: List[PyObjectId] = Field([])
     webhook_url: Optional[str] = Field(None)
     email: Optional[str] = Field(None)
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 
 
-class AlertRouteRead(AlertRouteBase):
+class AlertEndpointRead(AlertEndpointBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
 
 
-class AlertRouteCreate(AlertRouteBase):
+class AlertEndpointCreate(AlertEndpointBase):
     pass
 
 
-class AlertRouteUpdate(AlertRouteBase):
+class AlertEndpointUpdate(AlertEndpointBase):
     pass
 
 
-class AlertRoutePaginatedRead(PyBaseModel):
+class AlertEndpointPaginatedRead(PyBaseModel):
     total: int
-    items: List[AlertRouteRead]
+    items: List[AlertEndpointRead]
 
 
-class AlertRouteSearch(PyPaginatedBaseModel):
+class AlertEndpointSearch(PyPaginatedBaseModel):
     pass

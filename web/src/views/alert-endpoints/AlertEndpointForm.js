@@ -2,7 +2,7 @@ import {Field, Form} from "formik";
 import {Col, FormFeedback, FormGroup, Input, Label} from "reactstrap";
 import React from "react";
 
-export const AlertRouteForm = (props) => {
+export const AlertEndpointForm = (props) => {
   const {errors, touched} = props.formik
 
   return (

@@ -78,27 +78,6 @@ export const ChannelList = (props) => {
                   >
                     {channel.slug}
                   </CardSubtitle>
-                  <div className={'my-2'}>
-                    {
-                      channel.tags.length > 0 ? (
-                        <div>
-                          {
-                            channel.tags.map((tag) => (
-                              <Badge className={'me-2'} key={tag.id}>
-                                {tag.slug}
-                              </Badge>
-                            ))
-                          }
-                        </div>
-                      ) : (
-                        <div>
-                          <Badge className={'me-2'}>
-                            No tags
-                          </Badge>
-                        </div>
-                      )
-                    }
-                  </div>
                   <div className={'d-flex flex-row-reverse'}>
                     <div className={'d-flex gap-2 flex-wrap'}>
                       <Button color={'danger'}>

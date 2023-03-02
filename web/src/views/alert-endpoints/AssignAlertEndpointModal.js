@@ -9,17 +9,17 @@ import {
 import {Field, Form, Formik} from "formik";
 import * as yup from "yup";
 import {api} from "../../api";
-import {AlertRouteForm} from "./AlertRouteForm";
+import {AlertEndpointForm} from "./AlertEndpointForm";
 import {AsyncPaginate} from "react-select-async-paginate";
 
-function AssignAlertRouteModal(props) {
+function AssignAlertEndpointModal(props) {
   const [modal, setModal] = useState(false);
-  const [alertRoute, setAlertRoute] = useState()
+  const [alertEndpoint, setAlertEndpoint] = useState()
 
   const toggle = () => setModal(!modal);
 
   async function loadOptions(search, loadedOptions) {
-    const {data} = await api.alertRoute.find({
+    const {data} = await api.alertEndpoint.find({
       limit: 10,
       skip: loadedOptions.length
     })
@@ -53,12 +53,12 @@ function AssignAlertRouteModal(props) {
         Assign
       </Button>
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Assign Alert Route</ModalHeader>
+        <ModalHeader toggle={toggle}>Assign Alert Endpoint</ModalHeader>
         <ModalBody>
           <AsyncPaginate
-            value={alertRoute}
+            value={alertEndpoint}
             loadOptions={loadOptions}
-            onChange={setAlertRoute}
+            onChange={setAlertEndpoint}
           />
         </ModalBody>
         <ModalFooter>
@@ -66,7 +66,7 @@ function AssignAlertRouteModal(props) {
             Cancel
           </Button>{' '}
           <Button color="primary" onClick={() => {
-            props.callbackAssign(alertRoute)
+            props.callbackAssign(alertEndpoint)
             toggle()
           }}>
             Assign
@@ -77,4 +77,4 @@ function AssignAlertRouteModal(props) {
   );
 }
 
-export default AssignAlertRouteModal;
+export default AssignAlertEndpointModal;

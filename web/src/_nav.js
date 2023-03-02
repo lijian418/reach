@@ -2,8 +2,8 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilAlarm,
-  cilAudioSpectrum,
-  cilSpeedometer,
+  cilAudioSpectrum, cilSend,
+  cilSpeedometer, cilWarning,
 } from '@coreui/icons'
 import { CNavItem } from '@coreui/react'
 
@@ -22,9 +22,15 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Alert Routes',
-    to: '/alert-routes',
-    icon: <CIcon icon={cilAlarm} customClassName="nav-icon" />
+    name: 'Alert Rules',
+    to: '/alert-rules',
+    icon: <CIcon icon={cilWarning} customClassName="nav-icon" />
+  },
+  {
+    component: CNavItem,
+    name: 'Alert Endpoints',
+    to: '/alert-endpoints',
+    icon: <CIcon icon={cilSend} customClassName="nav-icon" />
   },
 ]
 

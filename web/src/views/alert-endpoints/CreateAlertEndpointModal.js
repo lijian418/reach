@@ -9,22 +9,22 @@ import {
 import {Formik} from "formik";
 import * as yup from "yup";
 import {api} from "../../api";
-import {AlertRouteForm} from "./AlertRouteForm";
+import {AlertEndpointForm} from "./AlertEndpointForm";
 
-function CreateAlertRouteModal(props) {
+function CreateAlertEndpointModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const createAlertRoute = async (values) => {
-    const {data} = await api.alertRoute.create(values)
+  const createAlertEndpoint = async (values) => {
+    const {data} = await api.alertEndpoint.create(values)
     props.refetch()
   }
 
   return (
     <div>
       <Button color="primary" onClick={toggle}>
-        Add a new alert route
+        Add a new alert endpoint
       </Button>
       <Formik
         initialValues={{
@@ -38,13 +38,13 @@ function CreateAlertRouteModal(props) {
           webhook_url: yup.string().optional(),
         })}
         onSubmit={async (values) => {
-          await createAlertRoute(values)
+          await createAlertEndpoint(values)
         }}>
         {(formik) => (
           <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Create Alert Route</ModalHeader>
+            <ModalHeader toggle={toggle}>Create Alert Endpoint</ModalHeader>
             <ModalBody>
-              <AlertRouteForm formik={formik}/>
+              <AlertEndpointForm formik={formik}/>
             </ModalBody>
             <ModalFooter>
               <Button color="secondary" onClick={toggle}>
@@ -64,4 +64,4 @@ function CreateAlertRouteModal(props) {
   );
 }
 
-export default CreateAlertRouteModal;
+export default CreateAlertEndpointModal;

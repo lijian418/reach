@@ -4,10 +4,6 @@ import {useState} from "react";
 import {api} from "../../api";
 import {Badge} from "reactstrap";
 import EditChannelModal from "./EditChannelModal";
-import CreateTagModal from "./tags/CreateTagModal";
-import {TagList} from "./tags/TagList";
-import AssignAlertRouteModal from "../alert-routes/AssignAlertRouteModal";
-import {ChannelAlertRouteList} from "./alert-routes/ChannelAlertRouteList";
 
 const ChannelDetail = () => {
   let { channelId } = useParams();
@@ -20,11 +16,6 @@ const ChannelDetail = () => {
   const fetchChannel = async () => {
     const {data} = await api.channel.get(channelId)
     setChannel(data)
-  }
-
-  const assignAlertRouteToChannel = async (routeId) => {
-    const {data} = await api.alertRoute.assignToChannel(routeId, channelId)
-    await fetchChannel()
   }
 
   return (
@@ -40,32 +31,6 @@ const ChannelDetail = () => {
           </div>
         </div>
         <EditChannelModal channel={channel} refetch={fetchChannel}/>
-      </div>
-
-      <div className={'mt-4'}>
-        <div className={'d-flex justify-content-between mb-4'}>
-          <h3>Tags</h3>
-          {
-            channel && (
-              <CreateTagModal channel={channel} refetch={fetchChannel}/>
-            )
-          }
-        </div>
-        <TagList channel={channel} refetch={fetchChannel}/>
-      </div>
-
-      <div className={'mt-4'}>
-        <div className={'d-flex justify-content-between mb-4'}>
-          <h3>Alert Routes</h3>
-          {
-            channel && (
-              <AssignAlertRouteModal
-                alreadyAssigned={channel.alert_routes.map((x) => x.id)}
-                callbackAssign={(option) => assignAlertRouteToChannel(option.value)}/>
-            )
-          }
-        </div>
-        <ChannelAlertRouteList channel={channel} refetch={fetchChannel}/>
       </div>
     </>
   )

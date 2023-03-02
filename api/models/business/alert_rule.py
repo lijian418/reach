@@ -7,29 +7,29 @@ from models.fastapi.base_models import PyBaseModel, PyPaginatedBaseModel
 from models.fastapi.mongodb import PyObjectId
 
 
-class ChannelBase(PyBaseModel):
-    slug: str = Field(...)
+class AlertRuleBase(PyBaseModel):
     label: str = Field(...)
+    rule: str = Field(...)
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 
 
-class ChannelRead(ChannelBase):
+class AlertRuleRead(AlertRuleBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
 
 
-class ChannelCreate(ChannelBase):
+class AlertRuleCreate(AlertRuleBase):
     pass
 
 
-class ChannelUpdate(ChannelBase):
+class AlertRuleUpdate(AlertRuleBase):
     pass
 
 
-class ChannelPaginatedRead(PyBaseModel):
+class AlertRulePaginatedRead(PyBaseModel):
     total: int
-    items: List[ChannelRead]
+    items: List[AlertRuleRead]
 
 
-class ChannelSearch(PyPaginatedBaseModel):
+class AlertRuleSearch(PyPaginatedBaseModel):
     pass

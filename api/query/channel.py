@@ -13,26 +13,26 @@ async def create(payload: ChannelCreate) -> ChannelRead:
 
 async def get(entity_id: PyObjectId) -> ChannelRead:
     pipeline = [{"$match": {"_id": entity_id}},
-                # nested lookup tag and then alert_route
+                # nested lookup tag and then alert_endpoint
                 {"$lookup": {
                     "from": "tag_collection",
                     "let": {"tag_ids": "$tag_ids"},
                     "pipeline": [
                         {"$match": {"$expr": {"$in": ["$_id", "$$tag_ids"]}}},
                         {"$lookup": {
-                            "from": "alert_route_collection",
-                            "localField": "alert_route_ids",
+                            "from": "alert_endpoint_collection",
+                            "localField": "alert_endpoint_ids",
                             "foreignField": "_id",
-                            "as": "alert_routes"
+                            "as": "alert_endpoints"
                         }}
                     ],
                     "as": "tags"
                 }},
                 {"$lookup": {
-                    "from": "alert_route_collection",
-                    "localField": "alert_route_ids",
+                    "from": "alert_endpoint_collection",
+                    "localField": "alert_endpoint_ids",
                     "foreignField": "_id",
-                    "as": "alert_routes"
+                    "as": "alert_endpoints"
                 }}]
     entity = await channel_collection.aggregate(pipeline).to_list(length=None)
     return ChannelRead(**entity[0])
@@ -59,10 +59,10 @@ async def find(search: ChannelSearch) -> ChannelPaginatedRead:
                     "as": "tags"
                 }},
                 {"$lookup": {
-                    "from": "alert_route_collection",
-                    "localField": "alert_route_ids",
+                    "from": "alert_endpoint_collection",
+                    "localField": "alert_endpoint_ids",
                     "foreignField": "_id",
-                    "as": "alert_routes"
+                    "as": "alert_endpoints"
                 }},
                 {"$sort": {"created_at": pymongo.DESCENDING}},
                 {"$skip": search.skip},
@@ -73,21 +73,3 @@ async def find(search: ChannelSearch) -> ChannelPaginatedRead:
 
     return ChannelPaginatedRead(items=[ChannelRead(**item) for item in items],
                                 total=total)
-
-
-async def add_tag_to_channel(channel_id: PyObjectId, tag_id: PyObjectId):
-    await channel_collection.update_one({"_id": channel_id}, {"$addToSet": {"tag_ids": tag_id}})
-    updated_entity = await channel_collection.find_one({"_id": channel_id})
-    return ChannelRead(**updated_entity)
-
-
-async def add_alert_route_id_to_channel(channel_id: PyObjectId, alert_route_id: PyObjectId):
-    await channel_collection.update_one({"_id": channel_id}, {"$addToSet": {"alert_route_ids": alert_route_id}})
-    updated_entity = await channel_collection.find_one({"_id": channel_id})
-    return ChannelRead(**updated_entity)
-
-
-async def remove_alert_route_id_from_channel(channel_id: PyObjectId, alert_route_id: PyObjectId):
-    await channel_collection.update_one({"_id": channel_id}, {"$pull": {"alert_route_ids": alert_route_id}})
-    updated_entity = await channel_collection.find_one({"_id": channel_id})
-    return ChannelRead(**updated_entity)
