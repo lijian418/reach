@@ -32,10 +32,18 @@ const update = async (entityId, data): Promise<AxiosResponse> => {
   })
 }
 
+const tryData = async (entityId, data): Promise<AxiosResponse> => {
+  return await request({
+    method: "POST",
+    url: `/alert-rules/${entityId}/try-data`,
+    data: data
+  })
+}
 
 export const alertRule = {
   create,
   find,
   get,
-  update
+  update,
+  tryData
 }

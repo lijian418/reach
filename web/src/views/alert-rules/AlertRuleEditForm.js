@@ -4,8 +4,8 @@ import {
   FormFeedback,
   Input, Label,
 } from "reactstrap";
-import {ErrorMessage, Field, FieldArray, Form, Formik} from "formik";
-import React from "react";
+import {ErrorMessage, Field, FieldArray, Form, Formik, useFormikContext} from "formik";
+import React, {useEffect} from "react";
 import {api} from "../../api";
 
 export const AlertRuleEditForm = (props) => {
@@ -29,6 +29,14 @@ export const AlertRuleEditForm = (props) => {
     })
   }
 
+  const FormObserver: React.FC = () => {
+    const { values } = useFormikContext();
+    useEffect(() => {
+      props.setLocalAlertRule(values);
+    }, [values]);
+    return null;
+  };
+
   return (
     <Formik
       initialValues={{
@@ -40,6 +48,7 @@ export const AlertRuleEditForm = (props) => {
     >
       {({errors, touched, values}) => (
         <Form>
+          <FormObserver/>
           <FieldArray
             name="rules"
             render={arrayHelpers => (
@@ -54,14 +63,14 @@ export const AlertRuleEditForm = (props) => {
                     component={"select"}
                   >
                     <option label={'And'}>
-                      AND
+                      and
                     </option>
                     <option label={'Or'}>
-                      OR
+                      or
                     </option>
                   </Input>
                 </div>
-                <h4 className={'my-4'}>Rules</h4>
+                <h3 className={'my-4'}>Rules</h3>
                 {values.rules.map((friend, index) => (
                   <div key={index}>
                     <div className={'d-flex gap-4 flex-wrap mt-2'}>

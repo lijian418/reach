@@ -17,7 +17,7 @@ function CreateAlertRuleModal(props) {
   const toggle = () => setModal(!modal);
 
   const createAlertRule = async (values) => {
-    values.logic = "AND"
+    values.logic = "and"
     const {data} = await api.alertRule.create(values)
     props.refetch()
   }
