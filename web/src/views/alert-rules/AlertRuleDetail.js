@@ -34,7 +34,7 @@ const AlertRuleDetail = () => {
           <AlertRuleEditForm alertRule={alertRule} setLocalAlertRule={setLocalAlertRule}/>
         )
       }
-      <h3 className={'my-4'}>Try data</h3>
+      <h3 className={'mt-4'}>Try data</h3>
       <AlertRuleTryData alertRule={alertRule} localAlertRule={localAlertRule}/>
     </>
   )

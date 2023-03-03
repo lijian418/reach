@@ -99,7 +99,10 @@ async def try_data(payload: dict = Body(...)):
 
     try:
         result = jsonLogic(rules_json_logic, json.loads(payload['data']))
-        print(result)
+        if payload['level'] in payload['alertRule']['levels']:
+            result = result and True
+        else:
+            result = False
 
         return JSONResponse(content="Result: " + str(result))
     except Exception as e:

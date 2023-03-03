@@ -18,6 +18,7 @@ class AlertRuleBase(PyBaseModel):
     label: str = Field(...)
     rules: List[Rule] = Field([])
     logic: str = Field(...)
+    levels: List[str] = Field([])
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 

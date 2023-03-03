@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import {
   Button,
-  FormFeedback,
+  FormFeedback, FormGroup,
   Input, Label,
 } from "reactstrap";
 import {ErrorMessage, Field, FieldArray, Form, Formik, useFormikContext} from "formik";
@@ -11,6 +11,7 @@ import {api} from "../../api";
 export const AlertRuleEditForm = (props) => {
   const schema = yup.object().shape({
     logic: yup.string().required('Required'),
+    levels: yup.array().of(yup.string()),
     rules: yup.array()
       .of(
         yup.object().shape({
@@ -26,6 +27,7 @@ export const AlertRuleEditForm = (props) => {
     const {data} = await api.alertRule.update(props.alertRule.id, {
       logic: values.logic,
       rules: values.rules,
+      levels: values.levels,
     })
   }
 
@@ -41,6 +43,7 @@ export const AlertRuleEditForm = (props) => {
     <Formik
       initialValues={{
         logic: props.alertRule.logic,
+        levels: props.alertRule.levels,
         rules: props.alertRule.rules,
       }}
       validationSchema={schema}
@@ -49,27 +52,104 @@ export const AlertRuleEditForm = (props) => {
       {({errors, touched, values}) => (
         <Form>
           <FormObserver/>
+          <div>
+            <Label for="logic">Logic</Label>
+            <Input
+              style={{width: '130px'}}
+              name={`logic`}
+              type="select"
+              tag={Field}
+              component={"select"}
+            >
+              <option label={'And'}>
+                and
+              </option>
+              <option label={'Or'}>
+                or
+              </option>
+            </Input>
+          </div>
+          <FieldArray
+            name="levels"
+            render={arrayHelpers => (
+              <div>
+                <div className={'mt-2'}>
+                  <FormGroup
+                    check
+                    inline
+                  >
+                    <Input type="checkbox" onChange={
+                      (e) => {
+                        if (e.target.checked) {
+                          arrayHelpers.push('info')
+                        } else {
+                          arrayHelpers.remove(arrayHelpers.form.values.levels.indexOf('info'))
+                        }
+                      }
+                    } checked={arrayHelpers.form.values.levels.indexOf('info') !== -1}/>
+                    <Label check>
+                      Info
+                    </Label>
+                  </FormGroup>
+                  <FormGroup
+                    check
+                    inline
+                  >
+                    <Input type="checkbox" onChange={
+                      (e) => {
+                        if (e.target.checked) {
+                          arrayHelpers.push('warning')
+                        } else {
+                          arrayHelpers.remove(arrayHelpers.form.values.levels.indexOf('warning'))
+                        }
+                      }
+                    } checked={arrayHelpers.form.values.levels.indexOf('warning') !== -1}/>
+                    <Label check>
+                      Warning
+                    </Label>
+                  </FormGroup>
+                  <FormGroup
+                    check
+                    inline
+                  >
+                    <Input type="checkbox" onChange={
+                      (e) => {
+                        if (e.target.checked) {
+                          arrayHelpers.push('error')
+                        } else {
+                          arrayHelpers.remove(arrayHelpers.form.values.levels.indexOf('error'))
+                        }
+                      }
+                    } checked={arrayHelpers.form.values.levels.indexOf('error') !== -1}/>
+                    <Label check>
+                      Error
+                    </Label>
+                  </FormGroup>
+                  <FormGroup
+                    check
+                    inline
+                  >
+                    <Input type="checkbox" onChange={
+                      (e) => {
+                        if (e.target.checked) {
+                          arrayHelpers.push('success')
+                        } else {
+                          arrayHelpers.remove(arrayHelpers.form.values.levels.indexOf('success'))
+                        }
+                      }
+                    } checked={arrayHelpers.form.values.levels.indexOf('success') !== -1}/>
+                    <Label check>
+                      Success
+                    </Label>
+                  </FormGroup>
+                </div>
+              </div>
+            )}
+          />
           <FieldArray
             name="rules"
             render={arrayHelpers => (
               <div>
-                <div>
-                  <Label for="logic">Logic</Label>
-                  <Input
-                    style={{width: '130px'}}
-                    name={`logic`}
-                    type="select"
-                    tag={Field}
-                    component={"select"}
-                  >
-                    <option label={'And'}>
-                      and
-                    </option>
-                    <option label={'Or'}>
-                      or
-                    </option>
-                  </Input>
-                </div>
                 <h3 className={'my-4'}>Rules</h3>
                 {values.rules.map((friend, index) => (
                   <div key={index}>
@@ -133,15 +213,7 @@ export const AlertRuleEditForm = (props) => {
                     </div>
                   </div>
                 ))}
-                <div>
-                  {
-                    typeof errors.rules === 'string' && (
-                      <div className={'text-danger'}>
-                        {errors.rules}
-                      </div>
-                    )
-                  }
-                </div>
+
                 <div className={'d-flex flex-wrap gap-2 mt-2'}>
                   <Button
                     type="button"
@@ -159,6 +231,15 @@ export const AlertRuleEditForm = (props) => {
               </div>
             )}
           />
+          <div>
+            {
+              typeof errors.rules === 'string' && (
+                <div className={'text-danger'}>
+                  {errors.rules}
+                </div>
+              )
+            }
+          </div>
         </Form>
       )}
     </Formik>
