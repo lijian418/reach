@@ -13,35 +13,50 @@ async def create(payload: ChannelCreate) -> ChannelRead:
 
 async def get(entity_id: PyObjectId) -> ChannelRead:
     pipeline = [{"$match": {"_id": entity_id}},
-                # nested lookup tag and then alert_endpoint
-                {"$lookup": {
-                    "from": "tag_collection",
-                    "let": {"tag_ids": "$tag_ids"},
-                    "pipeline": [
-                        {"$match": {"$expr": {"$in": ["$_id", "$$tag_ids"]}}},
-                        {"$lookup": {
-                            "from": "alert_endpoint_collection",
-                            "localField": "alert_endpoint_ids",
-                            "foreignField": "_id",
-                            "as": "alert_endpoints"
-                        }}
-                    ],
-                    "as": "tags"
-                }},
-                {"$lookup": {
-                    "from": "alert_endpoint_collection",
-                    "localField": "alert_endpoint_ids",
-                    "foreignField": "_id",
-                    "as": "alert_endpoints"
-                }}]
+                {
+                    "$lookup": {
+                        "from": "alarm_collection",
+                        "let": {"alarm_ids": "$alarm_ids"},
+                        "pipeline": [
+                            {"$match": {"$expr": {"$in": ["$_id", "$$alarm_ids"]}}},
+                            {"$lookup": {
+                                "from": "alert_endpoint_collection",
+                                "localField": "endpoint_id",
+                                "foreignField": "_id",
+                                "as": "endpoint"
+                            }},
+                            {"$lookup": {
+                                "from": "alert_rule_collection",
+                                "localField": "rule_id",
+                                "foreignField": "_id",
+                                "as": "rule"
+                            }},
+                            {"$unwind": "$rule"},
+                            {"$unwind": "$endpoint"},
+                        ],
+                        "as": "alarms"
+                    }
+                }]
     entity = await channel_collection.aggregate(pipeline).to_list(length=None)
     return ChannelRead(**entity[0])
 
 
 async def update(entity_id: PyObjectId, payload) -> ChannelRead:
     await channel_collection.update_one({"_id": entity_id}, {"$set": payload})
-    updated_entity = await channel_collection.find_one({"_id": entity_id})
-    return ChannelRead(**updated_entity)
+    updated_entity = await get(entity_id)
+    return updated_entity
+
+
+async def add_alarm_id_to_channel(entity_id: PyObjectId, alarm_id: PyObjectId) -> ChannelRead:
+    await channel_collection.update_one({"_id": entity_id}, {"$addToSet": {"alarm_ids": alarm_id}})
+    updated_entity = await get(entity_id)
+    return updated_entity
+
+
+async def remove_alarm_id_from_channel(entity_id: PyObjectId, alarm_id: PyObjectId) -> ChannelRead:
+    await channel_collection.update_one({"_id": entity_id}, {"$pull": {"alarm_ids": alarm_id}})
+    updated_entity = await get(entity_id)
+    return updated_entity
 
 
 async def delete(entity_id: PyObjectId) -> bool:
@@ -52,18 +67,30 @@ async def delete(entity_id: PyObjectId) -> bool:
 async def find(search: ChannelSearch) -> ChannelPaginatedRead:
     query = {}
     pipeline = [{"$match": query},
-                {"$lookup": {
-                    "from": "tag_collection",
-                    "localField": "tag_ids",
-                    "foreignField": "_id",
-                    "as": "tags"
-                }},
-                {"$lookup": {
-                    "from": "alert_endpoint_collection",
-                    "localField": "alert_endpoint_ids",
-                    "foreignField": "_id",
-                    "as": "alert_endpoints"
-                }},
+                {
+                    "$lookup": {
+                        "from": "alarm_collection",
+                        "let": {"alarm_ids": "$alarm_ids"},
+                        "pipeline": [
+                            {"$match": {"$expr": {"$in": ["$_id", "$$alarm_ids"]}}},
+                            {"$lookup": {
+                                "from": "alert_endpoint_collection",
+                                "localField": "endpoint_id",
+                                "foreignField": "_id",
+                                "as": "endpoint"
+                            }},
+                            {"$lookup": {
+                                "from": "alert_rule_collection",
+                                "localField": "rule_id",
+                                "foreignField": "_id",
+                                "as": "rule"
+                            }},
+                            {"$unwind": "$rule"},
+                            {"$unwind": "$endpoint"},
+                        ],
+                        "as": "alarms"
+                    }
+                },
                 {"$sort": {"created_at": pymongo.DESCENDING}},
                 {"$skip": search.skip},
                 {"$limit": search.limit}]

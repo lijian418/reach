@@ -18,8 +18,8 @@ async def get(entity_id: PyObjectId) -> AlertRuleRead:
 
 async def update(entity_id: PyObjectId, payload) -> AlertRuleRead:
     await alert_rule_collection.update_one({"_id": entity_id}, {"$set": payload})
-    updated_entity = await alert_rule_collection.find_one({"_id": entity_id})
-    return AlertRuleRead(**updated_entity)
+    updated_entity = await get(entity_id)
+    return updated_entity
 
 
 async def delete(entity_id: PyObjectId) -> bool:
