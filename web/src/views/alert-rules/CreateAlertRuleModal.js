@@ -18,6 +18,7 @@ function CreateAlertRuleModal(props) {
 
   const createAlertRule = async (values) => {
     values.logic = "and"
+    values.levels = ["info", "warning", "error", "success"]
     const {data} = await api.alertRule.create(values)
     props.refetch()
   }

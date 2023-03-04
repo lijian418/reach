@@ -52,23 +52,6 @@ export const AlertRuleEditForm = (props) => {
       {({errors, touched, values}) => (
         <Form>
           <FormObserver/>
-          <div>
-            <Label for="logic">Logic</Label>
-            <Input
-              style={{width: '130px'}}
-              name={`logic`}
-              type="select"
-              tag={Field}
-              component={"select"}
-            >
-              <option label={'And'}>
-                and
-              </option>
-              <option label={'Or'}>
-                or
-              </option>
-            </Input>
-          </div>
           <FieldArray
             name="levels"
             render={arrayHelpers => (
@@ -150,7 +133,24 @@ export const AlertRuleEditForm = (props) => {
             name="rules"
             render={arrayHelpers => (
               <div>
-                <h3 className={'my-4'}>Rules</h3>
+                <h3 className={'mt-4'}>Rules</h3>
+                <div>
+                  <Label for="logic">Logic</Label>
+                  <Input
+                    style={{width: '130px'}}
+                    name={`logic`}
+                    type="select"
+                    tag={Field}
+                    component={"select"}
+                  >
+                    <option label={'And'}>
+                      and
+                    </option>
+                    <option label={'Or'}>
+                      or
+                    </option>
+                  </Input>
+                </div>
                 {values.rules.map((friend, index) => (
                   <div key={index}>
                     <div className={'d-flex gap-4 flex-wrap mt-2'}>

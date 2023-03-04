@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {api} from "../../api";
 import EditAlertRuleModal from "./EditAlertRuleModal";
 import {AlertRuleEditForm} from "./AlertRuleEditForm";
@@ -16,7 +16,10 @@ const AlertRuleDetail = () => {
   }, [alertRuleId])
 
   const fetchAlertRule = async () => {
-    const {data} = await api.alertRule.get(alertRuleId)
+    let {data} = await api.alertRule.get(alertRuleId)
+    if (data.rules.length === 0) {
+      data.rules.push({ key: '', value: '', type: 'text', operator: '=='})
+    }
     setAlertRule(data)
     setLocalAlertRule(data)
   }

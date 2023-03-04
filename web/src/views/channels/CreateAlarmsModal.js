@@ -36,8 +36,10 @@ export const CreateAlarmsModal = (props) => {
         endpoint_id: alarm.endpoint_id.value,
         channel_id: props.channel.id
       })
+      if (data) {
+        props.refetch()
+      }
     }
-    props.refetch()
   }
 
   async function loadOptionsRules(search, loadedOptions) {
@@ -96,11 +98,15 @@ export const CreateAlarmsModal = (props) => {
                 ]
               }}
               validationSchema={schema}
-              onSubmit={(values) => create(values)}
+              onSubmit={(values, {resetForm}) => {
+                create(values)
+                resetForm()
+              }}
             >
-              {({errors, touched, values, setFieldValue, handleSubmit}) => (
+              {({errors, touched, values, resetForm,
+                  setFieldValue, handleSubmit}) => (
                 <Modal isOpen={modal} toggle={toggle} size={'lg'}>
-                  <ModalHeader toggle={toggle}>Create Alert Rule</ModalHeader>
+                  <ModalHeader toggle={toggle}>Create Alarms</ModalHeader>
                   <ModalBody>
                     <Form>
                       <FieldArray
@@ -111,6 +117,11 @@ export const CreateAlarmsModal = (props) => {
                               <div key={index}>
                                 <div className={'d-flex gap-4 flex-wrap mt-2'}>
                                   <div style={{width: '200px'}}>
+                                    {
+                                      index === 0 && (
+                                        <p className={'mb-0'}>Rule</p>
+                                      )
+                                    }
                                     <AsyncPaginate
                                       value={values.alarms[index].rule_id}
                                       loadOptions={loadOptionsRules}
@@ -121,6 +132,11 @@ export const CreateAlarmsModal = (props) => {
                                     <ErrorMessage name={`alarms[${index}].rule_id`}/>
                                   </div>
                                   <div style={{width: '200px'}}>
+                                    {
+                                      index === 0 && (
+                                        <p className={'mb-0'}>Endpoint</p>
+                                      )
+                                    }
                                     <AsyncPaginate
                                       value={values.alarms[index].endpoint_id}
                                       loadOptions={loadOptionsEndpoints}
@@ -130,7 +146,7 @@ export const CreateAlarmsModal = (props) => {
                                     />
                                     <ErrorMessage name={`alarms[${index}].endpoint_id`}/>
                                   </div>
-                                  <div>
+                                  <div className={'mt-auto'}>
                                     <Button onClick={() => arrayHelpers.remove(index)}>Delete</Button>
                                   </div>
                                 </div>
