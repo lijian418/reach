@@ -11,8 +11,15 @@ class DBSettings(BaseSettings):
     MOTOR_TO_LIST_LIMIT: int = sys.maxsize
 
 
+class RabbitMQSettings(BaseSettings):
+    RABBIT_MQ_URL: str = None
+    RABBIT_MQ_QUEUE_NAME: str = None
+    RABBIT_MQ_ASYNC: bool = False
+
+
 class Settings(BaseSettings):
     db: DBSettings = DBSettings()
+    queue: RabbitMQSettings = RabbitMQSettings()
 
     class Config:
         case_sensitive = True

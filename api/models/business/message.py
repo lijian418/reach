@@ -1,5 +1,5 @@
 import time
-from typing import List
+from typing import List, Optional
 
 from pydantic import Field
 
@@ -11,18 +11,20 @@ from models.fastapi.mongodb import PyObjectId
 class MessageBase(PyBaseModel):
     title: str = Field(...)
     description: str = Field(...)
-    channel_id: PyObjectId = Field(...)
+    level: str = Field(...)
+    tags: dict = Field(...)
+    status: Optional[str] = Field(None)
+    channel_id: Optional[PyObjectId] = Field(None)
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 
 
 class MessageRead(MessageBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    channel: ChannelRead = Field(...)
 
 
 class MessageCreate(MessageBase):
-    pass
+    channel_slug: str = Field(...)
 
 
 class MessageUpdate(MessageBase):

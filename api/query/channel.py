@@ -11,6 +11,11 @@ async def create(payload: ChannelCreate) -> ChannelRead:
     return ChannelRead(**created_entity)
 
 
+async def get_by_slug(slug: str) -> dict:
+    entity = await channel_collection.find_one({"slug": slug})
+    return entity
+
+
 async def get(entity_id: PyObjectId) -> ChannelRead:
     pipeline = [{"$match": {"_id": entity_id}},
                 {

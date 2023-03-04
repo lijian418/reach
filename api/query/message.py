@@ -16,17 +16,6 @@ async def get(entity_id: PyObjectId) -> MessageRead:
     return MessageRead(**entity)
 
 
-async def update(entity_id: PyObjectId, payload) -> MessageRead:
-    await message_collection.update_one({"_id": entity_id}, {"$set": payload})
-    updated_entity = await message_collection.find_one({"_id": entity_id})
-    return MessageRead(**updated_entity)
-
-
-async def delete(entity_id: PyObjectId) -> bool:
-    result = await message_collection.delete_one({"_id": entity_id})
-    return result.deleted_count == 1
-
-
 async def find(search: MessageSearch) -> MessagePaginatedRead:
     query = {}
     pipeline = [{"$match": query},

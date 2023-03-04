@@ -4,6 +4,8 @@ from fastapi import FastAPI, APIRouter
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 
+from core.env import settings
+from core.queue.factory import QueueClientFactory
 from routes.main_router import main_router
 
 root_router = APIRouter()

@@ -1,8 +1,8 @@
-import time
-
 from fastapi import APIRouter, Depends, Body
 
 import query.message as message_query
+import query.channel as channel_query
+from core.queue.client import queue_client
 from models.business.message import MessageCreate, MessageRead, MessagePaginatedRead, MessageSearch
 from models.fastapi.mongodb import PyObjectId
 
@@ -13,17 +13,13 @@ router = APIRouter()
              response_model=MessageRead,
              response_model_by_alias=False)
 async def create(payload: MessageCreate = Body(...)):
+    payload.status = "created"
+    channel = await channel_query.get_by_slug(payload.channel_slug)
+    payload.channel_id = channel['_id']
     created = await message_query.create(payload)
+    if created:
+        await queue_client.send(str(created.id))
     return created
-
-
-@router.put("/{entity_id}",
-            response_model=MessageRead,
-            response_model_by_alias=False)
-async def update(entity_id: PyObjectId, payload=Body(...)):
-    payload['updated_at'] = time.time()
-    updated = await message_query.update(entity_id, payload)
-    return updated
 
 
 @router.get("/{entity_id}",
@@ -40,10 +36,3 @@ async def find(search: MessageSearch = Depends()):
     found = await message_query.find(search)
     return found
 
-
-@router.delete("/{entity_id}",
-               response_model=MessageRead,
-               response_model_by_alias=False)
-async def delete(entity_id: PyObjectId):
-    deleted = await message_query.delete(entity_id)
-    return deleted

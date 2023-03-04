@@ -5,6 +5,7 @@ import {api} from "../../api";
 import {Badge, Button} from "reactstrap";
 import EditChannelModal from "./EditChannelModal";
 import {CreateAlarmsModal} from "./CreateAlarmsModal";
+import SendMessage from "./SendMessage";
 
 const ChannelDetail = () => {
   let { channelId } = useParams();
@@ -49,7 +50,10 @@ const ChannelDetail = () => {
             <p className={'mb-0'}>alarms for this channel</p>
           </div>
         </div>
-        <CreateAlarmsModal channel={channel} refetch={fetchChannel}/>
+        <div className={'d-flex gap-2'}>
+          <SendMessage channel={channel}/>
+          <CreateAlarmsModal channel={channel} refetch={fetchChannel}/>
+        </div>
       </div>
       <div className={'mt-4'}>
         {
