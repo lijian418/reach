@@ -1,30 +1,5 @@
 version: '3'
 services:
-  mongodb-reach:
-    image: mongo:latest
-    container_name: mongodb-reach
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
-      MONGO_INITDB_DATABASE: main_db
-    volumes:
-      - mongodb-reach:/data/db
-    ports:
-      - '27017:27017'
-
-  api:
-    build:
-      context: ./api
-    container_name: reach-api
-    working_dir: /code/app
-    volumes:
-      - ./api:/code/app
-    environment:
-      MONGODB_URL: mongodb://admin:admin@mongodb-reach:27017
-    ports:
-      - '8000:8000'
-    restart: on-failure
-
   web:
     build:
       context: ./web
@@ -47,6 +22,54 @@ services:
     volumes:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+
+  mongodb-reach:
+    image: mongo:latest
+    container_name: mongodb-reach
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: main_db
+    volumes:
+      - mongodb-reach:/data/db
+    ports:
+      - '27017:27017'
+
+  consumer:
+    build:
+      context: ./consumer
+    container_name: reach-consumer
+    working_dir: /code/app
+    volumes:
+      - ./consumer:/code/app
+    environment:
+      MONGODB_URL: mongodb://admin:admin@mongodb-reach:27017
+      RABBIT_MQ_URL: amqp://rabbitmq-container:5672
+      RABBIT_MQ_QUEUE_NAME: reach-message-queue
+      RABBIT_MQ_MODE: async
+    restart: on-failure
+
+  api:
+    build:
+      context: ./api
+    container_name: reach-api
+    working_dir: /code/app
+    volumes:
+      - ./api:/code/app
+    environment:
+      MONGODB_URL: mongodb://admin:admin@mongodb-reach:27017
+      RABBIT_MQ_URL: amqp://rabbitmq-container:5672
+      RABBIT_MQ_QUEUE_NAME: reach-message-queue
+      RABBIT_MQ_MODE: async
+    ports:
+      - '8000:8000'
+    restart: on-failure
 
 volumes:
   mongodb-reach:

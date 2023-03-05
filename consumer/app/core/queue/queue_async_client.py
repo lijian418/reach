@@ -1,5 +1,5 @@
 import aio_pika
-from core.queue.creator import QueueClient
+from app.core.queue.creator import QueueClient
 
 
 class QueueAsyncClient(QueueClient):
@@ -42,7 +42,7 @@ class QueueAsyncClient(QueueClient):
             async with self.queue.iterator() as queue_iter:
                 async for message in queue_iter:
                     async with message.process():
-                        callback(message.body.decode())
+                        await callback(message.body.decode())
 
     async def delete(self):
         connection = await self._get_connection()

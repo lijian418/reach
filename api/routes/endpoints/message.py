@@ -10,16 +10,11 @@ router = APIRouter()
 
 
 @router.post("",
-             response_model=MessageRead,
+             response_model=dict,
              response_model_by_alias=False)
 async def create(payload: MessageCreate = Body(...)):
-    payload.status = "created"
-    channel = await channel_query.get_by_slug(payload.channel_slug)
-    payload.channel_id = channel['_id']
-    created = await message_query.create(payload)
-    if created:
-        await queue_client.send(str(created.id))
-    return created
+    await queue_client.send(str(payload.json()))
+    return {"message": "Message sent to queue"}
 
 
 @router.get("/{entity_id}",

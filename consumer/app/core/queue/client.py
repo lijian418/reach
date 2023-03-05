@@ -1,5 +1,5 @@
-from core.env import settings
-from core.queue.factory import QueueClientFactory
+from app.core.env import settings
+from app.core.queue.factory import QueueClientFactory
 
 if settings.queue.RABBIT_MQ_MODE == "async":
     queue_client = QueueClientFactory().build("async",

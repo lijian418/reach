@@ -1,6 +1,6 @@
 import pika
 import json
-from core.queue.creator import QueueClient
+from app.core.queue.creator import QueueClient
 
 
 class QueueSyncClient(QueueClient):
