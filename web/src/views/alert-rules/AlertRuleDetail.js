@@ -3,9 +3,8 @@ import useAsyncEffect from "use-async-effect";
 import React, {useEffect, useState} from "react";
 import {api} from "../../api";
 import EditAlertRuleModal from "./EditAlertRuleModal";
-import {AlertRuleTryData} from "./AlertRuleTryData";
-import {EditRules} from "./EditRules";
 import {Badge, Button, Input} from "reactstrap";
+import {AlertRuleTryDataModal} from "./AlertRuleTryDataModal";
 
 const AlertRuleDetail = () => {
   let { alertRuleId } = useParams();
@@ -36,9 +35,14 @@ const AlertRuleDetail = () => {
       </div>
       <div className={'d-flex justify-content-between mt-4'}>
         <h3>Rules</h3>
-        <Button onClick={() => navigate(`edit-rules`)}>
-          Edit Rules
-        </Button>
+        <div className={'d-flex gap-2'}>
+          <AlertRuleTryDataModal alertRule={alertRule}/>
+          <div>
+            <Button onClick={() => navigate(`edit-rules`)} color={'primary'}>
+              Edit Rules
+            </Button>
+          </div>
+        </div>
       </div>
       <h6>Logic applied: <Badge>{alertRule?.logic}</Badge></h6>
 
@@ -62,15 +66,13 @@ const AlertRuleDetail = () => {
       <h6>Triggers:</h6>
       <ul>
         {
-          alertRule && alertRule.rules.map((rule, index) => {
+          alertRule && alertRule?.rules.map((rule, index) => {
             return (
-              <li>Trigger when {rule.key}({rule.type}) {rule.operator} {rule.value}</li>
+              <li>Trigger when {rule.type} <Badge>{rule.key}</Badge> {rule.operator} {rule.value}</li>
             )
           })
         }
       </ul>
-      <h3 className={'mt-4'}>Try data</h3>
-      <AlertRuleTryData alertRule={alertRule} />
     </>
   )
 }
