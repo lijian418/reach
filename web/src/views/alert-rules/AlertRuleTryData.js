@@ -18,7 +18,7 @@ export const AlertRuleTryData = (props) => {
     const {data} = await api.alertRule.tryData(props.alertRule.id, {
       data: dataTry.data,
       level: dataTry.level,
-      alertRule: props.localAlertRule,
+      alertRule: props.alertRule,
     })
     setDataResponse(data)
   }
@@ -34,7 +34,6 @@ export const AlertRuleTryData = (props) => {
         data: yup.string().required("Required"),
       })}
       onSubmit={async (values) => {
-        console.log('trt', values)
         await sendTry(values)
       }}>
       {({errors, touched}) => (

@@ -68,8 +68,8 @@ export const AlertEndpointList = (props) => {
                   <CardTitle tag="h5">
                     Endpoint {alertEndpoint.label}
                   </CardTitle>
-                  <CardText>Email: {alertEndpoint.email ? alertEndpoint.email : "No Email Set"}</CardText>
-                  <CardText>Webhook URL: {alertEndpoint.webhook_url ? alertEndpoint.webhook_url : "No Webhook Set"}</CardText>
+                  <CardText>Emails on Endpoint: {alertEndpoint?.emails?.length}</CardText>
+                  <CardText>Webhook URL on Endpoint: {alertEndpoint?.webhook_urls?.length}</CardText>
                   <div className={'d-flex flex-row-reverse'}>
                     <div className={'d-flex gap-2 flex-wrap'}>
                       <Button color={'danger'}>

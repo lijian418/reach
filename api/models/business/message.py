@@ -3,7 +3,6 @@ from typing import List, Optional
 
 from pydantic import Field
 
-from models.business.channel import ChannelRead
 from models.fastapi.base_models import PyBaseModel, PyPaginatedBaseModel
 from models.fastapi.mongodb import PyObjectId
 

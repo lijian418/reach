@@ -3,7 +3,7 @@ from app.models.business.message import MessageRead
 from app.query.notify.creator import NotifyClient
 
 
-class SlackClient(NotifyClient):
+class CustomWebhookClient(NotifyClient):
     def __init__(self):
         pass
 

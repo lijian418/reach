@@ -7,8 +7,10 @@ import {
 import {ErrorMessage, Field, FieldArray, Form, Formik, useFormikContext} from "formik";
 import React, {useEffect} from "react";
 import {api} from "../../api";
+import {useNavigate} from "react-router-dom";
 
 export const AlertRuleEditForm = (props) => {
+  const navigate = useNavigate()
   const schema = yup.object().shape({
     logic: yup.string().required('Required'),
     levels: yup.array().of(yup.string()),
@@ -29,15 +31,8 @@ export const AlertRuleEditForm = (props) => {
       rules: values.rules,
       levels: values.levels,
     })
+    navigate(`/alert-rules/${props.alertRule.id}`)
   }
-
-  const FormObserver: React.FC = () => {
-    const { values } = useFormikContext();
-    useEffect(() => {
-      props.setLocalAlertRule(values);
-    }, [values]);
-    return null;
-  };
 
   return (
     <Formik
@@ -51,7 +46,6 @@ export const AlertRuleEditForm = (props) => {
     >
       {({errors, touched, values}) => (
         <Form>
-          <FormObserver/>
           <FieldArray
             name="levels"
             render={arrayHelpers => (
@@ -151,7 +145,7 @@ export const AlertRuleEditForm = (props) => {
                     </option>
                   </Input>
                 </div>
-                {values.rules.map((friend, index) => (
+                {values.rules.map((rule, index) => (
                   <div key={index}>
                     <div className={'d-flex gap-4 flex-wrap mt-2'}>
                       <div>

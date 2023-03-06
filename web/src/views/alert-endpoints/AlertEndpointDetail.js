@@ -4,6 +4,7 @@ import {useState} from "react";
 import {api} from "../../api";
 import {Badge} from "reactstrap";
 import EditAlertEndpointModal from "./EditAlertEndpointModal";
+import EndpointEmailModal from "./EndpointEmailModal";
 
 const AlertEndpointDetail = () => {
   let { alertEndpointId } = useParams();
@@ -22,21 +23,51 @@ const AlertEndpointDetail = () => {
     <>
       <div className={'d-flex justify-content-between'}>
         <div>
-          <h2>Alert Endpoint Details</h2>
-          <div className={'d-flex gap-1'}>
-            <p className={'mb-0'}>Email is</p>
-            <div>
-              <Badge>{alertEndpoint?.email}</Badge>
-            </div>
-          </div>
-          <div className={'d-flex gap-1'}>
-            <p className={'mb-0'}>Webhook URL is</p>
-            <div>
-              <Badge>{alertEndpoint?.webhook_url}</Badge>
-            </div>
-          </div>
+          <h2>Alert Endpoint Details - {alertEndpoint?.label}</h2>
         </div>
         <EditAlertEndpointModal alertEndpoint={alertEndpoint} refetch={fetchAlertEndpoint}/>
+      </div>
+
+      <div className={'mt-4'}>
+        <div className={'d-flex justify-content-between w-100'}>
+          <h4 className={'mb-0'}>Emails</h4>
+          {
+            alertEndpoint && (
+              <EndpointEmailModal alertEndpoint={alertEndpoint} refetch={fetchAlertEndpoint} />
+            )
+          }
+          {
+            alertEndpoint?.emails?.length === 0 && (
+              <p>{alertEndpoint?.emails?.length === 0 && "No Emails Set"}</p>
+            )
+          }
+        </div>
+        {
+          alertEndpoint?.emails?.map((email, index) => {
+            return (
+              <div key={index}>
+                <Badge>{email}</Badge>
+              </div>
+            )
+          })
+        }
+      </div>
+      <div className={'mt-4'}>
+        <h4 className={'mb-0'}>Webhook URLs</h4>
+        {
+          alertEndpoint?.webhook_urls?.map((webhookUrl, index) => {
+            return (
+              <div key={index}>
+                <Badge>{webhookUrl}</Badge>
+              </div>
+            )
+          })
+        }
+        {
+          alertEndpoint?.webhook_urls?.length === 0 && (
+            <p>{alertEndpoint?.webhook_urls?.length === 0 && "No Webhooks Set"}</p>
+          )
+        }
       </div>
     </>
   )

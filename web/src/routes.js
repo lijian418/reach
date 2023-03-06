@@ -7,6 +7,7 @@ const AlertEndpoints = React.lazy(() => import('./views/alert-endpoints/AlertEnd
 const AlertEndpointDetail = React.lazy(() => import('./views/alert-endpoints/AlertEndpointDetail'))
 const AlertRules = React.lazy(() => import('./views/alert-rules/AlertRules'))
 const AlertRuleDetail = React.lazy(() => import('./views/alert-rules/AlertRuleDetail'))
+const EditRules = React.lazy(() => import('./views/alert-rules/EditRules'))
 
 
 const routes = [
@@ -18,6 +19,7 @@ const routes = [
   { path: '/alert-endpoints/:alertEndpointId', name: 'Alert Endpoint Detail', element: AlertEndpointDetail },
   { path: '/alert-rules', name: 'Alert Rules', element: AlertRules },
   { path: '/alert-rules/:alertRuleId', name: 'Alert Rule Detail', element: AlertRuleDetail },
+  { path: '/alert-rules/:alertRuleId/edit-rules', name: 'Alert Rule Edit Rules', element: EditRules },
 ]
 
 export default routes
