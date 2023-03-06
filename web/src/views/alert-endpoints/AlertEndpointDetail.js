@@ -5,6 +5,7 @@ import {api} from "../../api";
 import {Badge} from "reactstrap";
 import EditAlertEndpointModal from "./EditAlertEndpointModal";
 import EndpointEmailModal from "./EndpointEmailModal";
+import EndpointWebhookModal from "./EndpointWebhookModal";
 
 const AlertEndpointDetail = () => {
   let { alertEndpointId } = useParams();
@@ -53,7 +54,15 @@ const AlertEndpointDetail = () => {
         }
       </div>
       <div className={'mt-4'}>
-        <h4 className={'mb-0'}>Webhook URLs</h4>
+
+        <div className={'d-flex justify-content-between w-100'}>
+          <h4 className={'mb-0'}>Webhook URLs</h4>
+          {
+            alertEndpoint && (
+              <EndpointWebhookModal alertEndpoint={alertEndpoint} refetch={fetchAlertEndpoint} />
+            )
+          }
+        </div>
         {
           alertEndpoint?.webhook_urls?.map((webhookUrl, index) => {
             return (

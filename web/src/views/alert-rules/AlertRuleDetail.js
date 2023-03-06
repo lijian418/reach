@@ -30,7 +30,7 @@ const AlertRuleDetail = () => {
     <>
       <div className={'d-flex justify-content-between'}>
         <div>
-          <h2>Alert Rule Details</h2>
+          <h2>Alert Rule Details - {alertRule?.label}</h2>
         </div>
         <EditAlertRuleModal alertRule={alertRule} refetch={fetchAlertRule}/>
       </div>
