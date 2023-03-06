@@ -18,9 +18,6 @@ const AlertRuleDetail = () => {
 
   const fetchAlertRule = async () => {
     let {data} = await api.alertRule.get(alertRuleId)
-    if (data.rules.length === 0) {
-      data.rules.push({ key: '', value: '', type: 'text', operator: '=='})
-    }
     setAlertRule(data)
     setLocalAlertRule(data)
   }

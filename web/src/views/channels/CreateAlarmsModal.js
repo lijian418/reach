@@ -17,6 +17,7 @@ export const CreateAlarmsModal = (props) => {
     rule_endpoint_associations: yup.array()
       .of(
         yup.object().shape({
+          label: yup.string().required('Required'),
           endpoint_id: yup.object().shape({
             value: yup.string().required('Required'),
             label: yup.string().required('Required'),
@@ -32,6 +33,7 @@ export const CreateAlarmsModal = (props) => {
   const create = async (values) => {
     for (const alarm of values.alarms) {
       const {data} = await api.alarm.create({
+        label: alarm.label,
         rule_id: alarm.rule_id.value,
         endpoint_id: alarm.endpoint_id.value,
         channel_id: props.channel.id
@@ -92,6 +94,7 @@ export const CreateAlarmsModal = (props) => {
               initialValues={{
                 alarms: [
                   {
+                    label: '',
                     rule_id: null,
                     endpoint_id: null,
                   }
@@ -116,6 +119,21 @@ export const CreateAlarmsModal = (props) => {
                             {values.alarms.map((alarm, index) => (
                               <div key={index}>
                                 <div className={'d-flex gap-4 flex-wrap mt-2'}>
+                                  <div style={{width: '200px'}}>
+                                    {
+                                      index === 0 && (
+                                        <p className={'mb-0'}>Label</p>
+                                      )
+                                    }
+                                    <Input
+                                      type="text"
+                                      name={`alarms[${index}].label`}
+                                      placeholder="Label"
+                                      value={values.alarms[index].label}
+                                      onChange={(e) => {
+                                        setFieldValue(`alarms[${index}].label`, e.target.value)
+                                      }}/>
+                                  </div>
                                   <div style={{width: '200px'}}>
                                     {
                                       index === 0 && (

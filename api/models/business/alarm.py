@@ -10,6 +10,7 @@ from models.fastapi.mongodb import PyObjectId
 
 
 class AlarmBase(PyBaseModel):
+    label: str = Field(...)
     endpoint_id: PyObjectId = Field(...)
     rule_id: PyObjectId = Field(...)
     channel_id: PyObjectId = Field(...)

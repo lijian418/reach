@@ -39,7 +39,7 @@ export const AlertRuleEditForm = (props) => {
       initialValues={{
         logic: props.alertRule.logic,
         levels: props.alertRule.levels,
-        rules: props.alertRule.rules,
+        rules: props.alertRule.rules.length > 0 ? props.alertRule.rules : [{key: '', type: 'text', operator: '==', value: ''}]
       }}
       validationSchema={schema}
       onSubmit={(values) => update(values)}

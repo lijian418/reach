@@ -37,11 +37,6 @@ const AlertEndpointDetail = () => {
               <EndpointEmailModal alertEndpoint={alertEndpoint} refetch={fetchAlertEndpoint} />
             )
           }
-          {
-            alertEndpoint?.emails?.length === 0 && (
-              <p>{alertEndpoint?.emails?.length === 0 && "No Emails Set"}</p>
-            )
-          }
         </div>
         {
           alertEndpoint?.emails?.map((email, index) => {
@@ -51,6 +46,12 @@ const AlertEndpointDetail = () => {
               </div>
             )
           })
+        }
+
+        {
+          alertEndpoint?.emails?.length === 0 && (
+            <p>{alertEndpoint?.emails?.length === 0 && "No Emails Set"}</p>
+          )
         }
       </div>
       <div className={'mt-4'}>

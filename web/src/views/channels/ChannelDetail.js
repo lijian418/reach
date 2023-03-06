@@ -6,6 +6,7 @@ import {Badge, Button} from "reactstrap";
 import EditChannelModal from "./EditChannelModal";
 import {CreateAlarmsModal} from "./CreateAlarmsModal";
 import SendMessage from "./SendMessage";
+import {MessageChannelList} from "./MessageChannelList";
 
 const ChannelDetail = () => {
   let { channelId } = useParams();
@@ -50,17 +51,19 @@ const ChannelDetail = () => {
             <p className={'mb-0'}>alarms for this channel</p>
           </div>
         </div>
-        <div className={'d-flex gap-2'}>
-          <SendMessage channel={channel}/>
-          <CreateAlarmsModal channel={channel} refetch={fetchChannel}/>
-        </div>
+        <CreateAlarmsModal channel={channel} refetch={fetchChannel}/>
       </div>
       <div className={'mt-4'}>
         {
           channel?.alarms?.map((alarm, index) => (
             <div key={index}>
               <div className={'d-flex gap-1'}>
-                <p className={'mb-0'}>When Alert</p>
+                <div>
+                  <Badge>
+                    Alarm {alarm.label}
+                  </Badge>
+                </div>
+                <p className={'mb-0'}> - When Alert</p>
                 <div>
                   <Badge>{alarm.rule.label}</Badge>
                 </div>
@@ -78,6 +81,16 @@ const ChannelDetail = () => {
           ))
         }
       </div>
+
+      <div className={'d-flex mt-4 justify-content-between'}>
+        <div>
+          <h3>Messages</h3>
+        </div>
+        <SendMessage channel={channel}/>
+      </div>
+      {
+        channel && <MessageChannelList channel={channel}/>
+      }
     </>
   )
 }

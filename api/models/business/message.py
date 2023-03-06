@@ -13,7 +13,8 @@ class MessageBase(PyBaseModel):
     level: str = Field(...)
     tags: dict = Field(...)
     status: Optional[str] = Field(None)
-    triggered_alarms: List[PyObjectId] = Field([])
+    triggered_alarms_ids: List[PyObjectId] = Field([])
+    triggered_alarms: List[dict] = Field([])
     channel_id: Optional[PyObjectId] = Field(None)
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
@@ -37,4 +38,4 @@ class MessagePaginatedRead(PyBaseModel):
 
 
 class MessageSearch(PyPaginatedBaseModel):
-    pass
+    channel_id: Optional[PyObjectId] = Field(None)
