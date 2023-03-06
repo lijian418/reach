@@ -1,5 +1,5 @@
 import time
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import Field
 
@@ -13,6 +13,7 @@ class MessageBase(PyBaseModel):
     level: str = Field(...)
     tags: dict = Field(...)
     status: Optional[str] = Field(None)
+    triggered_alarms: List[PyObjectId] = Field([])
     channel_id: Optional[PyObjectId] = Field(None)
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())

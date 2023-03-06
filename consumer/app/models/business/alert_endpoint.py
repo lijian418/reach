@@ -3,8 +3,8 @@ from typing import List, Optional
 
 from pydantic import Field
 
-from models.fastapi.base_models import PyBaseModel, PyPaginatedBaseModel
-from models.fastapi.mongodb import PyObjectId
+from app.models.base.base_models import PyBaseModel
+from app.models.base.mongodb import PyObjectId
 
 
 class AlertEndpointBase(PyBaseModel):
@@ -17,20 +17,3 @@ class AlertEndpointBase(PyBaseModel):
 
 class AlertEndpointRead(AlertEndpointBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-
-
-class AlertEndpointCreate(AlertEndpointBase):
-    pass
-
-
-class AlertEndpointUpdate(AlertEndpointBase):
-    pass
-
-
-class AlertEndpointPaginatedRead(PyBaseModel):
-    total: int
-    items: List[AlertEndpointRead]
-
-
-class AlertEndpointSearch(PyPaginatedBaseModel):
-    pass

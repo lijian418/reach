@@ -370,6 +370,20 @@ files = [
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "shared"
+version = "0.1.0"
+description = ""
+category = "main"
+optional = false
+python-versions = "^3.11"
+files = []
+develop = true
+
+[package.source]
+type = "directory"
+url = "../shared"
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -496,4 +510,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "28bd18f5d4f25a4a53244f155478d69160ba8d01b66a9a51d481e3c1c1ec6fb8"
+content-hash = "d37ab3b3a290f7863e0189587f282e1de17bc65a4fb8595427b59f674d7af2d8"

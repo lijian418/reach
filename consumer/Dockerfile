@@ -19,7 +19,7 @@ WORKDIR $APPDIR/
 COPY app ./app
 COPY main.py .
 COPY pyproject.toml ./pyproject.toml
-RUN poetry install --no-dev
+RUN poetry install
 
 FROM app-base as main
 WORKDIR /app/

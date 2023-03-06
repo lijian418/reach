@@ -13,3 +13,8 @@ async def get(entity_id: PyObjectId) -> MessageRead:
     entity = await message_collection.find_one({"_id": entity_id})
     return MessageRead(**entity)
 
+
+async def update(entity_id: PyObjectId, payload):
+    await message_collection.update_one({"_id": entity_id}, {"$set": payload})
+    updated_entity = await get(entity_id)
+    return updated_entity
