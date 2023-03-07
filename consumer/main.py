@@ -47,7 +47,7 @@ async def handle_message(message):
     print("Triggered alarms: ", triggered_alarms)
     if len(triggered_alarms) > 0:
         payload['status'] = "triggered"
-        payload['triggered_alarms_ids'] = list(map(lambda x: ObjectId(x.id), triggered_alarms))
+        payload['triggered_alarms'] = [alarm.dict() for alarm in triggered_alarms]
         updated = await message_query.update(created.id, payload)
         print("Message updated: ", updated.json())
         await notify_endpoints(triggered_alarms, updated)

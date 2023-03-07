@@ -18,18 +18,13 @@ async def get(entity_id: PyObjectId) -> MessageRead:
 
 async def find(search: MessageSearch) -> MessagePaginatedRead:
     query = {}
+
     if search.channel_id:
         query["channel_id"] = search.channel_id
+    if search.user_id:
+        query["triggered_alarms.endpoint.user_ids"] = {"$in": [search.user_id]}
 
     pipeline = [{"$match": query},
-                {
-                    "$lookup": {
-                        "from": "alarm_collection",
-                        "localField": "triggered_alarms_ids",
-                        "foreignField": "_id",
-                        "as": "triggered_alarms"
-                    }
-                },
                 {"$sort": {"created_at": pymongo.DESCENDING}},
                 {"$skip": search.skip},
                 {"$limit": search.limit}]
