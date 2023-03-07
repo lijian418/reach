@@ -16,7 +16,16 @@ const getByUsername = async (username): Promise<AxiosResponse> => {
   })
 }
 
+const find = async (search): Promise<AxiosResponse> => {
+  return await request({
+    method: "GET",
+    url: "/users",
+    params: search
+  })
+}
+
 export const user = {
   create,
-  getByUsername
+  getByUsername,
+  find
 }

@@ -9,6 +9,7 @@ import EndpointWebhookModal from "./EndpointWebhookModal";
 import {DeleteAlertRuleModal} from "../alert-rules/DeleteAlertRuleModal";
 import EditAlertRuleModal from "../alert-rules/EditAlertRuleModal";
 import {DeleteAlertEndpointModal} from "./DeleteAlertEndpointModal";
+import EndpointUsersModal from "./EndpointUsersModal";
 
 const AlertEndpointDetail = () => {
   let { alertEndpointId } = useParams();
@@ -65,7 +66,6 @@ const AlertEndpointDetail = () => {
         }
       </div>
       <div className={'mt-4'}>
-
         <div className={'d-flex justify-content-between w-100'}>
           <h4 className={'mb-0'}>Webhook URLs</h4>
           {
@@ -86,6 +86,30 @@ const AlertEndpointDetail = () => {
         {
           alertEndpoint?.webhook_urls?.length === 0 && (
             <p>{alertEndpoint?.webhook_urls?.length === 0 && "No Webhooks Set"}</p>
+          )
+        }
+      </div>
+      <div className={'mt-4'}>
+        <div className={'d-flex justify-content-between w-100'}>
+          <h4 className={'mb-0'}>Users</h4>
+          {
+            alertEndpoint && (
+              <EndpointUsersModal alertEndpoint={alertEndpoint} refetch={fetchAlertEndpoint} />
+            )
+          }
+        </div>
+        {
+          alertEndpoint?.users?.map((user, index) => {
+            return (
+              <div key={index}>
+                <Badge>{user.username}</Badge>
+              </div>
+            )
+          })
+        }
+        {
+          alertEndpoint?.users?.length === 0 && (
+            <p>{alertEndpoint?.users?.length === 0 && "No Users Set"}</p>
           )
         }
       </div>

@@ -21,6 +21,14 @@ async def get(entity_id: PyObjectId) -> AlertEndpointRead:
                         "foreignField": "_id",
                         "as": "alarms"
                     }
+                },
+                {
+                    "$lookup": {
+                        "from": "user_collection",
+                        "localField": "user_ids",
+                        "foreignField": "_id",
+                        "as": "users"
+                    }
                 }]
     entity = await alert_endpoint_collection.aggregate(pipeline).to_list(length=None)
     return AlertEndpointRead(**entity[0])
@@ -47,6 +55,14 @@ async def find(search: AlertEndpointSearch) -> AlertEndpointPaginatedRead:
                         "localField": "alarm_ids",
                         "foreignField": "_id",
                         "as": "alarms"
+                    }
+                },
+                {
+                    "$lookup": {
+                        "from": "user_collection",
+                        "localField": "user_ids",
+                        "foreignField": "_id",
+                        "as": "users"
                     }
                 },
                 {"$sort": {"created_at": pymongo.DESCENDING}},

@@ -25,6 +25,7 @@ async def create(payload: AlertEndpointCreate = Body(...)):
             response_model_by_alias=False)
 async def update(entity_id: PyObjectId, payload=Body(...)):
     payload['updated_at'] = time.time()
+    payload['user_ids'] = [PyObjectId(user_id) for user_id in payload['user_ids']]
     updated = await alert_endpoint_query.update(entity_id, payload)
     return updated
 

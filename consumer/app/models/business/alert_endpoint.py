@@ -11,6 +11,7 @@ class AlertEndpointBase(PyBaseModel):
     label: str = Field(...)
     webhook_urls: List[str] = Field([])
     emails: List[str] = Field([])
+    user_ids: List[PyObjectId] = Field([])
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 
