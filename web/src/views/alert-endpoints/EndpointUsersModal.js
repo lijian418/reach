@@ -12,7 +12,7 @@ import {api} from "../../api";
 import {AlertEndpointForm} from "./AlertEndpointForm";
 import {AsyncPaginate} from "react-select-async-paginate";
 
-function EndpointEmailModal(props) {
+function EndpointUserModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
@@ -43,6 +43,15 @@ function EndpointEmailModal(props) {
     };
   }
 
+  const initialOptions = props.alertEndpoint.users.map((user) => {
+    return (
+      {
+        value: user.id,
+        label: user.username
+      }
+    )
+  })
+
   return (
     <div>
       <Button color="primary" onClick={toggle}>
@@ -50,7 +59,7 @@ function EndpointEmailModal(props) {
       </Button>
       <Formik
         initialValues={{
-          user_ids: props.alertEndpoint.user_ids,
+          user_ids: initialOptions,
         }}
         validationSchema={yup.object().shape({
           user_ids: yup.array(),
@@ -70,7 +79,7 @@ function EndpointEmailModal(props) {
                       {values.user_ids.map((email, index) => (
                         <div key={index}>
                           <div className={'d-flex gap-2 flex-wrap mt-2'}>
-                            <div>
+                            <div style={{minWidth: '250px'}}>
                               <AsyncPaginate
                                 value={values.user_ids[index]}
                                 loadOptions={loadOptionsEndpoints}
@@ -117,4 +126,4 @@ function EndpointEmailModal(props) {
   );
 }
 
-export default EndpointEmailModal;
+export default EndpointUserModal;
