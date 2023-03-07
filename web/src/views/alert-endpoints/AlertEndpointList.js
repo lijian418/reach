@@ -76,7 +76,7 @@ export const AlertEndpointList = (props) => {
                     <div className={'d-flex gap-2 flex-wrap'}>
                       <DeleteAlertEndpointModal delete={async () => {
                         await api.alertEndpoint.remove(alertEndpoint.id)
-                        setAlertEndpoints(alertEndpoints.filter((alertEndpoint) => alertEndpoint.id !== alertEndpoint.id))
+                        setAlertEndpoints(alertEndpoints.filter((x) => x.id !== alertEndpoint.id))
                         setTotal(total - 1)
                       }} alertEndpoint={alertEndpoint} />
                       <Button color={'primary'} onClick={() => navigate(`/alert-endpoints/${alertEndpoint.id}`)}>

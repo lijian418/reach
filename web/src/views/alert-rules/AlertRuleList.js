@@ -73,7 +73,7 @@ export const AlertRuleList = (props) => {
                     <div className={'d-flex gap-2 flex-wrap'}>
                       <DeleteAlertRuleModal delete={async () => {
                         await api.alertRule.remove(alertRule.id)
-                        setAlertRules(alertRules.filter((alertRule) => alertRule.id !== alertRule.id))
+                        setAlertRules(alertRules.filter((x) => x.id !== alertRule.id))
                         setTotal(total - 1)
                       }} alertRule={alertRule} />
                       <Button color={'primary'} onClick={() => navigate(`/alert-rules/${alertRule.id}`)}>
