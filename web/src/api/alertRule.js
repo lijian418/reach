@@ -40,10 +40,18 @@ const tryData = async (entityId, data): Promise<AxiosResponse> => {
   })
 }
 
+const remove = async (entityId): Promise<AxiosResponse> => {
+  return await request({
+    method: "DELETE",
+    url: `/alert-rules/${entityId}`
+  })
+}
+
 export const alertRule = {
   create,
   find,
   get,
   update,
-  tryData
+  tryData,
+  remove
 }

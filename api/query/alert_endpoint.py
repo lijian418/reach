@@ -13,8 +13,18 @@ async def create(payload: AlertEndpointCreate) -> AlertEndpointRead:
 
 
 async def get(entity_id: PyObjectId) -> AlertEndpointRead:
-    entity = await alert_endpoint_collection.find_one({"_id": entity_id})
-    return AlertEndpointRead(**entity)
+    pipeline = [{"$match": {"_id": entity_id}},
+                {
+                    "$lookup": {
+                        "from": "alarm_collection",
+                        "localField": "alarm_ids",
+                        "foreignField": "_id",
+                        "as": "alarms"
+                    }
+                }]
+    entity = await alert_endpoint_collection.aggregate(pipeline).to_list(length=None)
+    return AlertEndpointRead(**entity[0])
+
 
 
 async def update(entity_id: PyObjectId, payload) -> AlertEndpointRead:
@@ -31,6 +41,14 @@ async def delete(entity_id: PyObjectId) -> bool:
 async def find(search: AlertEndpointSearch) -> AlertEndpointPaginatedRead:
     query = {}
     pipeline = [{"$match": query},
+                {
+                    "$lookup": {
+                        "from": "alarm_collection",
+                        "localField": "alarm_ids",
+                        "foreignField": "_id",
+                        "as": "alarms"
+                    }
+                },
                 {"$sort": {"created_at": pymongo.DESCENDING}},
                 {"$skip": search.skip},
                 {"$limit": search.limit}]
@@ -40,3 +58,15 @@ async def find(search: AlertEndpointSearch) -> AlertEndpointPaginatedRead:
 
     return AlertEndpointPaginatedRead(items=[AlertEndpointRead(**item) for item in items],
                                       total=total)
+
+
+async def add_alarm_id_to_alert_endpoint(endpoint_id: PyObjectId, alarm_id: PyObjectId):
+    await alert_endpoint_collection.update_one({"_id": endpoint_id}, {"$addToSet": {"alarm_ids": alarm_id}})
+    updated = await alert_endpoint_collection.find_one({"_id": endpoint_id})
+    return AlertEndpointRead(**updated)
+
+
+async def remove_alarm_id_from_alert_endpoint(endpoint_id: PyObjectId, alarm_id: PyObjectId):
+    await alert_endpoint_collection.update_one({"_id": endpoint_id}, {"$pull": {"alarm_ids": alarm_id}})
+    updated = await alert_endpoint_collection.find_one({"_id": endpoint_id})
+    return AlertEndpointRead(**updated)

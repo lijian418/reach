@@ -1,5 +1,5 @@
 import time
-from typing import List, Optional
+from typing import List
 
 from pydantic import Field, BaseModel
 
@@ -19,12 +19,14 @@ class AlertRuleBase(PyBaseModel):
     rules: List[Rule] = Field([])
     logic: str = Field(...)
     levels: List[str] = Field([])
+    alarm_ids: List[PyObjectId] = Field([])
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 
 
 class AlertRuleRead(AlertRuleBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    alarms: List[dict] = Field([])
 
 
 class AlertRuleCreate(AlertRuleBase):

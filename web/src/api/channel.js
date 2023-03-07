@@ -32,9 +32,17 @@ const update = async (channelId, data): Promise<AxiosResponse> => {
   })
 }
 
+const remove = async (channelId): Promise<AxiosResponse> => {
+  return await request({
+    method: "DELETE",
+    url: `/channels/${channelId}`
+  })
+}
+
 export const channel = {
   create,
   find,
   get,
-  update
+  update,
+  remove
 }

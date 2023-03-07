@@ -1,6 +1,7 @@
 import time
 
 from fastapi import Depends, Body, APIRouter
+from starlette.responses import JSONResponse
 
 import query.alert_endpoint as alert_endpoint_query
 from models.business.alert_endpoint import AlertEndpointRead, AlertEndpointCreate, AlertEndpointPaginatedRead, \
@@ -44,8 +45,11 @@ async def find(search: AlertEndpointSearch = Depends()):
 
 
 @router.delete("/{entity_id}",
-               response_model=AlertEndpointRead,
+               response_model=bool,
                response_model_by_alias=False)
 async def delete(entity_id: PyObjectId):
+    entity = await alert_endpoint_query.get(entity_id)
+    if len(entity.alarm_ids) > 0:
+        return JSONResponse(status_code=400, content={"message": "Endpoint is used by one or more alarms"})
     deleted = await alert_endpoint_query.delete(entity_id)
     return deleted

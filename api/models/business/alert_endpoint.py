@@ -10,6 +10,7 @@ from models.fastapi.mongodb import PyObjectId
 class AlertEndpointBase(PyBaseModel):
     label: str = Field(...)
     webhook_urls: List[str] = Field([])
+    alarm_ids: List[PyObjectId] = Field([])
     emails: List[str] = Field([])
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
@@ -17,6 +18,7 @@ class AlertEndpointBase(PyBaseModel):
 
 class AlertEndpointRead(AlertEndpointBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    alarms: List[dict] = Field([])
 
 
 class AlertEndpointCreate(AlertEndpointBase):

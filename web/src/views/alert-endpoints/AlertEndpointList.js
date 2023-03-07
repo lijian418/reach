@@ -13,6 +13,8 @@ import {cilTrash} from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import {useNavigate} from "react-router-dom";
 import {pageNumber} from "../../utils/pageNumber";
+import {DeleteAlertRuleModal} from "../alert-rules/DeleteAlertRuleModal";
+import {DeleteAlertEndpointModal} from "./DeleteAlertEndpointModal";
 
 export const AlertEndpointList = (props) => {
   const [search, setSearch] = useState()
@@ -72,9 +74,11 @@ export const AlertEndpointList = (props) => {
                   <CardText>Webhook URL on Endpoint: {alertEndpoint?.webhook_urls?.length}</CardText>
                   <div className={'d-flex flex-row-reverse'}>
                     <div className={'d-flex gap-2 flex-wrap'}>
-                      <Button color={'danger'}>
-                        <CIcon icon={cilTrash} size="sm"/> Delete
-                      </Button>
+                      <DeleteAlertEndpointModal delete={async () => {
+                        await api.alertEndpoint.remove(alertEndpoint.id)
+                        setAlertEndpoints(alertEndpoints.filter((alertEndpoint) => alertEndpoint.id !== alertEndpoint.id))
+                        setTotal(total - 1)
+                      }} alertEndpoint={alertEndpoint} />
                       <Button color={'primary'} onClick={() => navigate(`/alert-endpoints/${alertEndpoint.id}`)}>
                         View
                       </Button>

@@ -47,9 +47,12 @@ async def find(search: AlertRuleSearch = Depends()):
 
 
 @router.delete("/{entity_id}",
-               response_model=AlertRuleRead,
+               response_model=bool,
                response_model_by_alias=False)
 async def delete(entity_id: PyObjectId):
+    entity = await alert_rule_query.get(entity_id)
+    if len(entity.alarm_ids) > 0:
+        return JSONResponse(status_code=400, content={"message": "Alert Rule is used by one or more alarms"})
     deleted = await alert_rule_query.delete(entity_id)
     return deleted
 

@@ -1,18 +1,16 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {api} from "../../api";
 import useAsyncEffect from "use-async-effect";
 import {
-  Badge,
   Button,
   Card,
   CardBody,
-  CardSubtitle, CardText,
+  CardSubtitle,
   CardTitle,
 } from "reactstrap";
 import Pagination from "react-js-pagination";
-import {cilTrash} from "@coreui/icons";
-import CIcon from "@coreui/icons-react";
 import {useNavigate} from "react-router-dom";
+import DeleteModal from "../../components/DeleteModal";
 
 export const ChannelList = (props) => {
   const [search, setSearch] = useState()
@@ -80,9 +78,11 @@ export const ChannelList = (props) => {
                   </CardSubtitle>
                   <div className={'d-flex flex-row-reverse'}>
                     <div className={'d-flex gap-2 flex-wrap'}>
-                      <Button color={'danger'}>
-                        <CIcon icon={cilTrash} size="sm"/> Delete
-                      </Button>
+                      <DeleteModal delete={async () => {
+                        await api.channel.remove(channel.id)
+                        setChannels(channels.filter((c) => c.id !== channel.id))
+                        setTotal(total - 1)
+                      }} />
                       <Button color={'primary'} onClick={() => navigate(`/channels/${channel.id}`)}>
                         View
                       </Button>

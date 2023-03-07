@@ -13,6 +13,7 @@ import {cilTrash} from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import {useNavigate} from "react-router-dom";
 import {pageNumber} from "../../utils/pageNumber";
+import {DeleteAlertRuleModal} from "./DeleteAlertRuleModal";
 
 export const AlertRuleList = (props) => {
   const [search, setSearch] = useState()
@@ -70,9 +71,11 @@ export const AlertRuleList = (props) => {
                   </CardTitle>
                   <div className={'d-flex flex-row-reverse'}>
                     <div className={'d-flex gap-2 flex-wrap'}>
-                      <Button color={'danger'}>
-                        <CIcon icon={cilTrash} size="sm"/> Delete
-                      </Button>
+                      <DeleteAlertRuleModal delete={async () => {
+                        await api.alertRule.remove(alertRule.id)
+                        setAlertRules(alertRules.filter((alertRule) => alertRule.id !== alertRule.id))
+                        setTotal(total - 1)
+                      }} alertRule={alertRule} />
                       <Button color={'primary'} onClick={() => navigate(`/alert-rules/${alertRule.id}`)}>
                         View
                       </Button>

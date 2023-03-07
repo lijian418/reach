@@ -32,10 +32,17 @@ const update = async (entityId, data): Promise<AxiosResponse> => {
   })
 }
 
+const remove = async (entityId): Promise<AxiosResponse> => {
+  return await request({
+    method: "DELETE",
+    url: `/alert-endpoints/${entityId}`
+  })
+}
 
 export const alertEndpoint = {
   create,
   find,
   get,
-  update
+  update,
+  remove
 }

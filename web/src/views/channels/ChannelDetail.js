@@ -7,6 +7,7 @@ import EditChannelModal from "./EditChannelModal";
 import {CreateAlarmsModal} from "./CreateAlarmsModal";
 import SendMessage from "./SendMessage";
 import {MessageChannelList} from "./MessageChannelList";
+import DeleteModal from "../../components/DeleteModal";
 
 const ChannelDetail = () => {
   let { channelId } = useParams();
@@ -38,7 +39,13 @@ const ChannelDetail = () => {
             </div>
           </div>
         </div>
-        <EditChannelModal channel={channel} refetch={fetchChannel}/>
+        <div className={'d-flex gap-2'}>
+          <DeleteModal delete={async () => {
+            await api.channel.remove(channelId)
+            window.location.href = '/channels'
+          }} />
+          <EditChannelModal channel={channel} refetch={fetchChannel}/>
+        </div>
       </div>
       <div className={'d-flex mt-4 justify-content-between'}>
         <div>

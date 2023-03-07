@@ -3,6 +3,9 @@ import time
 from fastapi import APIRouter, Depends, Body
 
 import query.channel as channel_query
+import query.alarm as alarm_query
+import query.alert_rule as alert_rule_query
+import query.alert_endpoint as alert_endpoint_query
 from models.business.channel import ChannelRead, ChannelCreate, ChannelPaginatedRead, ChannelSearch
 from models.fastapi.mongodb import PyObjectId
 
@@ -45,5 +48,11 @@ async def find(search: ChannelSearch = Depends()):
                response_model=ChannelRead,
                response_model_by_alias=False)
 async def delete(entity_id: PyObjectId):
+    entity = await channel_query.get(entity_id)
+    for alarm in entity.alarms:
+        await alert_endpoint_query.remove_alarm_id_from_alert_endpoint(alarm.endpoint_id, alarm.id)
+        await alert_rule_query.remove_alarm_id_from_alert_rule(alarm.rule_id, alarm.id)
+        await alarm_query.delete(alarm.id)
+
     deleted = await channel_query.delete(entity_id)
-    return deleted
+    return entity

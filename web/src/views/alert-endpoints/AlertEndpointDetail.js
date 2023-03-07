@@ -1,11 +1,14 @@
 import {useParams} from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
-import {useState} from "react";
+import React, {useState} from "react";
 import {api} from "../../api";
 import {Badge} from "reactstrap";
 import EditAlertEndpointModal from "./EditAlertEndpointModal";
 import EndpointEmailModal from "./EndpointEmailModal";
 import EndpointWebhookModal from "./EndpointWebhookModal";
+import {DeleteAlertRuleModal} from "../alert-rules/DeleteAlertRuleModal";
+import EditAlertRuleModal from "../alert-rules/EditAlertRuleModal";
+import {DeleteAlertEndpointModal} from "./DeleteAlertEndpointModal";
 
 const AlertEndpointDetail = () => {
   let { alertEndpointId } = useParams();
@@ -26,7 +29,14 @@ const AlertEndpointDetail = () => {
         <div>
           <h2>Alert Endpoint Details - {alertEndpoint?.label}</h2>
         </div>
-        <EditAlertEndpointModal alertEndpoint={alertEndpoint} refetch={fetchAlertEndpoint}/>
+
+        <div className={'d-flex gap-2'}>
+          <DeleteAlertEndpointModal delete={async () => {
+            await api.alertEndpoint.remove(alertEndpointId)
+            window.location.href = '/alert-endpoints'
+          }} alertEndpoint={alertEndpoint} />
+          <EditAlertEndpointModal alertEndpoint={alertEndpoint} refetch={fetchAlertEndpoint}/>
+        </div>
       </div>
 
       <div className={'mt-4'}>

@@ -5,6 +5,7 @@ import {api} from "../../api";
 import EditAlertRuleModal from "./EditAlertRuleModal";
 import {Badge, Button, Input} from "reactstrap";
 import {AlertRuleTryDataModal} from "./AlertRuleTryDataModal";
+import {DeleteAlertRuleModal} from "./DeleteAlertRuleModal";
 
 const AlertRuleDetail = () => {
   let { alertRuleId } = useParams();
@@ -28,7 +29,13 @@ const AlertRuleDetail = () => {
         <div>
           <h2>Alert Rule Details - {alertRule?.label}</h2>
         </div>
-        <EditAlertRuleModal alertRule={alertRule} refetch={fetchAlertRule}/>
+        <div className={'d-flex gap-2'}>
+          <DeleteAlertRuleModal delete={async () => {
+            await api.alertRule.remove(alertRuleId)
+            navigate(`/alert-rules`)
+          }} alertRule={alertRule} />
+          <EditAlertRuleModal alertRule={alertRule} refetch={fetchAlertRule}/>
+        </div>
       </div>
       <div className={'d-flex justify-content-between mt-4'}>
         <h3>Rules</h3>
