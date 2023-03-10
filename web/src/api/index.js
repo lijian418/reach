@@ -4,6 +4,7 @@ import {alertEndpoint} from "./alertEndpoint";
 import {alertRule} from "./alertRule";
 import {alarm} from "./alarm";
 import {message} from "./message";
+import {subscription} from "./subscription";
 
 export const api = {
   user,
@@ -11,5 +12,6 @@ export const api = {
   alertEndpoint,
   alertRule,
   alarm,
-  message
+  message,
+  subscription
 }

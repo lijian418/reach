@@ -36,7 +36,6 @@ function EndpointEmailModal(props) {
           emails: yup.array().of(yup.string()),
         })}
         onSubmit={async (values) => {
-          console.log(values)
           await updateEndpoint(values)
         }}>
         {({ handleSubmit, values}) => (

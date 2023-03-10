@@ -52,7 +52,6 @@ function SendMessage(props) {
                 tags: yup.string().required('Required'),
               })}
               onSubmit={async (values) => {
-                console.log(values)
                 await sendMessage(values)
               }}>
               {({errors, touched, handleSubmit}) => (

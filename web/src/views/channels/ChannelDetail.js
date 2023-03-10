@@ -1,25 +1,29 @@
 import {useParams} from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
-import {useState} from "react";
+import React, {useState} from "react";
 import {api} from "../../api";
-import {Badge, Button} from "reactstrap";
+import {Badge, Button, Card, CardBody} from "reactstrap";
 import EditChannelModal from "./EditChannelModal";
 import {CreateAlarmsModal} from "./CreateAlarmsModal";
 import SendMessage from "./SendMessage";
 import {MessageChannelList} from "./MessageChannelList";
 import DeleteModal from "../../components/DeleteModal";
+import EditRulesOnChannel from "./EditRulesOnChannel";
+import {CNav, CNavItem, CNavLink, CTabContent, CTabPane} from "@coreui/react";
+import {AlertRuleTabs} from "../alert-rules/AlertRuleTabs";
 
 const ChannelDetail = () => {
   let { channelId } = useParams();
   const [channel, setChannel] = useState()
 
   useAsyncEffect(async() => {
-    await fetchChannel()
+    const fetched = await fetchChannel()
   }, [channelId])
 
   const fetchChannel = async () => {
     const {data} = await api.channel.get(channelId)
     setChannel(data)
+    return data
   }
 
   const removeAlarm = async (alarmId) => {
@@ -47,6 +51,18 @@ const ChannelDetail = () => {
           <EditChannelModal channel={channel} refetch={fetchChannel}/>
         </div>
       </div>
+      <div className={'d-flex mt-4 justify-content-between'}>
+        <h3>Subscribable Rules</h3>
+        {
+          channel && (
+            <EditRulesOnChannel channel={channel} refetch={fetchChannel}/>
+          )
+        }
+      </div>
+      <div className={'mt-4'}>
+        <AlertRuleTabs channel={channel}/>
+      </div>
+
       <div className={'d-flex mt-4 justify-content-between'}>
         <div>
           <h3>Alarms</h3>

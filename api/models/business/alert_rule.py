@@ -19,6 +19,7 @@ class AlertRuleBase(PyBaseModel):
     rules: List[Rule] = Field([])
     logic: str = Field(...)
     levels: List[str] = Field([])
+    priorities: List[str] = Field([])
     alarm_ids: List[PyObjectId] = Field([])
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())

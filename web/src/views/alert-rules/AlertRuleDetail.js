@@ -67,6 +67,23 @@ const AlertRuleDetail = () => {
           </div>
         </div>
       </div>
+      <div className={'d-flex gap-4'}>
+        <h6>Priorities accepted:</h6>
+        <div className={'d-flex flex-wrap gap-4'}>
+          <div>
+            <Input type="checkbox" checked={alertRule?.priorities?.includes('low')} disabled /> Low
+          </div>
+          <div>
+            <Input type="checkbox" checked={alertRule?.priorities?.includes('medium')} disabled /> Medium
+          </div>
+          <div>
+            <Input type="checkbox" checked={alertRule?.priorities?.includes('high')} disabled /> High
+          </div>
+          <div>
+            <Input type="checkbox" checked={alertRule?.priorities?.includes('urgent')} disabled /> Urgent
+          </div>
+        </div>
+      </div>
       <h6>Triggers:</h6>
       <ul>
         {

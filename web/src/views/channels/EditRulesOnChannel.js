@@ -1,63 +1,92 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Button,
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter, FormGroup, Col, Label, Input, FormFeedback,
+  ModalFooter,
 } from 'reactstrap';
-import {ErrorMessage, Field, FieldArray, Form, Formik} from "formik";
+import {ErrorMessage, FieldArray, Form, Formik} from "formik";
 import * as yup from "yup";
 import {api} from "../../api";
-import {AlertEndpointForm} from "./AlertEndpointForm";
+import {AsyncPaginate} from "react-select-async-paginate";
 
-function EndpointWebhookModal(props) {
+function EditRulesOnChannel(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const updateEndpoint = async (values) => {
-    const {data} = await api.alertEndpoint.update(props.alertEndpoint.id, {
-      "webhook_urls": values.webhook_urls,
+  const updateChannel = async (values) => {
+    const {data} = await api.channel.update(props.channel.id, {
+      "alert_rule_ids": values.alert_rule_ids.map((alert_rule) => alert_rule.value),
     })
     props.refetch()
   }
 
+  async function loadOptionsEndpoints(search, loadedOptions) {
+    const {data} = await api.alertRule.find({
+      limit: 10,
+      skip: loadedOptions.length
+    })
+
+    return {
+      options: data.items.map((item) => {
+        return (
+          {
+            value: item.id,
+            label: item.label
+          }
+        )
+      }),
+      hasMore: loadedOptions.length < data.total
+    };
+  }
+
+  const initialOptions = props.channel?.alert_rules?.map((alertRule) => {
+    return (
+      {
+        value: alertRule.id,
+        label: alertRule.label
+      }
+    )
+  })
+
   return (
     <div>
       <Button color="primary" onClick={toggle}>
-        Edit Webhook URLs
+        Edit Alert Rules
       </Button>
       <Formik
         initialValues={{
-          webhook_urls: props.alertEndpoint.webhook_urls.length === 0 ? [""] : props.alertEndpoint.webhook_urls,
+          alert_rule_ids: initialOptions ? initialOptions : [""]
         }}
         validationSchema={yup.object().shape({
-          webhook_urls: yup.array().of(yup.string()),
+          alert_rule_ids: yup.array(),
         })}
         onSubmit={async (values) => {
-          await updateEndpoint(values)
+          await updateChannel(values)
         }}>
-        {({ handleSubmit, values}) => (
+        {({ handleSubmit, values, setFieldValue}) => (
           <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Webhook URLs</ModalHeader>
+            <ModalHeader toggle={toggle}>Alert Rules</ModalHeader>
             <ModalBody>
               <Form>
                 <FieldArray
-                  name="webhook_urls"
+                  name="alert_rule_ids"
                   render={arrayHelpers => (
                     <div>
-                      {values.webhook_urls.map((webhook_url, index) => (
+                      {values.alert_rule_ids?.map((email, index) => (
                         <div key={index}>
                           <div className={'d-flex gap-2 flex-wrap mt-2'}>
-                            <div>
-                              <Input
-                                style={{width: '250px'}}
-                                type="text"
-                                name={`webhook_urls[${index}]`}
-                                tag={Field}
+                            <div style={{minWidth: '250px'}}>
+                              <AsyncPaginate
+                                value={values.alert_rule_ids[index]}
+                                loadOptions={loadOptionsEndpoints}
+                                onChange={(value) => {
+                                  setFieldValue(`alert_rule_ids[${index}]`, value)
+                                }}
                               />
-                              <ErrorMessage name={`webhook_urls[${index}].value`}/>
+                              <ErrorMessage name={`alert_rule_ids[${index}]`}/>
                             </div>
                             <div>
                               <Button onClick={() => arrayHelpers.remove(index)}>Delete</Button>
@@ -96,4 +125,4 @@ function EndpointWebhookModal(props) {
   );
 }
 
-export default EndpointWebhookModal;
+export default EditRulesOnChannel;

@@ -24,8 +24,17 @@ const find = async (search): Promise<AxiosResponse> => {
   })
 }
 
+const update = async (entity_id, user): Promise<AxiosResponse> => {
+  return await request({
+    method: 'PUT',
+    url: `/users/${entity_id}`,
+    data: user
+  })
+}
+
 export const user = {
   create,
   getByUsername,
-  find
+  find,
+  update
 }

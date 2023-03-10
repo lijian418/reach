@@ -41,7 +41,24 @@ async def get(entity_id: PyObjectId) -> ChannelRead:
                         ],
                         "as": "alarms"
                     }
-                }]
+                },
+                {
+                    "$lookup": {
+                        "from": "alert_rule_collection",
+                        "localField": "alert_rule_ids",
+                        "foreignField": "_id",
+                        "as": "alert_rules"
+                    }
+                },
+                {
+                    "$lookup": {
+                        "from": "subscription_collection",
+                        "localField": "subscription_ids",
+                        "foreignField": "_id",
+                        "as": "subscriptions"
+                    }
+                }
+                ]
     entity = await channel_collection.aggregate(pipeline).to_list(length=None)
     return ChannelRead(**entity[0])
 
@@ -64,6 +81,30 @@ async def remove_alarm_id_from_channel(entity_id: PyObjectId, alarm_id: PyObject
     return updated_entity
 
 
+async def add_subscription_id_to_channel(entity_id: PyObjectId, subscription_id: PyObjectId) -> ChannelRead:
+    await channel_collection.update_one({"_id": entity_id}, {"$addToSet": {"subscription_ids": subscription_id}})
+    updated_entity = await get(entity_id)
+    return updated_entity
+
+
+async def remove_subscription_id_from_channel(entity_id: PyObjectId, subscription_id: PyObjectId) -> ChannelRead:
+    await channel_collection.update_one({"_id": entity_id}, {"$pull": {"subscription_ids": subscription_id}})
+    updated_entity = await get(entity_id)
+    return updated_entity
+
+
+async def add_subscribed_user_id_to_channel(entity_id: PyObjectId, user_id: PyObjectId) -> ChannelRead:
+    await channel_collection.update_one({"_id": entity_id}, {"$addToSet": {"subscribed_user_ids": user_id}})
+    updated_entity = await get(entity_id)
+    return updated_entity
+
+
+async def remove_subscribed_user_id_from_channel(entity_id: PyObjectId, user_id: PyObjectId) -> ChannelRead:
+    await channel_collection.update_one({"_id": entity_id}, {"$pull": {"subscribed_user_ids": user_id}})
+    updated_entity = await get(entity_id)
+    return updated_entity
+
+
 async def delete(entity_id: PyObjectId) -> bool:
     result = await channel_collection.delete_one({"_id": entity_id})
     return result.deleted_count == 1
@@ -71,6 +112,8 @@ async def delete(entity_id: PyObjectId) -> bool:
 
 async def find(search: ChannelSearch) -> ChannelPaginatedRead:
     query = {}
+    if search.exclude_subscribed_user_id:
+        query["subscribed_user_ids"] = {"$ne": search.exclude_subscribed_user_id}
     pipeline = [{"$match": query},
                 {
                     "$lookup": {
@@ -94,6 +137,22 @@ async def find(search: ChannelSearch) -> ChannelPaginatedRead:
                             {"$unwind": "$endpoint"},
                         ],
                         "as": "alarms"
+                    }
+                },
+                {
+                    "$lookup": {
+                        "from": "alert_rule_collection",
+                        "localField": "alert_rule_ids",
+                        "foreignField": "_id",
+                        "as": "alert_rules"
+                    }
+                },
+                {
+                    "$lookup": {
+                        "from": "subscription_collection",
+                        "localField": "subscription_ids",
+                        "foreignField": "_id",
+                        "as": "subscriptions"
                     }
                 },
                 {"$sort": {"created_at": pymongo.DESCENDING}},

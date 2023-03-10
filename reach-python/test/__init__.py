@@ -9,10 +9,12 @@ client = SyncReachClient("http://localhost:8000")
 
 async def send_async():
     x = await async_client.send_messages([
-        {"title": "test", "description": "123", "level": "info", "tags": {"btc": "500"},
-         "channel_slug": "crypto-two"},
-        {"title": "test", "description": "123", "level": "info", "tags": {"btc": "500"},
-         "channel_slug": "crypto-two"},
+        {"title": "test",
+         "description": "123",
+         "level": "info",
+         "priority": "high",
+         "tags": {"eth": "300"},
+         "channel_slug": "crypto-channel"},
     ])
     print(x)
 

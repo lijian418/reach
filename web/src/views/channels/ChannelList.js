@@ -1,7 +1,8 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {api} from "../../api";
 import useAsyncEffect from "use-async-effect";
 import {
+  Badge,
   Button,
   Card,
   CardBody,
@@ -11,6 +12,7 @@ import {
 import Pagination from "react-js-pagination";
 import {useNavigate} from "react-router-dom";
 import DeleteModal from "../../components/DeleteModal";
+import {AlertRuleTabs} from "../alert-rules/AlertRuleTabs";
 
 export const ChannelList = (props) => {
   const [search, setSearch] = useState()
@@ -61,22 +63,25 @@ export const ChannelList = (props) => {
           />
         </div>
       </div>
-      <div className={'d-flex gap-3 flex-wrap'}>
+      <div>
         {
-          channels && channels.map((channel) => {
+          channels?.map((channel, index) => {
             return (
-              <Card style={{width: '25rem', minWidth: '300px'}} key={channel.id}>
+              <Card key={index} className={'mt-4'}>
                 <CardBody>
-                  <CardTitle tag="h5">
-                    {channel.label}
+                  <CardTitle tag="h3">
+                    Channel {channel.label}
                   </CardTitle>
                   <CardSubtitle
                     className="mb-2 text-muted"
                     tag="h6"
                   >
-                    {channel.slug}
+                    With slug "{channel.slug}"
                   </CardSubtitle>
-                  <div className={'d-flex flex-row-reverse'}>
+                </CardBody>
+                <CardBody>
+                  <AlertRuleTabs channel={channel} />
+                  <div className={'d-flex flex-row-reverse mt-4'}>
                     <div className={'d-flex gap-2 flex-wrap'}>
                       <DeleteModal delete={async () => {
                         await api.channel.remove(channel.id)
@@ -89,7 +94,7 @@ export const ChannelList = (props) => {
                     </div>
                   </div>
                 </CardBody>
-              </Card>
+            </Card>
             )
           })
         }

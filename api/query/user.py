@@ -44,3 +44,15 @@ async def find(search: UserSearch) -> UserPaginatedRead:
 
     return UserPaginatedRead(items=[UserRead(**item) for item in items],
                              total=total)
+
+
+async def add_subscription_id_to_user(entity_id: PyObjectId, subscription_id: PyObjectId) -> UserRead:
+    await user_collection.update_one({"_id": entity_id}, {"$addToSet": {"subscription_ids": subscription_id}})
+    updated_entity = await get(entity_id)
+    return updated_entity
+
+
+async def remove_subscription_id_from_user(entity_id: PyObjectId, subscription_id: PyObjectId) -> UserRead:
+    await user_collection.update_one({"_id": entity_id}, {"$pull": {"subscription_ids": subscription_id}})
+    updated_entity = await get(entity_id)
+    return updated_entity

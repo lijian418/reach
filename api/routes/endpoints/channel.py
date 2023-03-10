@@ -25,6 +25,8 @@ async def create(payload: ChannelCreate = Body(...)):
             response_model_by_alias=False)
 async def update(entity_id: PyObjectId, payload=Body(...)):
     payload['updated_at'] = time.time()
+    if payload['alert_rule_ids']:
+        payload['alert_rule_ids'] = [PyObjectId(id) for id in payload['alert_rule_ids']]
     updated = await channel_query.update(entity_id, payload)
     return updated
 

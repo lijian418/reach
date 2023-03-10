@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, Body
 
 import query.message as message_query
-import query.channel as channel_query
 from core.queue.client import queue_client
 from models.business.message import MessageCreate, MessageRead, MessagePaginatedRead, MessageSearch
 from models.fastapi.mongodb import PyObjectId

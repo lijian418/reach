@@ -1,5 +1,5 @@
 import time
-from typing import List
+from typing import List, Optional
 
 from pydantic import Field
 
@@ -9,6 +9,9 @@ from models.fastapi.mongodb import PyObjectId
 
 class UserBase(PyBaseModel):
     username: str = Field(...)
+    email: Optional[str] = Field(None)
+    webhook_url: Optional[str] = Field(None)
+    subscription_ids: List[PyObjectId] = Field([])
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 

@@ -14,6 +14,7 @@ export const AlertRuleEditForm = (props) => {
   const schema = yup.object().shape({
     logic: yup.string().required('Required'),
     levels: yup.array().of(yup.string()),
+    priorities: yup.array().of(yup.string()),
     rules: yup.array()
       .of(
         yup.object().shape({
@@ -30,6 +31,7 @@ export const AlertRuleEditForm = (props) => {
       logic: values.logic,
       rules: values.rules,
       levels: values.levels,
+      priorities: values.priorities,
     })
     navigate(`/alert-rules/${props.alertRule.id}`)
   }
@@ -39,6 +41,7 @@ export const AlertRuleEditForm = (props) => {
       initialValues={{
         logic: props.alertRule.logic,
         levels: props.alertRule.levels,
+        priorities: props.alertRule.priorities,
         rules: props.alertRule.rules.length > 0 ? props.alertRule.rules : [{key: '', type: 'text', operator: '==', value: ''}]
       }}
       validationSchema={schema}
@@ -46,6 +49,7 @@ export const AlertRuleEditForm = (props) => {
     >
       {({errors, touched, values}) => (
         <Form>
+          <h4>Levels</h4>
           <FieldArray
             name="levels"
             render={arrayHelpers => (
@@ -117,6 +121,84 @@ export const AlertRuleEditForm = (props) => {
                     } checked={arrayHelpers.form.values.levels.indexOf('success') !== -1}/>
                     <Label check>
                       Success
+                    </Label>
+                  </FormGroup>
+                </div>
+              </div>
+            )}
+          />
+          <h4 className={'mt-4'}>Priorities</h4>
+          <FieldArray
+            name="priorities"
+            render={arrayHelpers => (
+              <div>
+                <div className={'mt-2'}>
+                  <FormGroup
+                    check
+                    inline
+                  >
+                    <Input type="checkbox" onChange={
+                      (e) => {
+                        if (e.target.checked) {
+                          arrayHelpers.push('low')
+                        } else {
+                          arrayHelpers.remove(arrayHelpers.form.values.priorities.indexOf('low'))
+                        }
+                      }
+                    } checked={arrayHelpers.form.values.priorities.indexOf('low') !== -1}/>
+                    <Label check>
+                      Low
+                    </Label>
+                  </FormGroup>
+                  <FormGroup
+                    check
+                    inline
+                  >
+                    <Input type="checkbox" onChange={
+                      (e) => {
+                        if (e.target.checked) {
+                          arrayHelpers.push('medium')
+                        } else {
+                          arrayHelpers.remove(arrayHelpers.form.values.priorities.indexOf('medium'))
+                        }
+                      }
+                    } checked={arrayHelpers.form.values.priorities.indexOf('medium') !== -1}/>
+                    <Label check>
+                      Medium
+                    </Label>
+                  </FormGroup>
+                  <FormGroup
+                    check
+                    inline
+                  >
+                    <Input type="checkbox" onChange={
+                      (e) => {
+                        if (e.target.checked) {
+                          arrayHelpers.push('high')
+                        } else {
+                          arrayHelpers.remove(arrayHelpers.form.values.priorities.indexOf('high'))
+                        }
+                      }
+                    } checked={arrayHelpers.form.values.priorities.indexOf('high') !== -1}/>
+                    <Label check>
+                      High
+                    </Label>
+                  </FormGroup>
+                  <FormGroup
+                    check
+                    inline
+                  >
+                    <Input type="checkbox" onChange={
+                      (e) => {
+                        if (e.target.checked) {
+                          arrayHelpers.push('urgent')
+                        } else {
+                          arrayHelpers.remove(arrayHelpers.form.values.priorities.indexOf('urgent'))
+                        }
+                      }
+                    } checked={arrayHelpers.form.values.priorities.indexOf('urgent') !== -1}/>
+                    <Label check>
+                      Urgent
                     </Label>
                   </FormGroup>
                 </div>

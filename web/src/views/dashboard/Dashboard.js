@@ -4,7 +4,8 @@ import {MessageList} from "./MessageList";
 const Dashboard = () => {
   return (
     <>
-      <h2>Dashboard - User's messages</h2>
+      <h2>Dashboard</h2>
+      <h3>My Messages</h3>
       <MessageList/>
     </>
   )

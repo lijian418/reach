@@ -11,6 +11,7 @@ class MessageBase(PyBaseModel):
     title: str = Field(...)
     description: str = Field(...)
     level: str = Field(...)
+    priority: str = Field(...)
     tags: dict = Field(...)
     status: Optional[str] = Field(None)
     triggered_alarms: List[dict] = Field([])
