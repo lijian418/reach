@@ -3,9 +3,9 @@ import time
 from fastapi import APIRouter, Depends, Body
 
 import query.channel as channel_query
-import query.alarm as alarm_query
+import query.subscription as subscription_query
+import query.user as user_query
 import query.alert_rule as alert_rule_query
-import query.alert_endpoint as alert_endpoint_query
 from models.business.channel import ChannelRead, ChannelCreate, ChannelPaginatedRead, ChannelSearch
 from models.fastapi.mongodb import PyObjectId
 
@@ -25,8 +25,6 @@ async def create(payload: ChannelCreate = Body(...)):
             response_model_by_alias=False)
 async def update(entity_id: PyObjectId, payload=Body(...)):
     payload['updated_at'] = time.time()
-    if payload['alert_rule_ids']:
-        payload['alert_rule_ids'] = [PyObjectId(id) for id in payload['alert_rule_ids']]
     updated = await channel_query.update(entity_id, payload)
     return updated
 
@@ -47,14 +45,19 @@ async def find(search: ChannelSearch = Depends()):
 
 
 @router.delete("/{entity_id}",
-               response_model=ChannelRead,
+               response_model=bool,
                response_model_by_alias=False)
 async def delete(entity_id: PyObjectId):
     entity = await channel_query.get(entity_id)
-    for alarm in entity.alarms:
-        await alert_endpoint_query.remove_alarm_id_from_alert_endpoint(alarm.endpoint_id, alarm.id)
-        await alert_rule_query.remove_alarm_id_from_alert_rule(alarm.rule_id, alarm.id)
-        await alarm_query.delete(alarm.id)
+
+    # Remove all subscriptions
+    for subscription in entity.subscriptions:
+        await subscription_query.delete(subscription.id)
+        await user_query.remove_subscription(subscription.user_id, subscription.id)
+
+    # Remove all alert rules
+    for alert_rule in entity.alert_rules:
+        await alert_rule_query.delete(alert_rule.id)
 
     deleted = await channel_query.delete(entity_id)
-    return entity
+    return deleted

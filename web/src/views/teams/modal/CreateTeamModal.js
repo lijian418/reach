@@ -8,23 +8,24 @@ import {
 } from 'reactstrap';
 import {Formik} from "formik";
 import * as yup from "yup";
-import {api} from "../../api";
-import {AlertEndpointForm} from "./AlertEndpointForm";
+import {api} from "../../../api";
+import {TeamForm} from "../TeamForm";
+import {AiOutlineUsergroupAdd} from "react-icons/ai";
 
-function CreateAlertEndpointModal(props) {
+function CreateTeamModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const createAlertEndpoint = async (values) => {
-    const {data} = await api.alertEndpoint.create(values)
+  const createTeam = async (values) => {
+    const {data} = await api.team.create(values)
     props.refetch()
   }
 
   return (
     <div>
       <Button color="primary" onClick={toggle}>
-        Add a new alert endpoint
+        <AiOutlineUsergroupAdd/> Add a new team
       </Button>
       <Formik
         initialValues={{
@@ -38,13 +39,13 @@ function CreateAlertEndpointModal(props) {
           webhook_url: yup.string().optional(),
         })}
         onSubmit={async (values) => {
-          await createAlertEndpoint(values)
+          await createTeam(values)
         }}>
         {(formik) => (
           <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Create Alert Endpoint</ModalHeader>
+            <ModalHeader toggle={toggle}>Create Team</ModalHeader>
             <ModalBody>
-              <AlertEndpointForm formik={formik}/>
+              <TeamForm formik={formik}/>
             </ModalBody>
             <ModalFooter>
               <Button color="secondary" onClick={toggle}>
@@ -64,4 +65,4 @@ function CreateAlertEndpointModal(props) {
   );
 }
 
-export default CreateAlertEndpointModal;
+export default CreateTeamModal;

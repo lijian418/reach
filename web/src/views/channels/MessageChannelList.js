@@ -4,6 +4,7 @@ import useAsyncEffect from "use-async-effect";
 import Pagination from "react-js-pagination";
 import {pageNumber} from "../../utils/pageNumber";
 import {Table} from "reactstrap";
+import {AiOutlineFileSearch} from "react-icons/ai";
 
 export const MessageChannelList = (props) => {
   const [search, setSearch] = useState()
@@ -38,83 +39,97 @@ export const MessageChannelList = (props) => {
 
   return (
     <>
-      <div className={'d-flex flex-row-reverse mt-4'}>
-        <div className={'d-flex align-items-end'}>
-          <p className={'me-2'}>{search?.skip + messages?.length} out of {total}</p>
-          <Pagination
-            activePage={pageNumber(total ? total : 0, 10, search?.skip)}
-            totalItemsCount={total ? total : 0}
-            onChange={changePage}
-            itemClass="page-item"
-            linkClass="page-link"
-          />
-        </div>
-      </div>
-      <div className={'d-flex gap-3 flex-wrap'}>
-        <Table striped>
-          <thead>
-          <tr>
-            <th>
-              Title
-            </th>
-            <th>
-              Description
-            </th>
-            <th>
-              Level
-            </th>
-            <th>
-              Data
-            </th>
-            <th>
-              Alarms Activated
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-
-          {
-            messages && messages.map((message) => {
-              return (
+      {
+        messages && messages.length === 0 && (
+          <div className={'d-flex justify-content-center flex-column align-items-center'}>
+            <AiOutlineFileSearch className={'fs-1'}/>
+            <h5 className={'text-center mt-2 text-muted'}>No messages found</h5>
+          </div>
+        )
+      }
+      {
+        messages && messages.length > 0 && (
+          <>
+            <div className={'d-flex flex-row-reverse mt-4'}>
+              <div className={'d-flex align-items-end'}>
+                <p className={'me-2'}>{search?.skip + messages?.length} out of {total}</p>
+                <Pagination
+                  activePage={pageNumber(total ? total : 0, 10, search?.skip)}
+                  totalItemsCount={total ? total : 0}
+                  onChange={changePage}
+                  itemClass="page-item"
+                  linkClass="page-link"
+                />
+              </div>
+            </div>
+            <div className={'d-flex gap-3 flex-wrap'}>
+              <Table striped>
+                <thead>
                 <tr>
-                  <td>
-                    {message.title}
-                  </td>
-                  <td>
-                    {message.description}
-                  </td>
-                  <td>
-                    {message.level}
-                  </td>
-                  <td>
-                    {JSON.stringify(message.tags)}
-                  </td>
-                  <td>
-                    {message.triggered_alarms.map((alarm) => (
-                      <div>
-                        {alarm.label}
-                      </div>
-                    ))}
-                  </td>
+                  <th>
+                    Title
+                  </th>
+                  <th>
+                    Description
+                  </th>
+                  <th>
+                    Level
+                  </th>
+                  <th>
+                    Data
+                  </th>
+                  <th>
+                    Alarms Activated
+                  </th>
                 </tr>
-              )
-            })
-          }
-          </tbody>
-        </Table>
-      </div>
-      <div className={'d-flex flex-row-reverse mt-4'}>
-        <div className={'d-flex align-items-end'}>
-          <p className={'me-2'}>{search?.skip + messages?.length} out of {total}</p>
-          <Pagination
-            activePage={pageNumber(total ? total : 0, 10, search?.skip)}
-            totalItemsCount={total ? total : 0}
-            onChange={changePage}
-            itemClass="page-item"
-            linkClass="page-link"
-          />
-        </div>
-      </div>
+                </thead>
+                <tbody>
+
+                {
+                  messages && messages.map((message) => {
+                    return (
+                      <tr>
+                        <td>
+                          {message.title}
+                        </td>
+                        <td>
+                          {message.description}
+                        </td>
+                        <td>
+                          {message.level}
+                        </td>
+                        <td>
+                          {JSON.stringify(message.tags)}
+                        </td>
+                        <td>
+                          {message.triggered_alarms.map((alarm) => (
+                            <div>
+                              {alarm.label}
+                            </div>
+                          ))}
+                        </td>
+                      </tr>
+                    )
+                  })
+                }
+                </tbody>
+              </Table>
+            </div>
+            <div className={'d-flex flex-row-reverse mt-4'}>
+              <div className={'d-flex align-items-end'}>
+                <p className={'me-2'}>{search?.skip + messages?.length} out of {total}</p>
+                <Pagination
+                  activePage={pageNumber(total ? total : 0, 10, search?.skip)}
+                  totalItemsCount={total ? total : 0}
+                  onChange={changePage}
+                  itemClass="page-item"
+                  linkClass="page-link"
+                />
+              </div>
+            </div>
+          </>
+        )
+      }
     </>
   )
 }

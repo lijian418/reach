@@ -5,7 +5,7 @@ from app.core.env import settings
 client = motor.motor_asyncio.AsyncIOMotorClient(settings.db.MONGODB_URL)
 db = client.main_db
 
-alert_endpoint_collection = db["alert_endpoint_collection"]
+team = db["team"]
 alert_rule_collection = db["alert_rule_collection"]
 channel_collection = db["channel_collection"]
 message_collection = db["message_collection"]

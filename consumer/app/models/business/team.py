@@ -7,7 +7,7 @@ from app.models.base.base_models import PyBaseModel
 from app.models.base.mongodb import PyObjectId
 
 
-class AlertEndpointBase(PyBaseModel):
+class TeamBase(PyBaseModel):
     label: str = Field(...)
     webhook_urls: List[str] = Field([])
     emails: List[str] = Field([])
@@ -16,5 +16,5 @@ class AlertEndpointBase(PyBaseModel):
     updated_at: float = Field(default_factory=lambda: time.time())
 
 
-class AlertEndpointRead(AlertEndpointBase):
+class TeamRead(TeamBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")

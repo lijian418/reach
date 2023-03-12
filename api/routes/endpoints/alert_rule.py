@@ -1,14 +1,13 @@
-import json
 import time
 
-from fastapi import Depends, Body, APIRouter
-from starlette.responses import JSONResponse
+from fastapi import Depends, Body, APIRouter, HTTPException
 
 import query.alert_rule as alert_rule_query
+import query.destination as destination_query
+import query.channel as channel_query
 from models.business.alert_rule import AlertRuleRead, AlertRuleCreate, AlertRulePaginatedRead, \
     AlertRuleSearch
 from models.fastapi.mongodb import PyObjectId
-from utils.json_logic import jsonLogic
 
 
 router = APIRouter()
@@ -19,6 +18,7 @@ router = APIRouter()
              response_model_by_alias=False)
 async def create(payload: AlertRuleCreate = Body(...)):
     created = await alert_rule_query.create(payload)
+    await channel_query.add_alert_rule(created.channel_id, created.id)
     return created
 
 
@@ -51,64 +51,19 @@ async def find(search: AlertRuleSearch = Depends()):
                response_model_by_alias=False)
 async def delete(entity_id: PyObjectId):
     entity = await alert_rule_query.get(entity_id)
-    if len(entity.alarm_ids) > 0:
-        return JSONResponse(status_code=400, content={"message": "Alert Rule is used by one or more alarms"})
+
+    # Do not allow deletion of alert rules that are associated with a user
+    # Users will be shown subscriptions, not alert rules directly
+    if entity.user_id is not None:
+        raise HTTPException(status_code=400,
+                            detail="Alert rule is associated with a user "
+                                   "and can only be deleted by removing the subscription")
+
+    # Remove FKs from destinations and channels
+    if entity.destination_ids is not None and len(entity.destination_ids) > 0:
+        for destination_id in entity.destination_ids:
+            await destination_query.remove_alert_rule(destination_id, entity_id)
+
+    await channel_query.remove_alert_rule(entity.channel_id, entity_id)
     deleted = await alert_rule_query.delete(entity_id)
     return deleted
-
-
-@router.post("/{entity_id}/try-data",
-             response_model=bool,
-             response_model_by_alias=False)
-async def try_data(payload: dict = Body(...)):
-    # 'alertRule': {'logic': 'OR', 'rules': [
-    # {'key': 'btc', 'value': '5000', 'operator': '==', 'type': 'text'},
-    # {'key': 'eth', 'value': '3000', 'operator': '!=', 'type': 'text'}]}
-    # 'data': {'btc': '5000', 'eth': '3000'}
-
-    # JSON Logic
-    # rules = { "and" : [
-    #   {"<" : [ { "var" : "temp" }, 110 ]},
-    #   {"==" : [ { "var" : "pie.filling" }, "apple" ] }
-    # ] }
-
-    def get_rules(rules):
-        processed_rules = []
-        for rule in rules:
-            if rule['type'] == 'text':
-                processed_rules.append({
-                    rule['operator']: [
-                        {
-                            "var": rule['key']
-                        },
-                        rule['value']
-                    ]
-                })
-            elif rule['type'] == 'number':
-                processed_rules.append({
-                    rule['operator']: [
-                        {
-                            "var": rule['key']
-                        },
-                        int(rule['value'])
-                    ]
-                })
-        return processed_rules
-
-    try:
-        rules_json_logic = {payload['alertRule']['logic']: get_rules(payload['alertRule']['rules'])}
-    except Exception as e:
-        return JSONResponse(content="Cannot parse rules" + str(e))
-
-    try:
-        result = jsonLogic(rules_json_logic, json.loads(payload['data']))
-        if payload['level'] in payload['alertRule']['levels']:
-            result = result and True
-        else:
-            result = False
-
-        return JSONResponse(content="Result: " + str(result))
-    except Exception as e:
-        return JSONResponse(content="Cannot parse data" + str(e))
-
-

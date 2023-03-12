@@ -8,32 +8,32 @@ import {
 } from 'reactstrap';
 import {Formik} from "formik";
 import * as yup from "yup";
-import {api} from "../../api";
-import {AlertEndpointForm} from "./AlertEndpointForm";
+import {api} from "../../../api";
+import {TeamForm} from "../TeamForm";
 
-function EditAlertEndpointModal(props) {
+function EditTeamModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const editAlertEndpoint = async (values) => {
-    const {data} = await api.alertEndpoint.update(props.alertEndpoint.id, values)
+  const editTeam = async (values) => {
+    const {data} = await api.team.update(props.team.id, values)
     props.refetch()
   }
 
   return (
     <div>
       {
-        props.alertEndpoint && (
+        props.team && (
           <div>
             <Button color="primary" onClick={toggle}>
-              Edit Alert Endpoint
+              Edit Team
             </Button>
             <Formik
               initialValues={{
-                email: props.alertEndpoint.email,
-                label: props.alertEndpoint.label,
-                webhook_url: props.alertEndpoint.webhook_url
+                email: props.team.email,
+                label: props.team.label,
+                webhook_url: props.team.webhook_url
               }}
               validationSchema={yup.object().shape({
                 email: yup.string().optional(),
@@ -41,13 +41,13 @@ function EditAlertEndpointModal(props) {
                 webhook_url: yup.string().optional(),
               })}
               onSubmit={async (values) => {
-                await editAlertEndpoint(values)
+                await editTeam(values)
               }}>
               {(formik) => (
                 <Modal isOpen={modal} toggle={toggle}>
-                  <ModalHeader toggle={toggle}>Edit Alert Endpoint</ModalHeader>
+                  <ModalHeader toggle={toggle}>Edit Team</ModalHeader>
                   <ModalBody>
-                    <AlertEndpointForm formik={formik}/>
+                    <TeamForm formik={formik}/>
                   </ModalBody>
                   <ModalFooter>
                     <Button color="secondary" onClick={toggle}>
@@ -70,4 +70,4 @@ function EditAlertEndpointModal(props) {
   );
 }
 
-export default EditAlertEndpointModal;
+export default EditTeamModal;

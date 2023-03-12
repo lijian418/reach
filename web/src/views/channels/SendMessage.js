@@ -13,6 +13,7 @@ import {
 import React, {useState} from "react";
 import * as yup from "yup";
 import {api} from "../../api";
+import {TbSend} from "react-icons/tb";
 
 
 function SendMessage(props) {
@@ -36,7 +37,7 @@ function SendMessage(props) {
         props.channel && (
           <div>
             <Button color="primary" onClick={toggle}>
-              Send Message
+              <TbSend/> Send Message
             </Button>
             <Formik
               initialValues={{
@@ -137,6 +138,64 @@ function SendMessage(props) {
                             {' '}
                             <Label check>
                               Success
+                            </Label>
+                          </FormGroup>
+                        </Col>
+                      </FormGroup>
+                      <FormGroup
+                        row
+                        tag="fieldset"
+                      >
+                        <legend className="col-form-label col-sm-2">
+                          Priority
+                        </legend>
+                        <Col sm={10}>
+                          <FormGroup check inline>
+                            <Input
+                              name="priority"
+                              value={"low"}
+                              tag={Field}
+                              type="radio"
+                            />
+                            {' '}
+                            <Label check>
+                              Low
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check inline>
+                            <Input
+                              name="priority"
+                              value={"medium"}
+                              tag={Field}
+                              type="radio"
+                            />
+                            {' '}
+                            <Label check>
+                              Medium
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check inline>
+                            <Input
+                              name="priority"
+                              value={"high"}
+                              tag={Field}
+                              type="radio"
+                            />
+                            {' '}
+                            <Label check>
+                              High
+                            </Label>
+                          </FormGroup>
+                          <FormGroup check inline>
+                            <Input
+                              name="priority"
+                              value={"urgent"}
+                              tag={Field}
+                              type="radio"
+                            />
+                            {' '}
+                            <Label check>
+                              Urgent
                             </Label>
                           </FormGroup>
                         </Col>

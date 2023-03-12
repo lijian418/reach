@@ -1,22 +1,24 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {api} from "../../api";
 import useAsyncEffect from "use-async-effect";
 import {
-  Badge,
   Button,
   Card,
   CardBody,
-  CardSubtitle,
+  CardText,
   CardTitle,
 } from "reactstrap";
 import Pagination from "react-js-pagination";
+import {cilTrash} from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
 import {useNavigate} from "react-router-dom";
-import DeleteModal from "../../components/DeleteModal";
-import {AlertRuleTabs} from "../alert-rules/AlertRuleTabs";
+import {pageNumber} from "../../utils/pageNumber";
+import {DeleteAlertRuleModal} from "../alert-rules/DeleteAlertRuleModal";
+import {DeleteTeamModal} from "./modal/DeleteTeamModal";
 
-export const ChannelList = (props) => {
+export const TeamList = (props) => {
   const [search, setSearch] = useState()
-  const [channels, setChannels] = useState()
+  const [teams, setTeams] = useState()
   const [total, setTotal] = useState()
   const navigate = useNavigate()
 
@@ -26,17 +28,13 @@ export const ChannelList = (props) => {
       skip: 0
     }
     setSearch(searchData)
-    await getChannels(searchData)
+    await getTeams(searchData)
   }, [props.refetchAt])
 
-  const getChannels = async (searchData) => {
-    const {data} = await api.channel.find(searchData)
-    setChannels(data.items)
+  const getTeams = async (searchData) => {
+    const {data} = await api.team.find(searchData)
+    setTeams(data.items)
     setTotal(data.total)
-  }
-
-  function pageNumber(total,limit,offset){
-    return offset >= total ? -1 : parseInt(offset / limit) + 1;
   }
 
   const changePage = async (page) => {
@@ -46,53 +44,46 @@ export const ChannelList = (props) => {
       skip: newOffset
     }
     setSearch(searchData)
-    await getChannels(searchData)
+    await getTeams(searchData)
   }
 
   return (
     <>
-      <div>
+      <div className={'d-flex gap-3 flex-wrap'}>
         {
-          channels?.map((channel, index) => {
+          teams && teams.map((team) => {
             return (
-              <Card key={index} className={'mt-3'}>
+              <Card style={{width: '25rem', minWidth: '300px'}} key={team.id}>
                 <CardBody>
-                  <div className={'d-flex gap-2 justify-content-between'}>
+                  <div className={'d-flex justify-content-between'}>
                     <div>
                       <Button color={'link'}
                               className={'p-0 text-start text-decoration-none'}
-                              onClick={() => navigate(`/channels/${channel.id}`)}>
-                        <CardTitle tag="h3">
-                          {channel.label}
+                              onClick={() => navigate(`/teams/${team.id}`)}>
+                        <CardTitle tag="h3" >
+                          {team.label}
                         </CardTitle>
                       </Button>
-                      <CardSubtitle
-                        className="mb-2 text-muted"
-                        tag="h6"
-                      >
-                        With slug "{channel.slug}"
-                      </CardSubtitle>
                     </div>
-                    <div className={'d-flex gap-2 flex-wrap'}>
-                      <div>
-                        <DeleteModal delete={async () => {
-                          await api.channel.remove(channel.id)
-                          setChannels(channels.filter((c) => c.id !== channel.id))
+                    <div>
+                      <div className={'d-flex gap-2 flex-wrap'}>
+                        <DeleteTeamModal delete={async () => {
+                          await api.team.remove(team.id)
+                          setTeams(teams.filter((x) => x.id !== team.id))
                           setTotal(total - 1)
-                        }} />
+                        }} team={team} />
                       </div>
                     </div>
                   </div>
                 </CardBody>
-            </Card>
+              </Card>
             )
           })
         }
       </div>
-
       <div className={'d-flex flex-row-reverse mt-4'}>
         <div className={'d-flex align-items-end'}>
-          <p className={'me-2'}>{search?.skip + channels?.length} out of {total}</p>
+          <p className={'me-2'}>{search?.skip + teams?.length} out of {total}</p>
           <Pagination
             activePage={pageNumber(total ? total : 0, 10, search?.skip)}
             totalItemsCount={total ? total : 0}

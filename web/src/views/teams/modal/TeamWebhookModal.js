@@ -8,16 +8,16 @@ import {
 } from 'reactstrap';
 import {ErrorMessage, Field, FieldArray, Form, Formik} from "formik";
 import * as yup from "yup";
-import {api} from "../../api";
-import {AlertEndpointForm} from "./AlertEndpointForm";
+import {api} from "../../../api";
+import {TeamForm} from "../TeamForm";
 
-function EndpointWebhookModal(props) {
+function TeamWebhookModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const updateEndpoint = async (values) => {
-    const {data} = await api.alertEndpoint.update(props.alertEndpoint.id, {
+  const updateTeam = async (values) => {
+    const {data} = await api.team.update(props.team.id, {
       "webhook_urls": values.webhook_urls,
     })
     props.refetch()
@@ -30,13 +30,13 @@ function EndpointWebhookModal(props) {
       </Button>
       <Formik
         initialValues={{
-          webhook_urls: props.alertEndpoint.webhook_urls.length === 0 ? [""] : props.alertEndpoint.webhook_urls,
+          webhook_urls: props.team.webhook_urls.length === 0 ? [""] : props.team.webhook_urls,
         }}
         validationSchema={yup.object().shape({
           webhook_urls: yup.array().of(yup.string()),
         })}
         onSubmit={async (values) => {
-          await updateEndpoint(values)
+          await updateTeam(values)
         }}>
         {({ handleSubmit, values}) => (
           <Modal isOpen={modal} toggle={toggle}>
@@ -96,4 +96,4 @@ function EndpointWebhookModal(props) {
   );
 }
 
-export default EndpointWebhookModal;
+export default TeamWebhookModal;

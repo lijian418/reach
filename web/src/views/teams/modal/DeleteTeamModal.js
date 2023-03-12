@@ -1,16 +1,16 @@
-import DeleteModal from "../../components/DeleteModal";
+import DeleteModal from "../../../components/DeleteModal";
 import React, {useState} from "react";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import CIcon from "@coreui/icons-react";
 import {cilTrash} from "@coreui/icons";
 
-export const DeleteAlertEndpointModal = (props) => {
+export const DeleteTeamModal = (props) => {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
   const show = () => {
-    if (props.alertEndpoint?.alarms?.length > 0) {
+    if (props.team?.channel_integrations?.length > 0) {
       return (
         <div>
           <Button color={'danger'} onClick={toggle}>
@@ -20,12 +20,12 @@ export const DeleteAlertEndpointModal = (props) => {
             <ModalHeader toggle={toggle}>Delete</ModalHeader>
             <ModalBody>
               <p>
-                Before you delete this alert endpoint, you must delete all the alarms associated with it.
+                Before you delete this team, you must delete all the channel_integrations associated with it.
               </p>
               <ul>
                 {
-                  props.alertEndpoint.alarms.map((alarm, index) => {
-                    return <li key={index}>{alarm.label}</li>
+                  props.team.channel_integrations.map((channel_integration, index) => {
+                    return <li key={index}>{channel_integration.label}</li>
                   })
                 }
               </ul>

@@ -14,7 +14,7 @@ class MessageBase(PyBaseModel):
     priority: str = Field(...)
     tags: dict = Field(...)
     status: Optional[str] = Field(None)
-    triggered_alarms: List[dict] = Field([])
+    triggered_alert_rules: List[dict] = Field([])
     channel_id: Optional[PyObjectId] = Field(None)
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())

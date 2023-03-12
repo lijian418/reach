@@ -4,7 +4,7 @@ import {AxiosResponse} from "axios";
 const create = async (data): Promise<AxiosResponse> => {
   return await request({
     method: 'POST',
-    url: '/alert-endpoints',
+    url: '/teams',
     data: data
   })
 }
@@ -12,7 +12,7 @@ const create = async (data): Promise<AxiosResponse> => {
 const find = async (search): Promise<AxiosResponse> => {
   return await request({
     method: "GET",
-    url: "/alert-endpoints",
+    url: "/teams",
     params: search
   })
 }
@@ -20,14 +20,14 @@ const find = async (search): Promise<AxiosResponse> => {
 const get = async (entityId): Promise<AxiosResponse> => {
   return await request({
     method: "GET",
-    url: `/alert-endpoints/${entityId}`
+    url: `/teams/${entityId}`
   })
 }
 
 const update = async (entityId, data): Promise<AxiosResponse> => {
   return await request({
     method: "PUT",
-    url: `/alert-endpoints/${entityId}`,
+    url: `/teams/${entityId}`,
     data: data
   })
 }
@@ -35,14 +35,31 @@ const update = async (entityId, data): Promise<AxiosResponse> => {
 const remove = async (entityId): Promise<AxiosResponse> => {
   return await request({
     method: "DELETE",
-    url: `/alert-endpoints/${entityId}`
+    url: `/teams/${entityId}`
   })
 }
 
-export const alertEndpoint = {
+const addUsers = async (entityId, data): Promise<AxiosResponse> => {
+  return await request({
+    method: "POST",
+    url: `/teams/${entityId}/users`,
+    data: data
+  })
+}
+
+const removeUser = async (entityId, userId): Promise<AxiosResponse> => {
+  return await request({
+    method: "DELETE",
+    url: `/teams/${entityId}/users/${userId}`
+  })
+}
+
+export const team = {
   create,
   find,
   get,
   update,
-  remove
+  remove,
+  addUsers,
+  removeUser,
 }

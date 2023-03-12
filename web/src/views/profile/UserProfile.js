@@ -30,11 +30,13 @@ const UserProfile = () => {
           <Formik
             initialValues={{
               email: user?.email,
-              webhook_url: user?.webhook_url
+              webhook_url: user?.webhook_url,
+              slack_url: user?.webhook_url
             }}
             validationSchema={yup.object().shape({
               email: yup.string().optional(),
               webhook_url: yup.string().optional(),
+              slack_url: yup.string().optional(),
             })}
             onSubmit={async (values) => {
               await editUser(values)
@@ -63,6 +65,18 @@ const UserProfile = () => {
                       invalid={errors.webhook_url && touched.webhook_url}
                     />
                     <FormFeedback>{errors.webhook_url}</FormFeedback>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col>
+                    <Label for="label">Slack URL</Label>
+                    <Input
+                      type="text"
+                      name="webhook_url"
+                      tag={Field}
+                      invalid={errors.slack_url && touched.slack_url}
+                    />
+                    <FormFeedback>{errors.slack_url}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <Button type={'submit'}>

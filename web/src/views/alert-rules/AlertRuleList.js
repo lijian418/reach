@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {api} from "../../api";
 import useAsyncEffect from "use-async-effect";
 import {
@@ -66,19 +66,22 @@ export const AlertRuleList = (props) => {
             return (
               <Card style={{width: '25rem', minWidth: '300px'}} key={alertRule.id}>
                 <CardBody>
-                  <CardTitle tag="h5">
-                    Rule {alertRule.label}
-                  </CardTitle>
-                  <div className={'d-flex flex-row-reverse'}>
-                    <div className={'d-flex gap-2 flex-wrap'}>
+                  <div className={'d-flex gap-2 justify-content-between'}>
+                    <div>
+                      <Button color={'link'}
+                              className={'p-0 text-start text-decoration-none'}
+                              onClick={() => navigate(`/alert-rules/${alertRule.id}`)}>
+                        <CardTitle tag="h3">
+                          {alertRule.label}
+                        </CardTitle>
+                      </Button>
+                    </div>
+                    <div>
                       <DeleteAlertRuleModal delete={async () => {
                         await api.alertRule.remove(alertRule.id)
                         setAlertRules(alertRules.filter((x) => x.id !== alertRule.id))
                         setTotal(total - 1)
                       }} alertRule={alertRule} />
-                      <Button color={'primary'} onClick={() => navigate(`/alert-rules/${alertRule.id}`)}>
-                        View
-                      </Button>
                     </div>
                   </div>
                 </CardBody>

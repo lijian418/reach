@@ -3,7 +3,8 @@ from typing import List
 
 from pydantic import Field
 
-from models.business.alarm import AlarmRead
+from models.business.alert_rule import AlertRuleRead
+from models.business.subscription import SubscriptionRead
 from models.fastapi.base_models import PyBaseModel, PyPaginatedBaseModel
 from models.fastapi.mongodb import PyObjectId
 
@@ -11,19 +12,16 @@ from models.fastapi.mongodb import PyObjectId
 class ChannelBase(PyBaseModel):
     slug: str = Field(...)
     label: str = Field(...)
-    alarm_ids: List[PyObjectId] = Field([])
     alert_rule_ids: List[PyObjectId] = Field([])
     subscription_ids: List[PyObjectId] = Field([])
-    subscribed_user_ids: List[PyObjectId] = Field([])
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 
 
 class ChannelRead(ChannelBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    alarms: List[AlarmRead] = Field([])
-    alert_rules: List[dict] = Field([])
-    subscriptions: List[dict] = Field([])
+    alert_rules: List[AlertRuleRead] = Field([])
+    subscriptions: List[SubscriptionRead] = Field([])
 
 
 class ChannelCreate(ChannelBase):

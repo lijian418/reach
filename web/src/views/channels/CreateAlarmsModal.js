@@ -7,6 +7,7 @@ import {ErrorMessage, Field, FieldArray, Form, Formik, useFormikContext} from "f
 import React, {useEffect, useState} from "react";
 import {api} from "../../api";
 import {AsyncPaginate} from "react-select-async-paginate";
+import {IoAddCircleOutline} from "react-icons/io5";
 
 export const CreateAlarmsModal = (props) => {
   const [modal, setModal] = useState(false);
@@ -14,11 +15,11 @@ export const CreateAlarmsModal = (props) => {
   const toggle = () => setModal(!modal);
 
   const schema = yup.object().shape({
-    rule_endpoint_associations: yup.array()
+    rule_team_associations: yup.array()
       .of(
         yup.object().shape({
           label: yup.string().required('Required'),
-          endpoint_id: yup.object().shape({
+          team_id: yup.object().shape({
             value: yup.string().required('Required'),
             label: yup.string().required('Required'),
           }).required('Required'),
@@ -35,7 +36,7 @@ export const CreateAlarmsModal = (props) => {
       const {data} = await api.alarm.create({
         label: alarm.label,
         rule_id: alarm.rule_id.value,
-        endpoint_id: alarm.endpoint_id.value,
+        team_id: alarm.team_id.value,
         channel_id: props.channel.id
       })
       if (data) {
@@ -63,8 +64,8 @@ export const CreateAlarmsModal = (props) => {
     };
   }
 
-  async function loadOptionsEndpoints(search, loadedOptions) {
-    const {data} = await api.alertEndpoint.find({
+  async function loadOptionsTeams(search, loadedOptions) {
+    const {data} = await api.team.find({
       limit: 10,
       skip: loadedOptions.length
     })
@@ -88,7 +89,7 @@ export const CreateAlarmsModal = (props) => {
         props.channel && (
           <div>
             <Button color="primary" onClick={toggle}>
-              Add alarms
+              <IoAddCircleOutline/> Add Channel Integrations
             </Button>
             <Formik
               initialValues={{
@@ -96,7 +97,7 @@ export const CreateAlarmsModal = (props) => {
                   {
                     label: '',
                     rule_id: null,
-                    endpoint_id: null,
+                    team_id: null,
                   }
                 ]
               }}
@@ -109,7 +110,7 @@ export const CreateAlarmsModal = (props) => {
               {({errors, touched, values, resetForm,
                   setFieldValue, handleSubmit}) => (
                 <Modal isOpen={modal} toggle={toggle} size={'lg'}>
-                  <ModalHeader toggle={toggle}>Create Alarms</ModalHeader>
+                  <ModalHeader toggle={toggle}>Create Channel Integrations</ModalHeader>
                   <ModalBody>
                     <Form>
                       <FieldArray
@@ -152,17 +153,17 @@ export const CreateAlarmsModal = (props) => {
                                   <div style={{width: '200px'}}>
                                     {
                                       index === 0 && (
-                                        <p className={'mb-0'}>Endpoint</p>
+                                        <p className={'mb-0'}>Team</p>
                                       )
                                     }
                                     <AsyncPaginate
-                                      value={values.alarms[index].endpoint_id}
-                                      loadOptions={loadOptionsEndpoints}
+                                      value={values.alarms[index].team_id}
+                                      loadOptions={loadOptionsTeams}
                                       onChange={(value) => {
-                                        setFieldValue(`alarms[${index}].endpoint_id`, value)
+                                        setFieldValue(`alarms[${index}].team_id`, value)
                                       }}
                                     />
-                                    <ErrorMessage name={`alarms[${index}].endpoint_id`}/>
+                                    <ErrorMessage name={`alarms[${index}].team_id`}/>
                                   </div>
                                   <div className={'mt-auto'}>
                                     <Button onClick={() => arrayHelpers.remove(index)}>Delete</Button>

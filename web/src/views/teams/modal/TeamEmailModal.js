@@ -8,86 +8,56 @@ import {
 } from 'reactstrap';
 import {ErrorMessage, Field, FieldArray, Form, Formik} from "formik";
 import * as yup from "yup";
-import {api} from "../../api";
-import {AlertEndpointForm} from "./AlertEndpointForm";
-import {AsyncPaginate} from "react-select-async-paginate";
+import {api} from "../../../api";
+import {TeamForm} from "../TeamForm";
 
-function EndpointUserModal(props) {
+function TeamEmailModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const updateEndpoint = async (values) => {
-    const {data} = await api.alertEndpoint.update(props.alertEndpoint.id, {
-      "user_ids": values.user_ids.map((user) => user.value),
+  const updateTeam = async (values) => {
+    const {data} = await api.team.update(props.team.id, {
+      "emails": values.emails,
     })
     props.refetch()
   }
 
-  async function loadOptionsEndpoints(search, loadedOptions) {
-    const {data} = await api.user.find({
-      limit: 10,
-      skip: loadedOptions.length
-    })
-
-    return {
-      options: data.items.map((item) => {
-        return (
-          {
-            value: item.id,
-            label: item.username
-          }
-        )
-      }),
-      hasMore: loadedOptions.length < data.total
-    };
-  }
-
-  const initialOptions = props.alertEndpoint.users.map((user) => {
-    return (
-      {
-        value: user.id,
-        label: user.username
-      }
-    )
-  })
-
   return (
     <div>
       <Button color="primary" onClick={toggle}>
-        Edit Users
+        Edit Emails
       </Button>
       <Formik
         initialValues={{
-          user_ids: initialOptions,
+          emails: props.team.emails.length === 0 ? [""] : props.team.emails,
         }}
         validationSchema={yup.object().shape({
-          user_ids: yup.array(),
+          emails: yup.array().of(yup.string()),
         })}
         onSubmit={async (values) => {
-          await updateEndpoint(values)
+          await updateTeam(values)
         }}>
-        {({ handleSubmit, values, setFieldValue}) => (
+        {({ handleSubmit, values}) => (
           <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Users</ModalHeader>
+            <ModalHeader toggle={toggle}>Emails</ModalHeader>
             <ModalBody>
               <Form>
                 <FieldArray
-                  name="user_ids"
+                  name="emails"
                   render={arrayHelpers => (
                     <div>
-                      {values.user_ids.map((email, index) => (
+                      {values.emails.map((email, index) => (
                         <div key={index}>
                           <div className={'d-flex gap-2 flex-wrap mt-2'}>
-                            <div style={{minWidth: '250px'}}>
-                              <AsyncPaginate
-                                value={values.user_ids[index]}
-                                loadOptions={loadOptionsEndpoints}
-                                onChange={(value) => {
-                                  setFieldValue(`user_ids[${index}]`, value)
-                                }}
+                            <div>
+                              <Input
+                                style={{width: '250px'}}
+                                type="text"
+                                name={`emails[${index}]`}
+                                tag={Field}
                               />
-                              <ErrorMessage name={`user_ids[${index}]`}/>
+                              <ErrorMessage name={`emails[${index}].value`}/>
                             </div>
                             <div>
                               <Button onClick={() => arrayHelpers.remove(index)}>Delete</Button>
@@ -126,4 +96,4 @@ function EndpointUserModal(props) {
   );
 }
 
-export default EndpointUserModal;
+export default TeamEmailModal;

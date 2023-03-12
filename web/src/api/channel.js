@@ -39,10 +39,44 @@ const remove = async (channelId): Promise<AxiosResponse> => {
   })
 }
 
+const addUsers = async (channelId, data): Promise<AxiosResponse> => {
+  return await request({
+    method: "POST",
+    url: `/channels/${channelId}/users`,
+    data: data
+  })
+}
+
+const removeUser = async (channelId, userId): Promise<AxiosResponse> => {
+  return await request({
+    method: "DELETE",
+    url: `/channels/${channelId}/users/${userId}`
+  })
+}
+
+const addTeams = async (channelId, data): Promise<AxiosResponse> => {
+  return await request({
+    method: "POST",
+    url: `/channels/${channelId}/teams`,
+    data: data
+  })
+}
+
+const removeTeam = async (channelId, teamId): Promise<AxiosResponse> => {
+  return await request({
+    method: "DELETE",
+    url: `/channels/${channelId}/teams/${teamId}`
+  })
+}
+
 export const channel = {
   create,
   find,
   get,
   update,
-  remove
+  remove,
+  addUsers,
+  removeUser,
+  addTeams,
+  removeTeam
 }

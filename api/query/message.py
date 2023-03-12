@@ -7,8 +7,7 @@ from models.fastapi.mongodb import PyObjectId
 
 async def create(payload: MessageCreate) -> MessageRead:
     new_entity = await message_collection.insert_one(payload.dict())
-    created_entity = await message_collection.find_one({"_id": new_entity.inserted_id})
-    return MessageRead(**created_entity)
+    return await get(new_entity.inserted_id)
 
 
 async def get(entity_id: PyObjectId) -> MessageRead:
@@ -22,7 +21,7 @@ async def find(search: MessageSearch) -> MessagePaginatedRead:
     if search.channel_id:
         query["channel_id"] = search.channel_id
     if search.user_id:
-        query["triggered_alarms.endpoint.user_ids"] = {"$in": [search.user_id]}
+        query["triggered_alert_rules.user_id"] = search.user_id
 
     pipeline = [{"$match": query},
                 {"$sort": {"created_at": pymongo.DESCENDING}},
