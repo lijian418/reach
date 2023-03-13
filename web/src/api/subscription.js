@@ -17,15 +17,7 @@ const remove = async (id): Promise<AxiosResponse> => {
   })
 }
 
-const getMultiple = async (ids): Promise<AxiosResponse> => {
-  return await request({
-    method: 'GET',
-    url: `/subscriptions?ids=${ids}`
-  })
-}
-
 export const subscription = {
   create,
   remove,
-  getMultiple
 }

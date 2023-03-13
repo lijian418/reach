@@ -26,9 +26,9 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Teams',
-    to: '/teams',
-    icon: <CIcon icon={cilGroup} customClassName="nav-icon" />
+    name: 'Destinations',
+    to: '/destinations',
+    icon: <CIcon icon={cilSend} customClassName="nav-icon" />
   },
   {
     component: CNavTitle,

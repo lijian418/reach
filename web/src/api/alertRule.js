@@ -32,14 +32,6 @@ const update = async (entityId, data): Promise<AxiosResponse> => {
   })
 }
 
-const tryData = async (entityId, data): Promise<AxiosResponse> => {
-  return await request({
-    method: "POST",
-    url: `/alert-rules/${entityId}/try-data`,
-    data: data
-  })
-}
-
 const remove = async (entityId): Promise<AxiosResponse> => {
   return await request({
     method: "DELETE",
@@ -52,6 +44,5 @@ export const alertRule = {
   find,
   get,
   update,
-  tryData,
   remove
 }

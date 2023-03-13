@@ -2,7 +2,6 @@ import time
 from typing import List, Optional
 from pydantic import Field
 
-from models.business.alert_rule import AlertRuleCreate
 from models.fastapi.base_models import PyBaseModel, PyPaginatedBaseModel
 from models.fastapi.mongodb import PyObjectId
 
@@ -23,7 +22,7 @@ class SubscriptionRead(SubscriptionBase):
 
 
 class SubscriptionCreate(SubscriptionBase):
-    alert_rule: AlertRuleCreate = Field(...)
+    alert_rule: dict = Field(...)
 
 
 class SubscriptionUpdate(SubscriptionBase):

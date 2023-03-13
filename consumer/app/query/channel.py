@@ -11,10 +11,10 @@ async def get_by_slug(slug: str) -> ChannelRead:
                         "pipeline": [
                             {"$match": {"$expr": {"$in": ["$_id", "$$alarm_ids"]}}},
                             {"$lookup": {
-                                "from": "team",
-                                "localField": "team_id",
+                                "from": "destination",
+                                "localField": "destination_id",
                                 "foreignField": "_id",
-                                "as": "team"
+                                "as": "destination"
                             }},
                             {"$lookup": {
                                 "from": "alert_rule_collection",
@@ -23,7 +23,7 @@ async def get_by_slug(slug: str) -> ChannelRead:
                                 "as": "rule"
                             }},
                             {"$unwind": "$rule"},
-                            {"$unwind": "$team"},
+                            {"$unwind": "$destination"},
                         ],
                         "as": "alarms"
                     }

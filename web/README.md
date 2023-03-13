@@ -137,7 +137,7 @@ See [the Releases section of our project](https://github.com/coreui/coreui-free-
 * <https://github.com/mrholek>
 * <https://github.com/coreui>
 
-**CoreUI team**
+**CoreUI destination**
 * https://github.com/orgs/coreui/people
 
 ## Community

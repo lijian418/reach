@@ -4,7 +4,7 @@ import {AxiosResponse} from "axios";
 const create = async (data): Promise<AxiosResponse> => {
   return await request({
     method: 'POST',
-    url: '/alarms',
+    url: '/destinations',
     data: data
   })
 }
@@ -12,7 +12,7 @@ const create = async (data): Promise<AxiosResponse> => {
 const find = async (search): Promise<AxiosResponse> => {
   return await request({
     method: "GET",
-    url: "/alarms",
+    url: "/destinations",
     params: search
   })
 }
@@ -20,14 +20,14 @@ const find = async (search): Promise<AxiosResponse> => {
 const get = async (entityId): Promise<AxiosResponse> => {
   return await request({
     method: "GET",
-    url: `/alarms/${entityId}`
+    url: `/destinations/${entityId}`
   })
 }
 
 const update = async (entityId, data): Promise<AxiosResponse> => {
   return await request({
     method: "PUT",
-    url: `/alarms/${entityId}`,
+    url: `/destinations/${entityId}`,
     data: data
   })
 }
@@ -35,14 +35,14 @@ const update = async (entityId, data): Promise<AxiosResponse> => {
 const remove = async (entityId): Promise<AxiosResponse> => {
   return await request({
     method: "DELETE",
-    url: `/alarms/${entityId}`
+    url: `/destinations/${entityId}`
   })
 }
 
-export const alarm = {
+export const destination = {
   create,
   find,
   get,
   update,
-  remove
+  remove,
 }

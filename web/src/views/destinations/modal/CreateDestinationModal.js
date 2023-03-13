@@ -9,23 +9,22 @@ import {
 import {Formik} from "formik";
 import * as yup from "yup";
 import {api} from "../../../api";
-import {TeamForm} from "../TeamForm";
-import {AiOutlineUsergroupAdd} from "react-icons/ai";
+import {DestinationForm} from "../DestinationForm";
 
-function CreateTeamModal(props) {
+function CreateDestinationModal(props) {
   const [modal, setModal] = useState(false);
 
   const toggle = () => setModal(!modal);
 
-  const createTeam = async (values) => {
-    const {data} = await api.team.create(values)
+  const createDestination = async (values) => {
+    const {data} = await api.destination.create(values)
     props.refetch()
   }
 
   return (
     <div>
       <Button color="primary" onClick={toggle}>
-        <AiOutlineUsergroupAdd/> Add a new team
+        Add destination
       </Button>
       <Formik
         initialValues={{
@@ -39,13 +38,13 @@ function CreateTeamModal(props) {
           webhook_url: yup.string().optional(),
         })}
         onSubmit={async (values) => {
-          await createTeam(values)
+          await createDestination(values)
         }}>
         {(formik) => (
           <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}>Create Team</ModalHeader>
+            <ModalHeader toggle={toggle}>Create Destination</ModalHeader>
             <ModalBody>
-              <TeamForm formik={formik}/>
+              <DestinationForm formik={formik}/>
             </ModalBody>
             <ModalFooter>
               <Button color="secondary" onClick={toggle}>
@@ -65,4 +64,4 @@ function CreateTeamModal(props) {
   );
 }
 
-export default CreateTeamModal;
+export default CreateDestinationModal;

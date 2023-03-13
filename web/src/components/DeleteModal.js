@@ -10,8 +10,8 @@ function DeleteModal(props) {
 
   return (
     <div>
-      <Button color={'danger'} onClick={toggle}>
-        <CIcon icon={cilTrash} size="sm"/> Delete
+      <Button color={'danger'} outline onClick={toggle}>
+        {props.label ? props.label : 'Delete'}
       </Button>
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Delete</ModalHeader>
@@ -22,7 +22,7 @@ function DeleteModal(props) {
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>{' '}
-          <Button color="primary" onClick={async () => {
+          <Button color="danger" onClick={async () => {
             await props.delete();
             toggle();
           }}>

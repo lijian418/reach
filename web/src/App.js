@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import {BrowserRouter, HashRouter, Route, Routes} from 'react-router-dom'
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import './scss/style.scss'
 import {useUser} from "./hooks/useUser";
 import 'bootstrap/dist/css/bootstrap.min.css';

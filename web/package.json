@@ -49,6 +49,7 @@
     "reactstrap": "^9.1.6",
     "redux": "4.2.0",
     "simplebar-react": "^2.4.1",
+    "styled-components": "^5.3.8",
     "use-async-effect": "^2.2.7",
     "yup": "^1.0.1"
   },

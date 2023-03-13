@@ -2,37 +2,33 @@ import {useParams} from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
 import React, {useState} from "react";
 import {api} from "../../api";
-import {Button, Card, CardBody, CardTitle} from "reactstrap";
-import EditTeamModal from "./modal/EditTeamModal";
-import TeamEmailModal from "./modal/TeamEmailModal";
-import TeamWebhookModal from "./modal/TeamWebhookModal";
-import {DeleteTeamModal} from "./modal/DeleteTeamModal";
-import TeamUsersModal from "./modal/TeamUsersModal";
+import {Card, CardBody, CardTitle} from "reactstrap";
+import DestinationEmailModal from "./modal/DestinationEmailModal";
+import DestinationWebhookModal from "./modal/DestinationWebhookModal";
 import {CNav, CNavItem, CNavLink, CTabContent, CTabPane} from "@coreui/react";
-import {RiGroupLine} from "react-icons/ri";
-import {AiOutlineMail, AiOutlineMinusCircle, AiOutlineSetting, AiOutlineSlack} from "react-icons/ai";
-import {MdOutlinePersonSearch, MdWebhook} from "react-icons/md";
+import {AiOutlineMail, AiOutlineSetting, AiOutlineSlack} from "react-icons/ai";
+import {MdWebhook} from "react-icons/md";
 import {BsSearch} from "react-icons/bs";
 
-const TeamDetail = () => {
-  let { teamId } = useParams();
-  const [team, setTeam] = useState()
+const DestinationDetail = () => {
+  let { destinationId } = useParams();
+  const [destination, setDestination] = useState()
   const [activeKey, setActiveKey] = useState(0)
 
   useAsyncEffect(async() => {
-    await fetchTeam()
-  }, [teamId])
+    await fetchDestination()
+  }, [destinationId])
 
-  const fetchTeam = async () => {
-    const {data} = await api.team.get(teamId)
-    setTeam(data)
+  const fetchDestination = async () => {
+    const {data} = await api.destination.get(destinationId)
+    setDestination(data)
   }
 
   return (
     <>
       <div className={'d-flex justify-content-between'}>
         <div>
-          <h2>Team Details - {team?.label}</h2>
+          <h2>Destination Details - {destination?.label}</h2>
         </div>
       </div>
 
@@ -74,13 +70,13 @@ const TeamDetail = () => {
             <div className={'mt-4'}>
               <div className={'d-flex justify-content-end w-100'}>
                 {
-                  team && (
-                    <TeamEmailModal team={team} refetch={fetchTeam} />
+                  destination && (
+                    <DestinationEmailModal destination={destination} refetch={fetchDestination} />
                   )
                 }
               </div>
               {
-                team?.emails?.map((email, index) => {
+                destination?.emails?.map((email, index) => {
                   return (
                     <div key={index} className={'mt-2'}>
                       <Card>
@@ -100,10 +96,10 @@ const TeamDetail = () => {
                 })
               }
               {
-                team?.emails?.length === 0 && (
+                destination?.emails?.length === 0 && (
                   <div className={'d-flex justify-content-center flex-column align-items-center'}>
                     <BsSearch className={'fs-1'}/>
-                    <h5 className={'text-center mt-2 text-muted'}>No Emails are assigned to this team</h5>
+                    <h5 className={'text-center mt-2 text-muted'}>No Emails are assigned to this destination</h5>
                   </div>
                 )
               }
@@ -115,13 +111,13 @@ const TeamDetail = () => {
             <div className={'mt-4'}>
               <div className={'d-flex justify-content-end w-100'}>
                 {
-                  team && (
-                    <TeamWebhookModal team={team} refetch={fetchTeam} />
+                  destination && (
+                    <DestinationWebhookModal destination={destination} refetch={fetchDestination} />
                   )
                 }
               </div>
               {
-                team?.webhook_urls?.map((webhookUrl, index) => {
+                destination?.webhook_urls?.map((webhookUrl, index) => {
                   return (
                     <div key={index} className={'mt-2'}>
                       <Card>
@@ -141,10 +137,10 @@ const TeamDetail = () => {
                 })
               }
               {
-                team?.webhook_urls?.length === 0 && (
+                destination?.webhook_urls?.length === 0 && (
                   <div className={'d-flex justify-content-center flex-column align-items-center'}>
                     <BsSearch className={'fs-1'}/>
-                    <h5 className={'text-center mt-2 text-muted'}>No Webhooks are assigned to this team</h5>
+                    <h5 className={'text-center mt-2 text-muted'}>No Webhooks are assigned to this destination</h5>
                   </div>
                 )
               }
@@ -165,4 +161,4 @@ const TeamDetail = () => {
   )
 }
 
-export default TeamDetail
+export default DestinationDetail

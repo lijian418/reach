@@ -12,12 +12,12 @@ from app.query.notify.client import notify
 from app.utils.alert_rule import matches
 
 
-async def notify_teams(triggered_alarms: List[AlarmRead],
+async def notify_destinations(triggered_alarms: List[AlarmRead],
                            message: MessageRead):
-    print("Notifying teams")
+    print("Notifying destinations")
     for alarm in triggered_alarms:
-        print("Notifying team: ", alarm.team.label)
-        await notify(alarm.team, message)
+        print("Notifying destination: ", alarm.destination.label)
+        await notify(alarm.destination, message)
 
 
 def get_triggered_alarms(channel, message):
@@ -50,7 +50,7 @@ async def handle_message(message):
         payload['triggered_alarms'] = [alarm.dict() for alarm in triggered_alarms]
         updated = await message_query.update(created.id, payload)
         print("Message updated: ", updated.json())
-        await notify_teams(triggered_alarms, updated)
+        await notify_destinations(triggered_alarms, updated)
 
 
 async def main():
