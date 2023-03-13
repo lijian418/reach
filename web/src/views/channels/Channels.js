@@ -10,7 +10,9 @@ const Channels = () => {
         <h2>Channels</h2>
         <CreateChannelModal refetch={() => setRefetchAt(new Date())}/>
       </div>
-      <ChannelList refetchAt={refetchAt}/>
+      <div className={'mt-4'}>
+        <ChannelList refetchAt={refetchAt}/>
+      </div>
     </>
   )
 }

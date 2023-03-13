@@ -6,6 +6,7 @@ import {
   cilSpeedometer, cilUser, cilWarning,
 } from '@coreui/icons'
 import {CNavItem, CNavTitle} from '@coreui/react'
+import {MdOutlineCallMade, MdOutlineCallReceived} from "react-icons/md";
 
 const _nav = [
   {
@@ -28,7 +29,7 @@ const _nav = [
     component: CNavItem,
     name: 'Destinations',
     to: '/destinations',
-    icon: <CIcon icon={cilSend} customClassName="nav-icon" />
+    icon: <MdOutlineCallMade className="nav-icon" />
   },
   {
     component: CNavTitle,

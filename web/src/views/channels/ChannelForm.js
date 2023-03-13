@@ -33,6 +33,19 @@ export const ChannelForm = (props) => {
           <FormFeedback>{errors.slug}</FormFeedback>
         </Col>
       </FormGroup>
+      <FormGroup row>
+        <Col>
+          <Label for="description">Description</Label>
+          <Input
+            type="text"
+            name="description"
+            tag={Field}
+            invalid={errors.description && touched.description}
+          />
+          <FormText>Brief description of what messages are sent to this channel</FormText>
+          <FormFeedback>{errors.description}</FormFeedback>
+        </Col>
+      </FormGroup>
     </Form>
   )
 }

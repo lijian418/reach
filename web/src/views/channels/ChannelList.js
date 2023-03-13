@@ -11,8 +11,11 @@ import {
 } from "reactstrap";
 import Pagination from "react-js-pagination";
 import {useNavigate} from "react-router-dom";
-import DeleteModal from "../../components/DeleteModal";
-import {AlertRuleTabs} from "../alert-rules/AlertRuleTabs";
+import {CardWrapper} from "../../components/card/CardWrapper";
+import {CircleIcon} from "../../components/card/CircleIcon";
+import {AiOutlineRight} from "react-icons/ai";
+import {ClickableCard} from "../../components/card/ClickableCard";
+import {BsSoundwave} from "react-icons/bs";
 
 export const ChannelList = (props) => {
   const [search, setSearch] = useState()
@@ -51,40 +54,30 @@ export const ChannelList = (props) => {
 
   return (
     <>
-      <div>
+      <div className={'d-flex gap-2 flex-column'}>
         {
           channels?.map((channel, index) => {
             return (
-              <Card key={index} className={'mt-3'}>
+              <ClickableCard onClick={() => navigate(`/channels/${channel.id}`)}>
                 <CardBody>
-                  <div className={'d-flex gap-2 justify-content-between'}>
-                    <div>
-                      <Button color={'link'}
-                              className={'p-0 text-start text-decoration-none'}
-                              onClick={() => navigate(`/channels/${channel.id}`)}>
-                        <CardTitle tag="h3">
-                          {channel.label}
-                        </CardTitle>
-                      </Button>
-                      <CardSubtitle
-                        className="mb-2 text-muted"
-                        tag="h6"
-                      >
-                        With slug "{channel.slug}"
-                      </CardSubtitle>
-                    </div>
-                    <div className={'d-flex gap-2 flex-wrap'}>
+                  <CardWrapper>
+                    <div className={'d-flex gap-3 flex-wrap'}>
+                      <CircleIcon>
+                        <BsSoundwave/>
+                      </CircleIcon>
                       <div>
-                        <DeleteModal delete={async () => {
-                          await api.channel.remove(channel.id)
-                          setChannels(channels.filter((c) => c.id !== channel.id))
-                          setTotal(total - 1)
-                        }} />
+                        <h4>{channel.label}</h4>
+                        <p className={'text-muted mb-0'}>
+                          {channel.description ? channel.description : 'No description'}
+                        </p>
                       </div>
                     </div>
-                  </div>
+                    <div>
+                      <AiOutlineRight/>
+                    </div>
+                  </CardWrapper>
                 </CardBody>
-            </Card>
+              </ClickableCard>
             )
           })
         }

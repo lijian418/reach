@@ -10,6 +10,7 @@ import {Formik} from "formik";
 import * as yup from "yup";
 import {api} from "../../../api";
 import {DestinationForm} from "../DestinationForm";
+import {ButtonUnderline} from "../../../components/ButtonUnderline";
 
 function CreateDestinationModal(props) {
   const [modal, setModal] = useState(false);
@@ -23,9 +24,9 @@ function CreateDestinationModal(props) {
 
   return (
     <div>
-      <Button color="primary" onClick={toggle}>
+      <ButtonUnderline onClick={toggle}>
         Add destination
-      </Button>
+      </ButtonUnderline>
       <Formik
         initialValues={{
           email: "",

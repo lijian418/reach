@@ -4,25 +4,20 @@ import useAsyncEffect from "use-async-effect";
 import Pagination from "react-js-pagination";
 import {useNavigate} from "react-router-dom";
 import {pageNumber} from "../../utils/pageNumber";
-import {CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem} from "@coreui/react";
+import {CAccordionBody, CAccordionHeader, CAccordionItem} from "@coreui/react";
 import {DeleteDestinationModal} from "./modal/DeleteDestinationModal";
-import {Button, Card, CardBody, CardGroup} from "reactstrap";
-import {ClickableCard} from "../../components/card/ClickableCard";
-import {CircleIcon} from "../../components/card/CircleIcon";
-import {MdEmail} from "react-icons/md";
-import {AiFillEdit} from "react-icons/ai";
-import {CardWrapper} from "../../components/card/CardWrapper";
 import {CAccordionCustom} from "../../components/CAccordionCustom";
 import DestinationEmailModal from "./modal/DestinationEmailModal";
 import DestinationWebhookModal from "./modal/DestinationWebhookModal";
 import EditDestinationModal from "./modal/EditDestinationModal";
 import DestinationSlackModal from "./modal/DestinationSlackModal";
+import {CircleIcon} from "../../components/card/CircleIcon";
+import {MdEmail, MdOutlineCallMade, MdOutlineCallReceived} from "react-icons/md";
 
 export const DestinationList = (props) => {
   const [search, setSearch] = useState()
   const [destinations, setDestinations] = useState()
   const [total, setTotal] = useState()
-  const navigate = useNavigate()
   const [activeItemKey, setActiveItemKey] = useState()
 
   useAsyncEffect(async () => {
@@ -79,28 +74,33 @@ export const DestinationList = (props) => {
             return (
               <CAccordionItem itemKey={index} key={destination.id}>
                 <CAccordionHeader>
-                  <div>
-                    <h3>{destination.label}</h3>
-                    <p className={'text-muted mb-0'}>
-                      {
-                        destination.emails.length > 0 && `${destination.emails.length} email` + (destination.emails.length > 1 ? 's' : '')
-                      }
-                      {
-                        destination.emails.length > 0 && destination.slack_urls.length > 0 && ', '
-                      }
-                      {
-                        destination.slack_urls.length > 0 && `${destination.slack_urls.length} slack url` + (destination.slack_urls.length > 1 ? 's' : '')
-                      }
-                      {
-                        (destination.emails.length > 0 || destination.slack_urls.length > 0) && destination.webhook_urls.length > 0 && ', '
-                      }
-                      {
-                        destination.webhook_urls.length > 0 && `${destination.webhook_urls.length} webhook url` + (destination.webhook_urls.length > 1 ? 's' : '')
-                      }
-                      {
-                        (destination.emails.length === 0 && destination.slack_urls.length === 0 && destination.webhook_urls.length === 0) && 'No destination'
-                      }
-                    </p>
+                  <div className={'d-flex gap-3'}>
+                    <CircleIcon>
+                      <MdOutlineCallMade/>
+                    </CircleIcon>
+                    <div>
+                      <h4>{destination.label}</h4>
+                      <p className={'text-muted mb-0'}>
+                        {
+                          destination.emails.length > 0 && `${destination.emails.length} email` + (destination.emails.length > 1 ? 's' : '')
+                        }
+                        {
+                          destination.emails.length > 0 && destination.slack_urls.length > 0 && ', '
+                        }
+                        {
+                          destination.slack_urls.length > 0 && `${destination.slack_urls.length} slack url` + (destination.slack_urls.length > 1 ? 's' : '')
+                        }
+                        {
+                          (destination.emails.length > 0 || destination.slack_urls.length > 0) && destination.webhook_urls.length > 0 && ', '
+                        }
+                        {
+                          destination.webhook_urls.length > 0 && `${destination.webhook_urls.length} webhook url` + (destination.webhook_urls.length > 1 ? 's' : '')
+                        }
+                        {
+                          (destination.emails.length === 0 && destination.slack_urls.length === 0 && destination.webhook_urls.length === 0) && 'No destination'
+                        }
+                      </p>
+                    </div>
                   </div>
                 </CAccordionHeader>
                 <CAccordionBody>

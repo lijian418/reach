@@ -10,6 +10,7 @@ import {ChannelForm} from "./ChannelForm";
 import {Field, Form, Formik} from "formik";
 import * as yup from "yup";
 import {api} from "../../api";
+import {ButtonUnderline} from "../../components/ButtonUnderline";
 
 function CreateChannelModal(props) {
   const [modal, setModal] = useState(false);
@@ -23,17 +24,19 @@ function CreateChannelModal(props) {
 
   return (
     <div>
-      <Button color="primary" onClick={toggle}>
-        Add a new channel
-      </Button>
+      <ButtonUnderline onClick={toggle}>
+        Add channel
+      </ButtonUnderline>
       <Formik
         initialValues={{
           slug: "",
           label: "",
+          description: "",
         }}
         validationSchema={yup.object().shape({
           slug: yup.string().required('Required'),
           label: yup.string().required('Required'),
+          description: yup.string(),
         })}
         onSubmit={async (values) => {
           await createChannel(values)

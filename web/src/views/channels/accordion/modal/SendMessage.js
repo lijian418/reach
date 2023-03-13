@@ -1,6 +1,6 @@
 import {Field, Form, Formik} from "formik";
 import {
-  Button,
+  Button, CardBody,
   Col,
   FormFeedback,
   FormGroup,
@@ -12,8 +12,12 @@ import {
 } from "reactstrap";
 import React, {useState} from "react";
 import * as yup from "yup";
-import {api} from "../../api";
-import {TbSend} from "react-icons/tb";
+import {api} from "../../../../api";
+import {CardWrapper} from "../../../../components/card/CardWrapper";
+import {CircleIcon} from "../../../../components/card/CircleIcon";
+import {AiOutlineRight} from "react-icons/ai";
+import {ClickableCard} from "../../../../components/card/ClickableCard";
+import {RxInput} from "react-icons/rx";
 
 
 function SendMessage(props) {
@@ -36,9 +40,26 @@ function SendMessage(props) {
       {
         props.channel && (
           <div>
-            <Button color="primary" onClick={toggle}>
-              <TbSend/> Send Message
-            </Button>
+            <ClickableCard onClick={toggle}>
+              <CardBody>
+                <CardWrapper>
+                  <div className={'d-flex gap-3 flex-wrap'}>
+                    <CircleIcon>
+                      <RxInput/>
+                    </CircleIcon>
+                    <div>
+                      <h4>Form</h4>
+                      <p className={'text-muted mb-0'}>
+                        Use a form to send a message
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <AiOutlineRight/>
+                  </div>
+                </CardWrapper>
+              </CardBody>
+            </ClickableCard>
             <Formik
               initialValues={{
                 title: "",
