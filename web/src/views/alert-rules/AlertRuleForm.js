@@ -21,20 +21,16 @@ export const AlertRuleForm = (props) => {
       </div>
       <div>
         <h4 className={'mt-4'}>Label</h4>
-        <Card>
-          <CardBody>
-            <div>
-              <Input
-                name={`label`}
-                type="text"
-                tag={Field}
-                component={"input"}
-                invalid={touched.label && !!errors.label}
-              />
-              <ErrorMessage name="label" component={FormFeedback}/>
-            </div>
-          </CardBody>
-        </Card>
+        <div>
+          <Input
+            name={`label`}
+            type="text"
+            tag={Field}
+            component={"input"}
+            invalid={touched.label && !!errors.label}
+          />
+          <ErrorMessage name="label" component={FormFeedback}/>
+        </div>
 
         <h4 className={'mt-4'}><GrInfo/> Levels</h4>
         <Card>

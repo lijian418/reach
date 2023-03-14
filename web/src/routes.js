@@ -11,6 +11,8 @@ const AlertRuleChannelEdit = React.lazy(() => import('./views/alert-rules/AlertR
 
 const SubscriptionCreate = React.lazy(() => import('./views/subscription/SubscriptionCreate'))
 const SubscriptionEdit = React.lazy(() => import('./views/subscription/SubscriptionEdit'))
+const SubscriptionDetail = React.lazy(() => import('./views/subscription/SubscriptionDetail'))
+const SubscriptionList = React.lazy(() => import('./views/subscription/SubscriptionList'))
 
 const UserProfile = React.lazy(() => import('./views/profile/UserProfile'))
 
@@ -22,7 +24,9 @@ const routes = [
   { path: '/channels/:channelId', name: 'Channel Detail', element: ChannelDetail },
 
   { path: '/channels/:channelId/subscriptions/new', name: 'Create Subscription', element: SubscriptionCreate },
+  { path: '/channels/:channelId/subscriptions', name: 'Create Subscription', element: SubscriptionList },
   { path: '/channels/:channelId/subscriptions/:subscriptionId/edit', name: 'Edit Subscription', element: SubscriptionEdit },
+  { path: '/channels/:channelId/subscriptions/:subscriptionId', name: 'Subscription details', element: SubscriptionDetail },
 
   { path: '/channels/:channelId/alert-rules/new', name: 'Create Alert Rule', element: AlertRuleChannelCreate },
   { path: '/channels/:channelId/alert-rules/:alertRuleId/edit', name: 'Edit Alert Rule', element: AlertRuleChannelEdit },

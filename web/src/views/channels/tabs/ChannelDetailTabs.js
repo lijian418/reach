@@ -40,7 +40,7 @@ export const ChannelDetailTabs = (props) => {
             <div className={'d-flex justify-content-between'}>
               <h4 className={'mb-0'}>Your subscriptions</h4>
               <div className={'d-flex gap-2'}>
-                <ButtonUnderline>
+                <ButtonUnderline onClick={() => navigate(`/channels/${channel.id}/subscriptions`)}>
                   <h6 className={'mb-0'}>See all</h6>
                 </ButtonUnderline>
                 <ButtonUnderline onClick={() => navigate(`/channels/${channel.id}/subscriptions/new`)}>

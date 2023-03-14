@@ -5,17 +5,19 @@ import {api} from "../../api";
 import {SubscriptionCard} from "./SubscriptionCard";
 import {Empty} from "../../components/Empty";
 import {BiAddToQueue} from "react-icons/bi";
+import {useNavigate} from "react-router-dom";
 
 export const SubscriptionChannelList = (props) => {
   const [subscriptions, setSubscriptions] = useState()
   const {user} = useUser()
+  const navigate = useNavigate()
 
   useAsyncEffect(async () => {
     if (props.channel.id && user) {
       const {data} = await api.subscription.find({
         user_id: user.id,
         channel_id: props.channel.id,
-        limit: 3,
+        limit: 2,
         skip: 0
       })
       setSubscriptions(data.items)

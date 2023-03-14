@@ -6,7 +6,7 @@ import {useUser} from "../../hooks/useUser";
 import {subscriptionSchema} from "./SubscriptionSchema";
 import {AlertRuleForm} from "../alert-rules/AlertRuleForm";
 import useAsyncEffect from "use-async-effect";
-import {CircleIcon} from "../../components/card/CircleIcon";
+import {CircleIcon, CircleIconButton} from "../../components/card/CircleIcon";
 import {AiOutlineLeft} from "react-icons/ai";
 import {Button} from "reactstrap";
 
@@ -39,11 +39,9 @@ const SubscriptionCreate = () => {
 
   return (
     <div>
-      <CircleIcon onClick={() => navigate(`/channels/${channelId}`)} style={{
-        cursor: 'pointer',
-      }}>
+      <CircleIconButton onClick={() => navigate(`/channels/${channelId}`)}>
         <AiOutlineLeft/>
-      </CircleIcon>
+      </CircleIconButton>
       <h3 className={'mt-4'}>Create your subscription on {channel?.label}</h3>
       <Formik
         initialValues={{

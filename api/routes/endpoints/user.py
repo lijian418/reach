@@ -59,16 +59,16 @@ async def delete(entity_id: PyObjectId):
     entity = await user_query.get(entity_id)
 
     # delete all subscriptions
-    for subscription in entity.subscriptions:
+    for subscription_id in entity.subscription_ids:
+        subscription = await subscription_query.get(subscription_id)
         alert_rule = await alert_rule_query.get(subscription.alert_rule_id)
-        if alert_rule.destination_ids is not None and len(alert_rule.destination_ids) > 0:
-            for destination_id in alert_rule.destination_ids:
-                await destination_query.remove_alert_rule(destination_id, entity_id)
 
-        await channel_query.remove_alert_rule(alert_rule.channel_id, entity_id)
-        await user_query.remove_subscription(subscription.user_id, entity_id)
+        await channel_query.remove_alert_rule(alert_rule.channel_id, alert_rule.id)
         await alert_rule_query.delete(subscription.alert_rule_id)
-        await subscription_query.delete(entity_id)
+
+        await channel_query.remove_subscription(subscription.channel_id, subscription_id)
+        await user_query.remove_subscription(subscription.user_id, subscription_id)
+        await subscription_query.delete(subscription_id)
 
     deleted = await user_query.delete(entity_id)
     return deleted
