@@ -1,4 +1,4 @@
-import {AlertRuleEditForm} from "./AlertRuleEditForm";
+import {AlertRuleChannelEdit} from "./AlertRuleChannelEdit";
 import React, {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
@@ -32,7 +32,7 @@ const EditRules = (props) => {
       <div className={'mt-4'}>
         {
           alertRule && (
-            <AlertRuleEditForm alertRule={alertRule} />
+            <AlertRuleChannelEdit alertRule={alertRule} />
           )
         }
       </div>

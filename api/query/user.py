@@ -3,7 +3,6 @@ import pymongo
 from core.db import user_collection
 from models.business.user import UserCreate, UserRead, UserSearch, UserPaginatedRead
 from models.fastapi.mongodb import PyObjectId
-from query.lookups import subscriptions_lookup
 
 
 async def create(payload: UserCreate) -> UserRead:
@@ -12,8 +11,7 @@ async def create(payload: UserCreate) -> UserRead:
 
 
 async def get(entity_id: PyObjectId) -> UserRead:
-    pipeline = [{"$match": {"_id": entity_id}},
-                subscriptions_lookup]
+    pipeline = [{"$match": {"_id": entity_id}}]
     entity = await user_collection.aggregate(pipeline).to_list(length=None)
     return UserRead(**entity[0])
 
@@ -26,6 +24,11 @@ async def get_by_username(username: str) -> UserRead:
 async def update(entity_id: PyObjectId, payload) -> UserRead:
     await user_collection.update_one({"_id": entity_id}, {"$set": payload})
     return await get(entity_id)
+
+
+async def add_subscription(user_id: PyObjectId, subscription_id: PyObjectId) -> UserRead:
+    await user_collection.update_one({"_id": user_id}, {"$addToSet": {"subscription_ids": subscription_id}})
+    return await get(user_id)
 
 
 async def remove_subscription(user_id: PyObjectId, subscription_id: PyObjectId) -> UserRead:
@@ -41,7 +44,6 @@ async def delete(entity_id: PyObjectId) -> bool:
 async def find(search: UserSearch) -> UserPaginatedRead:
     query = {}
     pipeline = [{"$match": query},
-                subscriptions_lookup,
                 {"$sort": {"created_at": pymongo.DESCENDING}},
                 {"$skip": search.skip},
                 {"$limit": search.limit}]

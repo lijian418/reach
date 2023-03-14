@@ -17,7 +17,24 @@ const remove = async (id): Promise<AxiosResponse> => {
   })
 }
 
+const get = async (id): Promise<AxiosResponse> => {
+  return await request({
+    method: 'GET',
+    url: `/subscriptions/${id}`
+  })
+}
+
+const find = async (params): Promise<AxiosResponse> => {
+  return await request({
+    method: 'GET',
+    url: '/subscriptions',
+    params: params
+  })
+}
+
 export const subscription = {
   create,
   remove,
+  get,
+  find
 }

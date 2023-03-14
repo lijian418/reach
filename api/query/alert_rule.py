@@ -1,3 +1,5 @@
+import logging
+
 import pymongo
 
 from core.db import alert_rule_collection
@@ -8,13 +10,13 @@ from query.lookups import user_lookup, destinations_lookup, user_unwind, channel
 
 async def create(payload: AlertRuleCreate) -> AlertRuleRead:
     new_entity = await alert_rule_collection.insert_one(payload.dict())
-    return await get(new_entity.inserted_id)
+    return await get(PyObjectId(new_entity.inserted_id))
 
 
 async def get(entity_id: PyObjectId) -> AlertRuleRead:
     pipeline = [{"$match": {"_id": entity_id}},
-                channel_lookup,
                 destinations_lookup,
+                channel_lookup,
                 user_lookup,
                 user_unwind,
                 channel_unwind]

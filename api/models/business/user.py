@@ -3,7 +3,6 @@ from typing import List, Optional
 
 from pydantic import Field
 
-from models.business.subscription import SubscriptionRead
 from models.fastapi.base_models import PyBaseModel, PyPaginatedBaseModel
 from models.fastapi.mongodb import PyObjectId
 
@@ -19,7 +18,6 @@ class UserBase(PyBaseModel):
 
 class UserRead(UserBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    subscriptions: List[SubscriptionRead] = Field([])
 
 
 class UserCreate(UserBase):

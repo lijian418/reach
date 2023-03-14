@@ -6,6 +6,7 @@ import query.subscription as subscription_query
 import query.user as user_query
 import query.alert_rule as alert_rule_query
 import query.channel as channel_query
+from models.business.alert_rule import AlertRuleCreate
 from models.business.subscription import SubscriptionCreate, SubscriptionRead, SubscriptionPaginatedRead, \
     SubscriptionSearch
 from models.fastapi.mongodb import PyObjectId
@@ -17,17 +18,19 @@ router = APIRouter()
              response_model=SubscriptionRead,
              response_model_by_alias=False)
 async def create(payload: SubscriptionCreate = Body(...)):
-    created = await subscription_query.create(payload)
-    return created
+    payload.alert_rule['type'] = "subscription"
+    payload.alert_rule['channel_id'] = payload.channel_id
+    payload.alert_rule['user_id'] = payload.user_id
+    alert_rule = await alert_rule_query.create(AlertRuleCreate(**payload.alert_rule))
 
+    payload.alert_rule_id = alert_rule.id
+    subscription = await subscription_query.create(payload)
 
-@router.put("/{entity_id}",
-            response_model=SubscriptionRead,
-            response_model_by_alias=False)
-async def update(entity_id: PyObjectId, payload=Body(...)):
-    payload['updated_at'] = time.time()
-    updated = await subscription_query.update(entity_id, payload)
-    return updated
+    await channel_query.add_alert_rule(payload.channel_id, alert_rule.id)
+    await channel_query.add_subscription(payload.channel_id, subscription.id)
+    await user_query.add_subscription(payload.user_id, subscription.id)
+
+    return subscription
 
 
 @router.get("/{entity_id}",
@@ -52,9 +55,12 @@ async def delete(entity_id: PyObjectId):
     entity = await subscription_query.get(entity_id)
     alert_rule = await alert_rule_query.get(entity.alert_rule_id)
 
-    # remove alert rule id from channel
-    await channel_query.remove_alert_rule(alert_rule.channel_id, entity_id)
+    # remove alert rule
+    await channel_query.remove_alert_rule(alert_rule.channel_id, alert_rule.id)
     await alert_rule_query.delete(entity.alert_rule_id)
+
+    # remove subscription
+    await channel_query.remove_subscription(alert_rule.channel_id, entity_id)
     await user_query.remove_subscription(entity.user_id, entity_id)
     deleted = await subscription_query.delete(entity_id)
     return deleted

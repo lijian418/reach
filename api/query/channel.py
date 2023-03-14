@@ -17,9 +17,7 @@ async def get_by_slug(slug: str) -> ChannelRead:
 
 
 async def get(entity_id: PyObjectId) -> ChannelRead:
-    pipeline = [{"$match": {"_id": entity_id}},
-                alert_rules_lookup,
-                subscriptions_lookup]
+    pipeline = [{"$match": {"_id": entity_id}}]
     entity = await channel_collection.aggregate(pipeline).to_list(length=None)
     return ChannelRead(**entity[0])
 
@@ -31,6 +29,16 @@ async def update(entity_id: PyObjectId, payload) -> ChannelRead:
 
 async def add_alert_rule(entity_id: PyObjectId, alert_rule_id: PyObjectId) -> ChannelRead:
     await channel_collection.update_one({"_id": entity_id}, {"$push": {"alert_rule_ids": alert_rule_id}})
+    return await get(entity_id)
+
+
+async def add_subscription(entity_id: PyObjectId, subscription_id: PyObjectId) -> ChannelRead:
+    await channel_collection.update_one({"_id": entity_id}, {"$push": {"subscription_ids": subscription_id}})
+    return await get(entity_id)
+
+
+async def remove_subscription(entity_id: PyObjectId, subscription_id: PyObjectId) -> ChannelRead:
+    await channel_collection.update_one({"_id": entity_id}, {"$pull": {"subscription_ids": subscription_id}})
     return await get(entity_id)
 
 
@@ -47,8 +55,6 @@ async def delete(entity_id: PyObjectId) -> bool:
 async def find(search: ChannelSearch) -> ChannelPaginatedRead:
     query = {}
     pipeline = [{"$match": query},
-                alert_rules_lookup,
-                subscriptions_lookup,
                 {"$sort": {"created_at": pymongo.DESCENDING}},
                 {"$skip": search.skip},
                 {"$limit": search.limit}]

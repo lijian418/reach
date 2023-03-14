@@ -1,10 +1,8 @@
 import {useNavigate, useParams} from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {api} from "../../api";
-import EditAlertRuleModal from "./EditAlertRuleModal";
 import {Badge, Button, Card, CardBody, Input} from "reactstrap";
-import {AlertRuleTryDataModal} from "./AlertRuleTryDataModal";
 import {DeleteAlertRuleModal} from "./DeleteAlertRuleModal";
 import {MdPriorityHigh} from "react-icons/md";
 import {GrInfo, GrTrigger} from "react-icons/gr";
@@ -39,7 +37,6 @@ const AlertRuleDetail = () => {
             await api.alertRule.remove(alertRuleId)
             navigate(`/alert-rules`)
           }} alertRule={alertRule} />
-          <EditAlertRuleModal alertRule={alertRule} refetch={fetchAlertRule}/>
         </div>
       </div>
       <CNav variant="tabs" className={'mt-4'}>
@@ -58,7 +55,6 @@ const AlertRuleDetail = () => {
           <div>
             <div className={'d-flex justify-content-end mt-4'}>
               <div className={'d-flex gap-2'}>
-                <AlertRuleTryDataModal alertRule={alertRule}/>
                 <div>
                   <Button onClick={() => navigate(`edit-rules`)} color={'primary'}>
                     Edit Rules

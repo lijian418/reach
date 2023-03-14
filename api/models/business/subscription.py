@@ -7,9 +7,9 @@ from models.fastapi.mongodb import PyObjectId
 
 
 class SubscriptionBase(PyBaseModel):
-    channel_id: str = Field(...)
+    channel_id: PyObjectId = Field(...)
     user_id: PyObjectId = Field(...)
-    alert_rule_id: Optional[PyObjectId] = Field(...)
+    alert_rule_id: Optional[PyObjectId] = Field(None)
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 
@@ -35,4 +35,5 @@ class SubscriptionPaginatedRead(PyBaseModel):
 
 
 class SubscriptionSearch(PyPaginatedBaseModel):
-    pass
+    user_id: Optional[PyObjectId] = None
+    channel_id: Optional[PyObjectId] = None

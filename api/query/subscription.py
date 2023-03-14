@@ -36,6 +36,10 @@ async def delete(entity_id: PyObjectId) -> bool:
 
 async def find(search: SubscriptionSearch) -> SubscriptionPaginatedRead:
     query = {}
+    if search.user_id:
+        query["user_id"] = search.user_id
+    if search.channel_id:
+        query["channel_id"] = search.channel_id
     pipeline = [{"$match": query},
                 user_lookup,
                 alert_rule_lookup,

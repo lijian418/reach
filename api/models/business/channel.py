@@ -21,8 +21,6 @@ class ChannelBase(PyBaseModel):
 
 class ChannelRead(ChannelBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    alert_rules: List[AlertRuleRead] = Field([])
-    subscriptions: List[SubscriptionRead] = Field([])
 
 
 class ChannelCreate(ChannelBase):

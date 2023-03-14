@@ -17,15 +17,18 @@ class Rule(BaseModel):
 
 
 class AlertRuleBase(PyBaseModel):
-    type: str = Field(...)
+    type: str = Field("channel")
+
     label: str = Field(...)
     rules: List[Rule] = Field([])
     logic: str = Field(...)
     levels: List[str] = Field([])
     priorities: List[str] = Field([])
-    channel_id: PyObjectId = Field(...)
     destination_ids: List[PyObjectId] = Field([])
+
+    channel_id: PyObjectId = Field(...)
     user_id: Optional[PyObjectId] = Field(None)
+
     created_at: float = Field(default_factory=lambda: time.time())
     updated_at: float = Field(default_factory=lambda: time.time())
 
